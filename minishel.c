@@ -1,5 +1,4 @@
 #include <libc.h>
-#include "pipex.h"
 #include <readline/readline.h>
 #include <readline/history.h>
 
