@@ -84,5 +84,4 @@ int main(int ac, char **av, char **env)
         add_history(str);
         waitpid(n, NULL, 0);
     }
-    // rl_clear_history();
 }
