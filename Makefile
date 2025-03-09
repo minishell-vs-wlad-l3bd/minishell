@@ -1,5 +1,6 @@
 NAME = minishell
-CFLAGS =  -lreadline
+CFLAGS = -Wall -Wextra -Werror 
+SFLAGS = -lreadline
 COMP = cc
 HEADRES = minishell.h Libft/libft.h
 SRCS = minishell.c find_paths.c
@@ -10,7 +11,7 @@ all: $(NAME)
 
 $(NAME): $(OBGS)
 	make re -C Libft
-	$(COMP) $(CFLAGS)  $(OBGS) Libft/libft.a -o $@
+	$(COMP) $(CFLAGS) $(SFLAGS) $(OBGS) Libft/libft.a -o $@
 
 %.o: %.c $(HEADRES)
 	$(COMP) $(CFLAGS) -c -o $@ $<
@@ -21,7 +22,7 @@ clean:
 
 fclean: clean
 	make fclean -C Libft
-	rm -rf $(OBGS)
+	rm -rf $(NAME)
 
 re: fclean all
 
