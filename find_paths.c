@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   find_paths.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 14:24:36 by aayad             #+#    #+#             */
-/*   Updated: 2025/03/11 14:25:35 by aayad            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 char	*find_path(char **env)
@@ -38,7 +26,7 @@ char	*find_cmd_path(char **paths, char *cmd)
 		if (!access(cmd, F_OK | X_OK))
 			return (ft_strdup(cmd));
 		else
-			return (perror("command not found\n"), NULL);
+			return (ft_putstr_fd("command not found\n", 2), NULL);
 	}
 	i = 0;
 	while (paths[i])
@@ -54,5 +42,5 @@ char	*find_cmd_path(char **paths, char *cmd)
 		free(cmd_p);
 		i++;
 	}
-	return (perror("command not found\n"), NULL);
+	return (ft_putstr_fd("command not found\n", 2), NULL);
 }

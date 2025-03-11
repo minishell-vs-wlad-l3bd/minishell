@@ -18,7 +18,6 @@ int is_builtin(char *str)
 		return (1);
 	return (0);
 }
-
 // pid_t excuve_builtin(char *str)
 // {
 //     pid_t n = fork();
@@ -110,7 +109,6 @@ int main(int ac, char **av, char **env)
         free(str);
         ft_free(cmd);
         ft_free(paths);
-    } 
+    }
     rl_clear_history();
 }
-
