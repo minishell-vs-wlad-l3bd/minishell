@@ -7,6 +7,7 @@
 #include "Libft/libft.h"
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <signal.h>
 
 char	*find_cmd_path(char **paths, char *cmd);
 char	*find_path(char **env);
