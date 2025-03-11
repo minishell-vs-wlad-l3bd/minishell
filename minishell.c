@@ -101,4 +101,5 @@ int main(int ac, char **av, char **env)
         ft_free(paths);
     }
     rl_clear_history();
+	//test
 }
