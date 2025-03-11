@@ -39,7 +39,6 @@ int is_builtin(char *str)
 //     return n;
 // }
 
-
 void ft_free(char **arr)
 {
     int i = 0;
@@ -60,7 +59,7 @@ int main(int ac, char **av, char **env)
 {
     char **paths;
     char **cmd;
-	 char *path_v;
+	char *path_v;
     ac = 1;
     av = NULL;
     while(1)
@@ -69,14 +68,6 @@ int main(int ac, char **av, char **env)
 		signal(SIGQUIT, handler);
         paths = ft_split(find_path(env), ':');
         char *str = readline("\033[34mminishell\033[0m \033[31m▶ \033[0m");
-		if(!ft_strcmp(str, "exit") || str == NULL)
-			exit(1);
-		if (!str[0])
-			continue;
-        cmd = ft_split(str, ' ');
-        path_v = find_cmd_path(paths, cmd[0]);
-		if (!path_v)
-			return (1);
         if (str == NULL)
         {
             printf("exit\n");
@@ -94,7 +85,7 @@ int main(int ac, char **av, char **env)
         //     excuve_builtin();
         // else
         // {
-            char *path_v = find_cmd_path(paths, cmd[0]);
+            path_v = find_cmd_path(paths, cmd[0]);
             if (path_v)
             {
                 pid_t n = excuve_fonc(path_v, cmd);
