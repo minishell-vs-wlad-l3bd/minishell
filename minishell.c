@@ -77,7 +77,6 @@ int main(int ac, char **av, char **env)
         path_v = find_cmd_path(paths, cmd[0]);
 		if (!path_v)
 			return (1);
-        pid_t n = excuve_fonc(path_v, cmd);
         if (str == NULL)
         {
             printf("exit\n");
