@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 13:04:34 by mohidbel          #+#    #+#             */
-/*   Updated: 2024/11/14 21:26:15 by mohidbel         ###   ########.fr       */
+/*   Updated: 2024/11/04 11:21:23 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t	i;
 	size_t	s_len;
 
-	if (!s)
+	if (s == NULL)
 		return (NULL);
 	s_len = ft_strlen(s);
 	if (start >= s_len)

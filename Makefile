@@ -1,9 +1,9 @@
 NAME = minishell
-CFLAGS = -Wall -Wextra -Werror 
+# FLAGS = -Wall -Wextra -Werror 
 SFLAGS = -lreadline
 COMP = cc
 HEADRES = minishell.h Libft/libft.h
-SRCS = minishell.c find_paths.c
+SRCS = minishell.c find_paths.c env/get_env.c env/lst_tools.c built_in/do_cd.c
 
 OBGS = $(SRCS:.c=.o)
 
@@ -11,10 +11,10 @@ all: $(NAME)
 
 $(NAME): $(OBGS)
 	make re -C Libft
-	$(COMP) $(CFLAGS) $(SFLAGS) $(OBGS) Libft/libft.a -o $@
+	$(COMP) $(FLAGS)  $(OBGS) Libft/libft.a $(SFLAGS) -o $@
 
 %.o: %.c $(HEADRES)
-	$(COMP) $(CFLAGS) -c -o $@ $<
+	$(COMP) $(FLAGS) -c -o $@ $<
 
 clean:
 	make clean -C Libft

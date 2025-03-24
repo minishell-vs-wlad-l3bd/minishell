@@ -6,13 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 18:03:14 by mohidbel          #+#    #+#             */
-/*   Updated: 2024/11/14 21:11:16 by mohidbel         ###   ########.fr       */
+/*   Updated: 2024/11/04 11:26:45 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	check_overlap(unsigned char *d, const unsigned char *s, size_t len)
+static void	check_overlap(char *d, const char *s, size_t len)
 {
 	size_t	n;
 
@@ -38,11 +38,11 @@ static void	check_overlap(unsigned char *d, const unsigned char *s, size_t len)
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	const unsigned char	*s;
-	unsigned char		*d;
+	const char	*s;
+	char		*d;
 
-	d = (unsigned char *) dst;
-	s = (const unsigned char *) src;
+	d = (char *) dst;
+	s = (const char *) src;
 	if (!dst && !src && len > 0)
 		return (NULL);
 	check_overlap(d, s, len);

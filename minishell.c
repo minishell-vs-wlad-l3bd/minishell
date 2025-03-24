@@ -14,92 +14,87 @@ int is_builtin(char *str)
 {
 	if (!ft_strcmp(str, "echo") || !ft_strcmp(str, "cd")
 		|| !ft_strcmp(str, "pwd") || !ft_strcmp(str, "export")
-		|| !ft_strcmp(str, "unset") || !ft_strcmp(str, "env"))
+		|| !ft_strcmp(str, "unset") || !ft_strcmp(str, "env")
+        || !ft_strcmp(str, "exit")) // zdt exit
 		return (1);
 	return (0);
 }
-// pid_t excuve_builtin(char *str)
-// {
-//     pid_t n = fork();
-//     if(n == 0)
-//     {
-//         if(!strcmp(str, "cd"))
-//             do_cd();
-//         else if(!strcmp(str, "echo"))
-//             do_echo();
-//         else if(!strcmp(str, "pwd"))
-//             do_pwd();
-//         else if(!strcmp(str, "export"))
-//             do_export();
-//         else if(!strcmp(str, "unset"))
-//             do_unset();
-//         else if(!strcmp(str, "env"))
-//             do_env();
-//     }
-//     return n;
-// }
 
-void ft_free(char **arr)
+void execute_builtin(char **cmd, t_env **env)
 {
-    int i = 0;
-    while(arr[i])
-        free(arr[i++]);
-    free(arr);
+    if (!strcmp(cmd[0], "cd"))
+        do_cd(cmd, env);
+    // else if (!strcmp(cmd[0], "exit"))
+    //     do_exit();
+    // else if(!strcmp(cmd[0], "echo"))
+    //     do_echo(cmd);
+    // else if(!strcmp(cmd[0], "pwd"))
+    //     do_pwd(cmd);
+    // else if(!strcmp(cmd[0], "export"))
+    //     do_export(cmd);
+    // else if(!strcmp(cmd[0], "unset"))
+    //     do_unset(cmd);
+    // else if(!strcmp(cmd[0], "env"))
+    //     do_env(cmd);
 }
-pid_t excuve_fonc(char *path, char **alll)
-{
-    pid_t i = fork();
-    if(i == 0)
-        if(execve(path, alll, NULL) == -1)
-            exit(1);
-    return (i);
-}
+
+
+
+
+// khasna garbg collecter 3la 7sab leaks (ft_mlloc)??
+
+
+
 
 int main(int ac, char **av, char **env)
 {
-    char **paths;
-    char **cmd;
-	char *path_v;
-    ac = 1;
-    av = NULL;
-    while(1)
+    char **paths = NULL;
+    char **cmd = NULL;
+    char *str = NULL;
+    t_env *ev = env_init(env);
+    
+    signal(SIGINT, handler);
+    signal(SIGQUIT, SIG_IGN);  // Different handling for SIGQUIT
+    // SIG_IGN is signal bach makyghlich ctr + \ ikhdm aslan ^\ 
+    while (1)
     {
-		signal(SIGINT, handler);
-		signal(SIGQUIT, handler);
-        paths = ft_split(find_path(env), ':');
-        char *str = readline("\033[34mminishell\033[0m \033[31m▶ \033[0m");
-        if (str == NULL)
+        paths = ft_split(get_env_value(ev, "PATH"), ':');
+        str = readline(mini);
+        if (!str) // hydt exit 7it tahiya khaseha handle
         {
             printf("exit\n");
             break;
         }
-        if(!strcmp(str, "exit"))
+        if (!str[0])
         {
-            printf("exit\n");
-            break;
+            free(str);
+            continue;
         }
-        if(!str[0])
-            continue ;
+        add_history(str);
         cmd = ft_split(str, ' ');
-        // if(is_builtin(cmd[0]))
-        //     excuve_builtin();
-        // else
-        // {
-            path_v = find_cmd_path(paths, cmd[0]);
-            if (path_v)
+        if (is_builtin(cmd[0]))
+            execute_builtin(cmd, &ev);
+        else
+        {
+            char *cmd_path = find_cmd_path(paths, cmd[0]);
+            if (cmd_path)
             {
-                pid_t n = excuve_fonc(path_v, cmd);
-                waitpid(n, NULL, 0);
-                free(path_v);
+                pid_t pid = fork(); // hydt foinction dyal excuve tall mn b3d
+                if (pid == 0)
+                {
+                    // chno drt hna >> : handle signal again for Child process
+                    signal(SIGINT, handler);
+                    signal(SIGQUIT, SIG_IGN);
+                    execve(cmd_path, cmd, NULL);
+                    exit(127); // ila failat excuve tkhrj 127 error command not found
+                }
+                waitpid(pid, NULL, 0);
+                free(cmd_path);
             }
             else
-                ft_putstr_fd("command not found\n", 2);
-        // }
-        add_history(str);
-        free(str);
-        ft_free(cmd);
-        ft_free(paths);
+                fprintf(stderr, "minishell: %s: command not found\n", cmd[0]);// hyd fprintf;
+        }
     }
     rl_clear_history();
-	//test
+    return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 20:59:40 by mohidbel          #+#    #+#             */
-/*   Updated: 2024/11/09 14:54:02 by mohidbel         ###   ########.fr       */
+/*   Updated: 2024/11/08 14:57:11 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_putnbr_fd(int n, int fd)
 {
 	char	c;
 
-	if (fd < 0)
+	if(fd < 0)
 		return ;
 	if (n == -2147483648)
 	{

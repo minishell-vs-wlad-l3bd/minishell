@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 12:36:34 by mohidbel          #+#    #+#             */
-/*   Updated: 2024/11/16 10:38:07 by mohidbel         ###   ########.fr       */
+/*   Updated: 2024/11/08 16:50:14 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	if (dstsize <= dstlen)
 		return (dstsize + srclen);
 	i = 0;
-	while ((dstlen + i) < dstsize - 1 && src[i])
+	while ((dstlen + i) < dstsize - 1 && src[i] != '\0')
 	{
 		dst[dstlen + i] = src[i];
 		i++;
