@@ -3,7 +3,7 @@ NAME = minishell
 SFLAGS = -lreadline
 COMP = cc
 HEADRES = minishell.h Libft/libft.h
-SRCS = minishell.c find_paths.c env/get_env.c env/lst_tools.c built_in/do_cd.c
+SRCS = minishell.c find_paths.c env/get_env.c env/lst_tools.c built_in/do_cd.c built_in/do_echo.c
 
 OBGS = $(SRCS:.c=.o)
 

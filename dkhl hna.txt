@@ -1,0 +1,12 @@
+>> hna nb9aw nktbo chno drna
+
+>mhm rah w9ila salit cd
+>wzdt ch7wayj
+
+>> hada test 
+>> mhm chof hawl dir chi 7araka m3a echo and pwd and exit 
+
+
+aayad : 
+>> i add ft_malloc (utils/ft_malloc.c)
+>> i handle echo and echo -n

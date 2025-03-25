@@ -30,7 +30,7 @@ char *find_cmd_path(char **paths, char *cmd)
             return ft_strdup(cmd);
         return NULL;
     }
-	int i = -1
+	int i = -1;
     while (paths[++i])
     {
         tmp = ft_strjoin(paths[i], "/");

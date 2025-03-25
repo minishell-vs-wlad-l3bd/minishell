@@ -26,8 +26,8 @@ void execute_builtin(char **cmd, t_env **env)
         do_cd(cmd, env);
     // else if (!strcmp(cmd[0], "exit"))
     //     do_exit();
-    // else if(!strcmp(cmd[0], "echo"))
-    //     do_echo(cmd);
+    else if(!strcmp(cmd[0], "echo"))
+        do_echo(&cmd[1]);
     // else if(!strcmp(cmd[0], "pwd"))
     //     do_pwd(cmd);
     // else if(!strcmp(cmd[0], "export"))
@@ -55,7 +55,7 @@ int main(int ac, char **av, char **env)
     
     signal(SIGINT, handler);
     signal(SIGQUIT, SIG_IGN);  // Different handling for SIGQUIT
-    // SIG_IGN is signal bach makyghlich ctr + \ ikhdm aslan ^\ 
+    // SIG_IGN is signal bach makyghlich ctr + \ ikhdm aslan 
     while (1)
     {
         paths = ft_split(get_env_value(ev, "PATH"), ':');
@@ -63,12 +63,12 @@ int main(int ac, char **av, char **env)
         if (!str) // hydt exit 7it tahiya khaseha handle
         {
             printf("exit\n");
-            break;
+            break ;
         }
         if (!str[0])
         {
             free(str);
-            continue;
+            continue ;
         }
         add_history(str);
         cmd = ft_split(str, ' ');
@@ -78,7 +78,7 @@ int main(int ac, char **av, char **env)
         {
             char *cmd_path = find_cmd_path(paths, cmd[0]);
             if (cmd_path)
-            {
+            {    
                 pid_t pid = fork(); // hydt foinction dyal excuve tall mn b3d
                 if (pid == 0)
                 {

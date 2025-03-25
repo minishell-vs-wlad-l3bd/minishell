@@ -28,7 +28,9 @@ char	*find_cmd_path(char **paths, char *cmd);
 char	*get_env_value(t_env *env, char *key);
 
 // built in
-void do_cd(char **cmd, t_env **env);
+void    do_cd(char **cmd, t_env **env);
+void    do_echo(char **av);
+
 
 // for init env (kan3mr env->value)
 t_env	*ft_env_lstnew(void *content);
