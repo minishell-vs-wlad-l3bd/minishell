@@ -9,4 +9,7 @@
 
 aayad : 
 >> i add ft_malloc (utils/ft_malloc.c)
+>> i add parssing.c (utils/parssing.c)
 >> i handle echo and echo -n
+>> i aa do_env
+>> i add do unset

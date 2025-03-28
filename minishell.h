@@ -30,6 +30,10 @@ char	*get_env_value(t_env *env, char *key);
 // built in
 void    do_cd(char **cmd, t_env **env);
 void    do_echo(char **av);
+void    quotes(char **strs);
+void    do_unset(char **args, t_env **envp);
+void	do_env(t_env *env);
+
 
 
 // for init env (kan3mr env->value)

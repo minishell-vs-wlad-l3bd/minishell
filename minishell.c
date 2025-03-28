@@ -22,6 +22,7 @@ int is_builtin(char *str)
 
 void execute_builtin(char **cmd, t_env **env)
 {
+    quotes(&cmd[1]);
     if (!strcmp(cmd[0], "cd"))
         do_cd(cmd, env);
     // else if (!strcmp(cmd[0], "exit"))
@@ -32,10 +33,10 @@ void execute_builtin(char **cmd, t_env **env)
     //     do_pwd(cmd);
     // else if(!strcmp(cmd[0], "export"))
     //     do_export(cmd);
-    // else if(!strcmp(cmd[0], "unset"))
-    //     do_unset(cmd);
-    // else if(!strcmp(cmd[0], "env"))
-    //     do_env(cmd);
+    else if(!strcmp(cmd[0], "unset"))
+        do_unset(&cmd[1], env);
+    else if(!strcmp(cmd[0], "env"))
+        do_env(*env);
 }
 
 
@@ -48,6 +49,8 @@ void execute_builtin(char **cmd, t_env **env)
 
 int main(int ac, char **av, char **env)
 {
+    (void)ac;
+    (void)av;
     char **paths = NULL;
     char **cmd = NULL;
     char *str = NULL;
