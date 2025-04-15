@@ -1,5 +1,47 @@
 #include "../minishell.h"
 
+void update_env(t_env **env, char *key, char *value)
+{
+    size_t k_len;
+    size_t v_len;
+    char *new;
+    t_env *c;
+
+    if (!env || !key || !value)
+        return;
+    k_len = ft_strlen(key);
+    v_len = ft_strlen(value);
+    new = ft_malloc(k_len + v_len + 2);
+    if (!new)
+    {
+        perror("minishell: ft_malloc");
+        return;
+    }
+    ft_memcpy(new, key, k_len);
+    new[k_len] = '=';
+    ft_memcpy(new + k_len + 1, value, v_len);
+    new[k_len + v_len + 1] = '\0';
+    c = *env;
+    while (c)
+    {
+        if (c->value && !strncmp(c->value, key, k_len) && c->value[k_len] == '=')
+        {
+            c->value = new;
+            return;
+        }
+        c = c->next;
+    }
+    c = ft_malloc(sizeof(t_env));
+    if (!c)
+    {
+        perror("minishell: ft_malloc");
+        return;
+    }
+    c->value = new;
+    c->next = *env;
+    *env = c;
+}
+
 t_env	*env_init(char **env)
 {
 	int		i;
@@ -10,6 +52,6 @@ t_env	*env_init(char **env)
 	head = NULL;
 	i = -1;
 	while (env[++i])
-		ft_env_lstadd_back(&head, ft_env_lstnew(ft_strdup(env[i]))); // fhmha bohdk mafiyach 3yit
+		ft_env_lstadd_back(&head, ft_env_lstnew(ft_strdup(env[i])));
 	return (head);
 }

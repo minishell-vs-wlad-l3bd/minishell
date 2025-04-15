@@ -15,7 +15,7 @@ int is_builtin(char *str)
 	if (!ft_strcmp(str, "echo") || !ft_strcmp(str, "cd")
 		|| !ft_strcmp(str, "pwd") || !ft_strcmp(str, "export")
 		|| !ft_strcmp(str, "unset") || !ft_strcmp(str, "env")
-        || !ft_strcmp(str, "exit")) // zdt exit
+        || !ft_strcmp(str, "exit"))
 		return (1);
 	return (0);
 }
@@ -25,27 +25,39 @@ void execute_builtin(char **cmd, t_env **env)
     quotes(&cmd[1]);
     if (!strcmp(cmd[0], "cd"))
         do_cd(cmd, env);
-    // else if (!strcmp(cmd[0], "exit"))
-    //     do_exit();
     else if(!strcmp(cmd[0], "echo"))
         do_echo(&cmd[1]);
-    // else if(!strcmp(cmd[0], "pwd"))
-    //     do_pwd(cmd);
-    // else if(!strcmp(cmd[0], "export"))
-    //     do_export(cmd);
+    else if(!strcmp(cmd[0], "pwd"))
+        do_pwd();
+    else if(!strcmp(cmd[0], "export"))
+        do_export(cmd, env);
     else if(!strcmp(cmd[0], "unset"))
         do_unset(&cmd[1], env);
     else if(!strcmp(cmd[0], "env"))
         do_env(*env);
 }
 
-
-
-
-// khasna garbg collecter 3la 7sab leaks (ft_mlloc)??
-
-
-
+void execute(char **paths, char **cmd)
+{
+    char *cmd_path = find_cmd_path(paths, cmd[0]);
+    if (cmd_path)
+    {    
+        pid_t pid = fork();
+        if (pid == 0)
+        {
+            signal(SIGINT, handler);
+            signal(SIGQUIT, SIG_IGN);
+            execve(cmd_path, cmd, NULL);
+            exit(127);
+        }
+        waitpid(pid, NULL, 0);
+        free(cmd_path);
+    }
+    else
+    {
+        printf("minishell: %s: command not found\n", cmd[0]); //strerr ft_putstr_fd
+    }
+}
 
 int main(int ac, char **av, char **env)
 {
@@ -55,15 +67,13 @@ int main(int ac, char **av, char **env)
     char **cmd = NULL;
     char *str = NULL;
     t_env *ev = env_init(env);
-    
     signal(SIGINT, handler);
-    signal(SIGQUIT, SIG_IGN);  // Different handling for SIGQUIT
-    // SIG_IGN is signal bach makyghlich ctr + \ ikhdm aslan 
+    signal(SIGQUIT, SIG_IGN);
     while (1)
     {
         paths = ft_split(get_env_value(ev, "PATH"), ':');
-        str = readline(mini);
-        if (!str) // hydt exit 7it tahiya khaseha handle
+        str = readline(BLEU"minishell "RESET RED"▶"RESET);
+        if (!str)
         {
             printf("exit\n");
             break ;
@@ -78,25 +88,7 @@ int main(int ac, char **av, char **env)
         if (is_builtin(cmd[0]))
             execute_builtin(cmd, &ev);
         else
-        {
-            char *cmd_path = find_cmd_path(paths, cmd[0]);
-            if (cmd_path)
-            {    
-                pid_t pid = fork(); // hydt foinction dyal excuve tall mn b3d
-                if (pid == 0)
-                {
-                    // chno drt hna >> : handle signal again for Child process
-                    signal(SIGINT, handler);
-                    signal(SIGQUIT, SIG_IGN);
-                    execve(cmd_path, cmd, NULL);
-                    exit(127); // ila failat excuve tkhrj 127 error command not found
-                }
-                waitpid(pid, NULL, 0);
-                free(cmd_path);
-            }
-            else
-                fprintf(stderr, "minishell: %s: command not found\n", cmd[0]);// hyd fprintf;
-        }
+            execute(paths, cmd);
     }
     rl_clear_history();
     return 0;

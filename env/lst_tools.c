@@ -21,7 +21,7 @@ t_env	*ft_env_lstnew(void *content)
 {
 	t_env	*node1;
 
-	node1 = malloc(sizeof(t_env));
+	node1 = ft_malloc(sizeof(t_env));
 	if (node1 == NULL)
 		return (NULL);
 	node1->value = content;

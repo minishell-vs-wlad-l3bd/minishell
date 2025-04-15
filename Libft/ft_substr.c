@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 13:04:34 by mohidbel          #+#    #+#             */
-/*   Updated: 2024/11/04 11:21:23 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:54:30 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (ft_strdup(""));
 	if (len > s_len - start)
 		len = s_len - start;
-	substr = malloc((len + 1) * sizeof(char));
+	substr = ft_malloc((len + 1) * sizeof(char));
 	if (substr == NULL)
 		return (NULL);
 	i = 0;

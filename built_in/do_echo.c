@@ -8,7 +8,6 @@ void    do_echo(char **av)
 
     i = 0;
     nl = 0;
-
     while (av[i] && ft_strncmp(av[i], "-n", 2) == 0)
     {
         j = 2;
@@ -19,7 +18,6 @@ void    do_echo(char **av)
         nl++;
         i++;
     }
-
     while (av[i])
     {
         write(STDOUT_FILENO, av[i], ft_strlen(av[i]));
@@ -27,7 +25,6 @@ void    do_echo(char **av)
             write(STDOUT_FILENO, " ", 1);
         i++;
     }
-
     if (!nl)
         write(STDOUT_FILENO, "\n", 1);
 }
