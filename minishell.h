@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <errno.h>
-#include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <readline/history.h>
@@ -16,8 +15,6 @@
 #define RESET "\033[0m"
 #define BLEU "\033[34m"
 
-#define mini "BLEU minishell\033[0m \033[31m▶ \033[0m" // hada macro dyal smiya dyal minishell n09dro nbdloh mn hna
-
 
 typedef struct s_env
 {
@@ -28,7 +25,9 @@ typedef struct s_env
 
 typedef struct s_mini
 {
-    int ret;
+    int in;
+    int out;
+    int ret; // return
 } t_mini;
 
 
@@ -44,12 +43,13 @@ void	do_env(t_env *env);
 void do_pwd(void);
 void do_export(char **args, t_env **env);
 
-
-
 // for init env (kan3mr env->value)
 t_env	*ft_env_lstnew(void *content);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 t_env	*env_init(char **env);
 void update_env(t_env **env, char *key, char *value);
+
+// utils
 void *ft_malloc(size_t size);
+
 #endif

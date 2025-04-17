@@ -1,5 +1,5 @@
 NAME = minishell
-# FLAGS = -Wall -Wextra -Werror 
+FLAGS = -Wall -Wextra -Werror 
 SFLAGS = -lreadline
 COMP = cc
 HEADRES = minishell.h Libft/libft.h

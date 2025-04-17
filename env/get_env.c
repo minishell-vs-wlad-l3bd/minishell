@@ -33,10 +33,7 @@ void update_env(t_env **env, char *key, char *value)
     }
     c = ft_malloc(sizeof(t_env));
     if (!c)
-    {
-        perror("minishell: ft_malloc");
         return;
-    }
     c->value = new;
     c->next = *env;
     *env = c;
@@ -47,11 +44,16 @@ t_env	*env_init(char **env)
 	int		i;
 	t_env	*head;
 
-    if (!env)
-        return NULL;
 	head = NULL;
-	i = -1;
-	while (env[++i])
+	i = 1;
+    if(!env)
+    {
+        return (NULL);
+    }
+	while (env[i])
+    {
 		ft_env_lstadd_back(&head, ft_env_lstnew(ft_strdup(env[i])));
+        i++;
+    }
 	return (head);
 }

@@ -38,14 +38,18 @@ void print_sort_env(t_env **env)
     }
 }
 
+// void env_add()
+// {
+// }
+
 void do_export(char **args, t_env **env)
 {
     if (!args[1])
     {
         print_sort_env(env);
     }
-    else
-    {
-        // i will do it
-    }
+    // else
+    // {
+    //     env_add();
+    // }
 }
