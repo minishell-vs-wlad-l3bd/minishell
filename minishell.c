@@ -28,6 +28,8 @@ void execute_builtin(char **cmd, t_env **env)
         do_cd(cmd, env);
     else if(!strcmp(cmd[0], "echo"))
         do_echo(&cmd[1]);
+    else if (!strcmp(cmd[0], "exit"))
+        do_exit(cmd, env);
     else if(!strcmp(cmd[0], "pwd"))
         do_pwd();
     else if(!strcmp(cmd[0], "export"))
@@ -60,8 +62,7 @@ void execute(char **paths, char **cmd)
 
 int check_type(char *str)
 {
-    if(ft_strchr(str, '|') || ft_strchr(str, '<') || ft_strchr(str, '>')
-        || ft_strchr(str, '<<') || ft_strchr(str, '>>'))
+    if(ft_strchr(str, '|'))
         return 1;
     return 0;
 }
@@ -151,7 +152,7 @@ int main(int ac, char **av, char **env)
     while (1)
     {
         paths = ft_split(get_env_value(ev, "PATH"), ':');
-        str = readline(BLEU"minishell "RESET RED"▶"RESET);
+        str = readline(BLEU"minishell "RESET RED"▶ "RESET);
         if (!str)
         {
             printf("exit\n");
