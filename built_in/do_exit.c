@@ -43,7 +43,7 @@ void	do_exit(char **args, t_env **envp)
 		if (!is_numeric(args[0]))
 		{
 			ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-			ft_putstr_fd(args[0], STDERR_FILENO);
+			ft_putstr_fd(args[1], STDERR_FILENO);
 			ft_putendl_fd(": numeric argument required", STDERR_FILENO);
 			free_envp(envp);
 			exit(255);
