@@ -33,6 +33,7 @@ void    do_echo(char **av);
 void    quotes(char **strs);
 void    do_unset(char **args, t_env **envp);
 void	do_env(t_env *env);
+void	do_exit(char **args, t_env **envp);
 
 
 
@@ -40,5 +41,7 @@ void	do_env(t_env *env);
 t_env	*ft_env_lstnew(void *content);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 t_env	*env_init(char **env);
+
+int     handle_redirections(char **cmd);
 
 #endif

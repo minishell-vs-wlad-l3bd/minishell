@@ -36,7 +36,7 @@ void update_env(t_env **env, char *key, char *value)
     }
 
     // Add new variable if not found
-    c = (sizeof(t_env));
+    c = malloc(sizeof(t_env));
     if (!c)
     {
         perror("minishell: malloc");

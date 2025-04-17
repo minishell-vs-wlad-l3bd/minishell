@@ -4,7 +4,7 @@ SFLAGS = -lreadline
 COMP = cc
 HEADRES = minishell.h Libft/libft.h
 SRCS = minishell.c find_paths.c env/get_env.c env/lst_tools.c built_in/do_cd.c built_in/do_echo.c\
-utils/parssing.c built_in/do_unset.c built_in/do_env.c
+utils/parssing.c built_in/do_unset.c built_in/do_env.c built_in/do_exit.c redr.c
 
 OBGS = $(SRCS:.c=.o)
 
