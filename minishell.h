@@ -46,6 +46,9 @@ void	do_env(t_env *env);
 void do_pwd(void);
 void do_export(char **args, t_env **env);
 
+void	do_exit(char **args, t_env **envp);
+
+
 
 
 // for init env (kan3mr env->value)

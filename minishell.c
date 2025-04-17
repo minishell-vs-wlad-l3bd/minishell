@@ -62,7 +62,7 @@ void execute(char **paths, char **cmd)
 
 int check_type(char *str)
 {
-    if(ft_strchr(str, '|'))
+    if(ft_strchr(str, '|') || t_strchr(str, '>') || t_strchr(str, '>>') || t_strchr(str, '<'))
         return 1;
     return 0;
 }
@@ -169,6 +169,7 @@ int main(int ac, char **av, char **env)
         {
             char **cmds = split_with_pipes(str);
             pipe_handle(cmds, paths, &ev);
+            handle_redirections(cmd);
         }
         else if (is_builtin(cmd[0]))
             execute_builtin(cmd, &ev);
