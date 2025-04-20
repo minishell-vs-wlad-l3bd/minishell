@@ -24,9 +24,20 @@ typedef struct s_env
     struct s_env *next;
 }   t_env;
 
+typedef enum e_redir
+{
+    R_NONE,
+    R_IN,      // <
+    R_OUT,     // >
+    R_APPEND,  // >>
+    R_PIPE,
+}   t_redir;
+
 
 typedef struct s_mini
 {
+    t_redir redir;
+    t_env env;
     int in;
     int out;
     int ret; // return
@@ -56,7 +67,8 @@ t_env	*ft_env_lstnew(void *content);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 t_env	*env_init(char **env);
 
-void update_env(t_env **env, char *key, char *value);
+void    update_env(t_env **env, char *key, char *value);
+int     handle_redirections(char **cmd);
 
 // utils
 void *ft_malloc(size_t size);

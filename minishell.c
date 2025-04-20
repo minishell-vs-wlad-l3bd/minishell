@@ -60,12 +60,22 @@ void execute(char **paths, char **cmd)
         printf("minishell: %s: command not found\n", cmd[0]); //strerr ft_putstr_fd
 }
 
-int check_type(char *str)
+int check_is_type(char *str)
 {
-    if(ft_strchr(str, '|') || t_strchr(str, '>') || t_strchr(str, '>>') || t_strchr(str, '<'))
-        return 1;
-    return 0;
+    if (ft_strncmp(str, "<<", 2) == 0)
+        return R_IN; 
+    else if (ft_strncmp(str, ">>", 2) == 0)
+        return R_APPEND;
+    else if (str[0] == '>' && str[1] != '>')
+        return R_OUT;
+    else if (str[0] == '<' && str[1] != '<')
+        return R_IN;
+    else if (ft_strchr(str, '|'))
+        return R_PIPE;
+    else
+        return R_NONE;
 }
+
 
 char **split_with_pipes(char *str)
 {
@@ -102,17 +112,16 @@ void pipe_handle(char **cmds, char **paths, t_env **env)
         pids[i] = fork();
         if (pids[i] == 0) 
         {
-            signal(SIGINT, SIG_DFL);
-            signal(SIGQUIT, SIG_DFL);
             if (i > 0)
-                dup2(pipe_fds[i-1][0], STDIN_FILENO);
+            dup2(pipe_fds[i-1][0], STDIN_FILENO);
             if (i < count - 1)
-                dup2(pipe_fds[i][1], STDOUT_FILENO);
+            dup2(pipe_fds[i][1], STDOUT_FILENO);
             for (int j = 0; j < count - 1; j++) {
                 close(pipe_fds[j][0]);
                 close(pipe_fds[j][1]);
             }
             char **cmd = ft_split(cmds[i], ' ');
+            handle_redirections(cmd);
             if (is_builtin(cmd[0]))
             {
                 execute_builtin(cmd, env);
@@ -122,9 +131,9 @@ void pipe_handle(char **cmds, char **paths, t_env **env)
             {
                 char *cmd_path = find_cmd_path(paths, cmd[0]);
                 if (cmd_path)
-                    execve(cmd_path, cmd, NULL);
+                execve(cmd_path, cmd, NULL);
                 else
-                    printf("minishell: %s: command not found\n", cmd[0]);
+                printf("minishell: %s: command not found\n", cmd[0]);
                 exit(127);
             }
         }
@@ -137,6 +146,17 @@ void pipe_handle(char **cmds, char **paths, t_env **env)
     for (int i = 0; i < count; i++) {
         waitpid(pids[i], NULL, 0);
     }
+}
+
+void check_type(char *str, char **paths, t_env *env)
+{
+    char **cmd = ft_split(str, ' ');
+    char **cmds = split_with_pipes(str);
+
+    if(check_is_type(str) == R_PIPE)
+        pipe_handle(cmds, paths, &env);
+    else
+        handle_redirections(cmd);
 }
 
 int main(int ac, char **av, char **env)
@@ -165,12 +185,8 @@ int main(int ac, char **av, char **env)
         }
         add_history(str);
         cmd = ft_split(str, ' ');
-        if (check_type(str)) 
-        {
-            char **cmds = split_with_pipes(str);
-            pipe_handle(cmds, paths, &ev);
-            handle_redirections(cmd);
-        }
+        if (check_is_type(str))
+            check_type(str, paths, ev);
         else if (is_builtin(cmd[0]))
             execute_builtin(cmd, &ev);
         else
