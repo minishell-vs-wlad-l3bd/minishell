@@ -20,13 +20,17 @@
 
 typedef struct s_env
 {
+    char *key;
     char *value;
+    int n;
     struct s_env *next;
 }   t_env;
 
 
 typedef struct s_mini
 {
+    t_env *env;
+    char *var; // v=lsds
     int in;
     int out;
     int ret; // return
@@ -52,11 +56,12 @@ void	do_exit(char **args, t_env **envp);
 
 
 // for init env (kan3mr env->value)
-t_env	*ft_env_lstnew(void *content);
+t_env	*ft_env_lstnew(void *key, void *value, char *var, int n);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 t_env	*env_init(char **env);
 
 void update_env(t_env **env, char *key, char *value);
+int handle_redirections(char **cmd);
 
 // utils
 void *ft_malloc(size_t size);

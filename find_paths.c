@@ -2,16 +2,13 @@
 
 char *get_env_value(t_env *env, char *key)
 {
-    size_t key_len;
     
     if (!env || !key)
         return NULL;
-    
-    key_len = ft_strlen(key);
     while (env)
     {
-        if (env->value && strncmp(env->value, key, key_len) == 0 && env->value[key_len] == '=')
-            return env->value + key_len + 1;
+        if (env->key && !ft_strcmp(env->key, key))
+            return env->value;
         env = env->next;
     }
     return NULL;
