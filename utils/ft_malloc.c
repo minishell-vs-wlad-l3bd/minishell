@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "../main/minishell.h"
 
 // void ft_free(void *ptr, int flag)
 // {

@@ -1,8 +1,8 @@
-#include "../minishell.h"
+#include "../excute.h"
 
 void do_pwd(void)
 {
-    char cwd[PATH_MAX];
+    char cwd[MAX_PATH];
 
     if (getcwd(cwd, sizeof(cwd)))
         printf("%s\n", cwd);

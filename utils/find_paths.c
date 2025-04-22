@@ -1,15 +1,17 @@
-#include "minishell.h"
+#include "../main/minishell.h"
 
-char *get_env_value(t_env *env, char *key)
+char *get_env_value(t_mini *mini, char *key)
 {
-    
-    if (!env || !key)
+    t_env *node;
+
+    node = mini->env;
+    if (!node || !key)
         return NULL;
-    while (env)
+    while (node)
     {
-        if (env->key && !ft_strcmp(env->key, key))
-            return env->value;
-        env = env->next;
+        if (node->key && !ft_strcmp(node->key, key))
+            return node->value;
+        node = node->next;
     }
     return NULL;
 }

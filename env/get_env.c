@@ -1,12 +1,12 @@
-#include "../minishell.h"
+#include "../main/minishell.h"
 
-void update_env(t_env **env, char *key, char *value)
+void update_env(t_mini *mini, char *key, char *value)
 {
 	size_t v_len;
 	char *new;
 	t_env *c;
 
-	if (!env || !key || !value)
+	if (!mini->env || !key || !value)
 		return;
 	v_len = ft_strlen(value);
 	new = ft_malloc(v_len + 1);
@@ -17,7 +17,7 @@ void update_env(t_env **env, char *key, char *value)
 	}
 	ft_memcpy(new, value, v_len);
 	new[v_len] = '\0';
-	c = *env;
+	c = mini->env;
 	while (c)
 	{
 		if (c->key && !ft_strcmp(c->key, key))
@@ -34,26 +34,94 @@ void update_env(t_env **env, char *key, char *value)
 		return;
 	c->key = key;
 	c->value = new;
-	c->next = *env;
-	*env = c;
+	c->next = mini->env;
+	mini->env = c;
 }
 
-t_env	*env_init(char **env)
+void	env_pre_add(t_env **head, int flg)
+{
+	if (!flg)
+	{
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("PWD", getcwd(NULL, MAX_PATH), 1));
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("SHLVL", "1", 1));
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("_", "/usr/bin/env", 1));
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("PATH",
+				"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0));
+	}
+	else
+	{
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("OLDPWD", NULL, 1));
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("PWD", getcwd(NULL, MAX_PATH), 1));
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("PATH",
+				"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0));
+		ft_env_lstadd_back(head, ft_env_lstnew("SHLVL", "1", 1));
+	}
+}
+
+int	double_arr_len(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
+char	*ft_env_eqls(char **res)
 {
 	int		i;
+	char	*out;
+	char	*tmp;
+
+	if (!res || !(*res))
+		return (0);
+	i = -1;
+	out = NULL;
+	while (res[++i])
+	{
+		tmp = res[i];
+		if (out == NULL)
+		{
+			out = ft_strjoin(res[i], res[i + 1]);
+			i++;
+		}
+		else
+			out = ft_strjoin(out, res[i]);
+	}
+	return (out);
+}
+
+t_env	*env_init(char **env, int flag)
+{
 	t_env	*head;
+	t_env *new_node;
+	int		i;
 	char **tmp;
 
 	head = NULL;
 	i = 0;
-	if(!env)
-		return (NULL);
+	if(!*env)
+	{
+		env_pre_add(&head, flag);
+		return (head);
+	}
 	while (env[i])
 	{
 		tmp = ft_split(env[i], '=');
-		t_env *new_node = ft_env_lstnew(tmp[0], tmp[1], env[i], 0);
-		ft_env_lstadd_back(&head, new_node);
-		free(tmp);
+		if (double_arr_len(tmp) == 2)
+			ft_env_lstadd_back(&head, ft_env_lstnew(tmp[0], tmp[1], 1));
+		else if (double_arr_len(tmp) == 1)
+			ft_env_lstadd_back(&head, ft_env_lstnew(tmp[0], "", 1));
+		else if (double_arr_len(tmp) > 2)
+			ft_env_lstadd_back(&head, ft_env_lstnew(tmp[0], ft_env_eqls(tmp), 1));
 		i++;
 	}
 	return (head);

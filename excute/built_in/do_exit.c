@@ -1,15 +1,16 @@
-#include "../minishell.h"
+#include "../excute.h"
 
-void	free_envp(t_env **envp)
+void	free_envp(t_mini *mini)
 {
 	t_env *tmp;
 
-	while (*envp)
+	while (mini->env)
 	{
-		tmp = (*envp)->next;
-		free((*envp)->value);
-		free(*envp);
-		*envp = tmp;
+		tmp = mini->env->next;
+		free(mini->env->value);
+		free(mini->env->key);
+		free(mini->env);
+		mini->env = tmp;
 	}
 }
 
@@ -32,7 +33,7 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-void	do_exit(char **args, t_env **envp)
+void	do_exit(char **args, t_mini *mini)
 {
 	long	exit_code;
 
@@ -45,7 +46,7 @@ void	do_exit(char **args, t_env **envp)
 			ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 			ft_putstr_fd(args[1], STDERR_FILENO);
 			ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-			free_envp(envp);
+			free_envp(mini);
 			exit(255);
 		}
 		else if (args[1])	
@@ -58,6 +59,6 @@ void	do_exit(char **args, t_env **envp)
 	else
 		exit_code = 0;
 
-	free_envp(envp);
+	free_envp(mini);
 	exit((unsigned char)exit_code);
 }

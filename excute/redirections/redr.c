@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../excute.h"
 
 int handle_redirections(char **cmd)
 {

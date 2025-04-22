@@ -1,8 +1,8 @@
-#include "../minishell.h"
+#include "../excute.h"
 
-void do_cd(char **cmd, t_env **env)
+void do_cd(char **cmd, t_mini *mini)
 {
-    char cwd[PATH_MAX];
+    char cwd[MAX_PATH];
     char *target = NULL;
     char *error = NULL;
     int print_newdir = 0;
@@ -14,13 +14,13 @@ void do_cd(char **cmd, t_env **env)
     }
     if (!cmd[1])
     {
-        target = get_env_value(*env, "HOME");
+        target = get_env_value(mini, "HOME");
         if (!target)
             error = "HOME not set";
     }
     else if (strcmp(cmd[1], "-") == 0)
     {
-        target = get_env_value(*env, "OLDPWD");
+        target = get_env_value(mini, "OLDPWD");
         if (!target)
             error = "OLDPWD not set";
         else
@@ -34,8 +34,8 @@ void do_cd(char **cmd, t_env **env)
             error = "fail chadir";
         else
         {
-            update_env(env, "OLDPWD", cwd);
-            update_env(env, "PWD", getcwd(cwd, sizeof(cwd)));
+            update_env(mini, "OLDPWD", cwd);
+            update_env(mini, "PWD", getcwd(cwd, sizeof(cwd)));
             if (print_newdir)
                 if (getcwd(cwd, sizeof(cwd)))
                     printf("%s\n", cwd);

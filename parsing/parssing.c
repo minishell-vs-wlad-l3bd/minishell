@@ -1,4 +1,4 @@
-#include "../minishell.h"
+# include "../main/minishell.h"
 
 void	remove_quotes(char *str)
 {
@@ -10,7 +10,7 @@ void	remove_quotes(char *str)
 	j = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'' || str[i] == '"') // check echo $HOME + echo "$HOME" + echo '$HOME' (mohim dok li variable home and user etc ...)
+		if (str[i] == '\'' || str[i] == '"')
 		{
 			quote = str[i];
 			i++;

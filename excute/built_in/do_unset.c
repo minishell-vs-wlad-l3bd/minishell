@@ -1,8 +1,8 @@
-#include "../minishell.h"
+#include "../excute.h"
 
-void remove_env_var(char *var, t_env **envp)
+void remove_env_var(char *var, t_mini *mini)
 {
-    t_env *temp = *envp;
+    t_env *temp = mini->env;
     t_env *prev = NULL;
     size_t len;
     
@@ -14,7 +14,7 @@ void remove_env_var(char *var, t_env **envp)
             if (prev)
                 prev->next = temp->next;
             else
-                *envp = temp->next;
+                mini->env = temp->next;
             free(temp->value);
             free(temp);
             return;
@@ -44,14 +44,14 @@ int is_invalid_identifier(char *str)
     return 0;
 }
 
-void do_unset(char **args, t_env **envp)
+void do_unset(char **args, t_mini *mini)
 {
     int i = 0;
 
     while (args[i])
     {
         if (!is_invalid_identifier(args[i]))
-            remove_env_var(args[i], envp);
+            remove_env_var(args[i], mini);
         i++;
     }
 }
