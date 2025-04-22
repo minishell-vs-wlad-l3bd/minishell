@@ -7,6 +7,7 @@ void mini_init(t_mini *mini, int ac, char **av, char **env)
     (void)ac;
     (void)av;
     mini->exit = 0;
+    mini->child = 0;
     mini->env = env_init(env, 0);
     mini->export_env = env_init(env, 1);
     mini->in = dup(STDIN_FILENO);
@@ -19,8 +20,6 @@ void norm_main(t_mini *mini)
 
     while (1)
     {
-        signal(SIGINT, SIG_DFL);
-        signal(SIGQUIT, handler_child);
         str = readline(BLEU"minishell "RESET RED"▶ "RESET);
         if (!str)
         {
@@ -29,6 +28,8 @@ void norm_main(t_mini *mini)
         }
         if (str && *str)
             add_history(str);
+        else
+            continue ;
         signal(SIGINT, handler);
         signal(SIGQUIT, handler);
         ft_execute(mini, str);

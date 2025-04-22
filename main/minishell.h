@@ -44,6 +44,7 @@ typedef struct s_mini
 	int		out;
 	int		ret;
 	int		exit;
+	int		child;
 	pid_t	pid;
 } t_mini;
 
