@@ -2,6 +2,14 @@
 #include "../excute/excute.h"
 
 
+void restore_fd(t_mini *mini)
+{
+    dup2(mini->in, STDIN_FILENO);
+    dup2(mini->out, STDOUT_FILENO);
+    close(mini->in);
+    close(mini->out);
+}
+
 void mini_init(t_mini *mini, int ac, char **av, char **env)
 {
     (void)ac;
@@ -30,9 +38,9 @@ void norm_main(t_mini *mini)
             add_history(str);
         else
             continue ;
-        signal(SIGINT, handler);
-        signal(SIGQUIT, handler);
         ft_execute(mini, str);
+        restore_fd(mini);
+        mini->child = 0;
     }
 }
 

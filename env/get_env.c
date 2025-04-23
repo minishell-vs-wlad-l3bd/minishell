@@ -1,23 +1,18 @@
 #include "../main/minishell.h"
 
-void update_env(t_mini *mini, char *key, char *value)
+void update_env(t_env **env, char *key, char *value)
 {
 	size_t v_len;
 	char *new;
 	t_env *c;
 
-	if (!mini->env || !key || !value)
-		return;
+	if (!env || !key || !value)
+		return ;
 	v_len = ft_strlen(value);
 	new = ft_malloc(v_len + 1);
-	if (!new)
-	{
-		perror("minishell: ft_malloc");
-		return;
-	}
 	ft_memcpy(new, value, v_len);
 	new[v_len] = '\0';
-	c = mini->env;
+	c = *env;
 	while (c)
 	{
 		if (c->key && !ft_strcmp(c->key, key))
@@ -30,12 +25,10 @@ void update_env(t_mini *mini, char *key, char *value)
 		c = c->next;
 	}
 	c = ft_malloc(sizeof(t_env));
-	if (!c)
-		return;
 	c->key = key;
 	c->value = new;
-	c->next = mini->env;
-	mini->env = c;
+	c->next = *env;
+	*env = c;
 }
 
 void	env_pre_add(t_env **head, int flg)
@@ -58,9 +51,9 @@ void	env_pre_add(t_env **head, int flg)
 			ft_env_lstnew("OLDPWD", NULL, 1));
 		ft_env_lstadd_back(head,
 			ft_env_lstnew("PWD", getcwd(NULL, MAX_PATH), 1));
-		ft_env_lstadd_back(head,
-			ft_env_lstnew("PATH",
-				"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0));
+		// ft_env_lstadd_back(head,
+		// 	ft_env_lstnew("PATH",
+		// 		"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0));
 		ft_env_lstadd_back(head, ft_env_lstnew("SHLVL", "1", 1));
 	}
 }

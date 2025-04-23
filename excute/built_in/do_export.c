@@ -19,6 +19,10 @@ void ft_sort(t_mini *mini)
 				tmp = current->key;
 				current->key = next_node->key;
 				next_node->key = tmp;
+
+				tmp = current->value;
+				current->value = next_node->value;
+				next_node->value = tmp;
 			}
 			next_node = next_node->next;
 		}
@@ -33,45 +37,53 @@ void print_sort_env(t_mini *mini)
 	while (node)
 	{
 		printf("export : ");
-		printf("%s=", node->key);
-		if (!node->value)
-			printf("\"%s\"\n", node->value);
+		printf("%s", node->key);
+		if (node->value)
+			printf("=\"%s\"\n", node->value);
 		else
-			printf("\"\"\n"); 
+			printf("\n"); 
 		node = node->next;
 	}
 }
 
+int check(t_env **env, char *key)
+{
+	t_env *node = *env;
+	while(node)
+	{
+		if (!ft_strcmp(node->key, key))
+			return 1;
+		node = node->next;
+	}
+	return 0;
+ }
+
 void env_add(t_mini *mini, char *s)
 {
 	char **tmp;
-	t_env *node;
 
-	node = mini->export_env;
 	if(!ft_strchr(s, '='))
 	{
-		ft_env_lstadd_back(&node, ft_env_lstnew(ft_strdup(s), ft_strdup(""), 1));
+		if (check(&mini->export_env, s) || check(&mini->env, s))
+			return ;
+		ft_env_lstadd_back(&mini->export_env, ft_env_lstnew(s, NULL, 1));
 	}
 	else
 	{
 		tmp = ft_split(s, '=');
 		if(tmp)
 		{
-			if(tmp[1])
-				ft_env_lstadd_back(&node, ft_env_lstnew(ft_strdup(tmp[0]), ft_strdup(tmp[1]), 1));
-			else
-				ft_env_lstadd_back(&node, ft_env_lstnew(ft_strdup(tmp[0]), ft_strdup(""), 1));
+			if (check(&mini->env, tmp[0]))
+				update_env(&mini->env, tmp[0], tmp[1]);
+			update_env(&mini->export_env, tmp[0], tmp[1]);
 		}
-		
 	}
 }
 
 void do_export(char **args, t_mini *mini)
 {
 	if (!args[1])
-	{
 		print_sort_env(mini);
-	}
 	else
 		env_add(mini, args[1]);
 }

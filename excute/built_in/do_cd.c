@@ -34,8 +34,10 @@ void do_cd(char **cmd, t_mini *mini)
             error = "fail chadir";
         else
         {
-            update_env(mini, "OLDPWD", cwd);
-            update_env(mini, "PWD", getcwd(cwd, sizeof(cwd)));
+            update_env(&mini->env, "OLDPWD", cwd);
+            update_env(&mini->export_env, "OLDPWD", cwd);
+            update_env(&mini->env, "PWD", getcwd(cwd, sizeof(cwd)));
+            update_env(&mini->export_env, "PWD", getcwd(cwd, sizeof(cwd)));
             if (print_newdir)
                 if (getcwd(cwd, sizeof(cwd)))
                     printf("%s\n", cwd);

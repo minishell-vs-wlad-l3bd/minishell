@@ -4,6 +4,7 @@
 		"excute.h": "c",
 		"minishell.h": "c",
 		"sstream": "c",
-		"readline.h": "c"
+		"readline.h": "c",
+		"format": "c"
 	}
 }

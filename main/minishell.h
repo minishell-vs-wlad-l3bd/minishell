@@ -52,19 +52,17 @@ typedef struct s_mini
 char	*find_cmd_path(char **paths, char *cmd);
 char	*get_env_value(t_mini *mini, char *key);
 
-
 // excute fonction
-pid_t execute(char **paths, char **cmd, t_mini *mini);
+void	execute_cmd(char **paths, char **cmd, t_mini *mini);
 void	execute_builtin(char **cmd, t_mini *mini);
-void ft_execute(t_mini *mini, char *str);
-int is_builtin(char *str);
+void	ft_execute(t_mini *mini, char *str);
+int		is_builtin(char *str);
 
 // for init env (kan3mr env->value)
 t_env	*ft_env_lstnew(void *key, void *value, int n);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 t_env	*env_init(char **env, int flag);
-void update_env(t_mini *mini, char *key, char *value);
-
+void	update_env(t_env **env, char *key, char *value);
 
 // utils
 void *ft_malloc(size_t size);

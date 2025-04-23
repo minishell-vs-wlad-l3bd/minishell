@@ -41,7 +41,7 @@ char **split_with_pipes(char *str)
 	return cmds;
 }
 
-pid_t execute(char **paths, char **cmd, t_mini *mini)
+void execute_cmd(char **paths, char **cmd, t_mini *mini)
 {
 	pid_t pid;
 	char *cmd_path = find_cmd_path(paths, cmd[0]);
@@ -49,28 +49,32 @@ pid_t execute(char **paths, char **cmd, t_mini *mini)
     {
 		printf("minishell: %s: command not found\n", cmd[0]);
         mini->exit = 127;
-        return -1;
+		return ;
     }
 	pid = fork();
 	if (pid == 0)
 	{
+		mini->child = 1;
 		execve(cmd_path, cmd, NULL);
 		perror("execve failed");
-		mini->exit = 127;
-		exit(127);
 	}
-	return pid;
+	else
+		waitpid(pid, NULL, 0);
 }
+
 
 int check_type(char *str, char **paths, t_mini *mini)
 {
     char **cmd = ft_split(str, ' ');
     char **cmds = split_with_pipes(str);
 
-    if(ft_strchr(str, '|'))
+    if (ft_strchr(str, '|'))
         pipe_handle(cmds, paths, mini);
-    else
-        handle_redirections(cmd);
+    else if (ft_strchr(str, '>'))
+	{
+		handle_redirections(cmd);
+		execute_cmd(paths, cmd, mini);
+	}
 }
 
 void ft_execute(t_mini *mini, char *str)
@@ -86,9 +90,5 @@ void ft_execute(t_mini *mini, char *str)
     else if (is_builtin(cmd[0]))
         execute_builtin(cmd, mini);
     else
-	{
-        pid = execute(paths, cmd, mini);
-		if(pid > 0)
-			waitpid(pid, NULL, 0);
-	}
+		execute_cmd(paths, cmd, mini);
 }
