@@ -40,6 +40,8 @@ typedef struct s_mini
 {
 	t_env	*env;
 	t_env	*export_env;
+	int		pipe_in;
+	int		pipe_out;
 	int		in;
 	int		out;
 	int		ret;
@@ -72,5 +74,7 @@ void    quotes(char **strs);
 //signals
 void	handler(int sig);
 void	handler_child(int sig);
+void    reset_std_fds(t_mini *mini);
+void    backup_std_fds(t_mini *mini);
 
 #endif

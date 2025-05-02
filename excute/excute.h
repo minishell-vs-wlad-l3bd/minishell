@@ -16,6 +16,6 @@ void	do_export(char **args, t_mini *mini);
 void	do_exit(char **args, t_mini *mini);
 
 
-int		handle_redirections(char **cmd);
+int handle_redirections(char **cmd, t_mini *mini);
 
 #endif

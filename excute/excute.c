@@ -67,15 +67,32 @@ int check_type(char *str, char **paths, t_mini *mini)
 {
     char **cmd = ft_split(str, ' ');
     char **cmds = split_with_pipes(str);
+    int status = 0;
+
+    if (!cmd)
+        return (1);
 
     if (ft_strchr(str, '|'))
+    {
         pipe_handle(cmds, paths, mini);
-    else if (ft_strchr(str, '>'))
-	{
-		handle_redirections(cmd);
-		execute_cmd(paths, cmd, mini);
-	}
+        status = 1;
+    }
+    else if (ft_strchr(str, '>') || ft_strchr(str, '<'))
+    {
+        if (handle_redirections(cmd, mini))
+        {
+            if (is_builtin(cmd[0]))
+                execute_builtin(cmd, mini);
+            else
+                execute_cmd(paths, cmd, mini);
+        }
+        else
+            mini->ret = 1;
+        status = 1;
+    }
+    return status;
 }
+
 
 void ft_execute(t_mini *mini, char *str)
 {

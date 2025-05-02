@@ -1,0 +1,20 @@
+export cmd=" ls            -la"
+"$cmd" 
+sh:  ls            -la: command not found
+
+$cmd 
+total 56
+drwxr-xr-x 10 mohidbel 2024_khouribga   174 May  2 14:23  .
+drwx------ 37 mohidbel 2024_khouribga  4096 May  2 14:21  ..
+drwxr-xr-x  2 mohidbel 2024_khouribga    78 Apr 30 22:31  env
+drwxr-xr-x  4 mohidbel 2024_khouribga   124 Apr 30 22:31  excute
+drwxr-xr-x  8 mohidbel 2024_khouribga   220 Apr 23 16:21  .git
+drwxr-xr-x  2 mohidbel 2024_khouribga  4096 Apr 30 22:31  Libft
+drwxr-xr-x  2 mohidbel 2024_khouribga    63 Apr 30 22:31  main
+-rw-r--r--  1 mohidbel 2024_khouribga   829 Apr 29 11:38  Makefile
+-rwxr-xr-x  1 mohidbel 2024_khouribga 36184 Apr 30 22:31  minishell
+drwxr-xr-x  2 mohidbel 2024_khouribga    74 Apr 30 22:31  parsing
+-rw-r--r--  1 mohidbel 2024_khouribga    60 Apr 10 18:14  README.md
+-rw-r--r--  1 mohidbel 2024_khouribga    81 May  2 14:23 'to do'
+drwxr-xr-x  2 mohidbel 2024_khouribga    84 Apr 30 22:31  utils
+drwxr-xr-x  2 mohidbel 2024_khouribga    27 Apr 15 21:39  .vscode

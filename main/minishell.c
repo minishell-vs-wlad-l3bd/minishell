@@ -2,12 +2,30 @@
 #include "../excute/excute.h"
 
 
-void restore_fd(t_mini *mini)
+void backup_std_fds(t_mini *mini)
 {
-    dup2(mini->in, STDIN_FILENO);
-    dup2(mini->out, STDOUT_FILENO);
-    close(mini->in);
-    close(mini->out);
+    if (mini->in == -1)
+        mini->in = dup(STDIN_FILENO);
+    if (mini->out == -1)
+        mini->out = dup(STDOUT_FILENO);
+    if (mini->in < 0 || mini->out < 0)
+        perror("minishell: dup error");
+}
+
+void reset_std_fds(t_mini *mini)
+{
+    if (mini->in != -1)
+    {
+        dup2(mini->in, STDIN_FILENO);
+        close(mini->in);
+        mini->in = -1;
+    }
+    if (mini->out != -1)
+    {
+        dup2(mini->out, STDOUT_FILENO);
+        close(mini->out);
+        mini->out = -1;
+    }
 }
 
 void mini_init(t_mini *mini, int ac, char **av, char **env)
@@ -16,6 +34,7 @@ void mini_init(t_mini *mini, int ac, char **av, char **env)
     (void)av;
     mini->exit = 0;
     mini->child = 0;
+    mini->ret = 0;
     mini->env = env_init(env, 0);
     mini->export_env = env_init(env, 1);
     mini->in = dup(STDIN_FILENO);
@@ -28,6 +47,8 @@ void norm_main(t_mini *mini)
 
     while (1)
     {
+        reset_std_fds(mini);
+        backup_std_fds(mini);
         str = readline(BLEU"minishell "RESET RED"▶ "RESET);
         if (!str)
         {
@@ -39,7 +60,6 @@ void norm_main(t_mini *mini)
         else
             continue ;
         ft_execute(mini, str);
-        restore_fd(mini);
         mini->child = 0;
     }
 }
@@ -50,6 +70,7 @@ int main(int ac, char **av, char **env)
 
     if (!isatty(0))
         return (1);
+    
     signal(SIGINT, handler);
     signal(SIGQUIT, handler);
     mini_init(&mini, ac, av, env);

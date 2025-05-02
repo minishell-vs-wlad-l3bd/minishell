@@ -82,8 +82,12 @@ void env_add(t_mini *mini, char *s)
 
 void do_export(char **args, t_mini *mini)
 {
+	int i = 0;
 	if (!args[1])
 		print_sort_env(mini);
 	else
-		env_add(mini, args[1]);
+	{
+		while(args[++i])
+			env_add(mini, args[i]);
+	}
 }

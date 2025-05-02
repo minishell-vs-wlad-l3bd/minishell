@@ -26,3 +26,4 @@ void *ft_malloc(size_t size)
     // ft_free(ptr, 0);
     return (ptr);
 }
+
