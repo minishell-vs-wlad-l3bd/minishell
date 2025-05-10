@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 20:22:33 by mohidbel          #+#    #+#             */
-/*   Updated: 2024/11/04 11:40:17 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:54:30 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*ft_calloc(size_t count, size_t size)
 	total_size = count * size;
 	if (count && total_size / count != size)
 		return (NULL);
-	ptr = malloc((total_size) * sizeof(char));
+	ptr = ft_malloc((total_size) * sizeof(char));
 	if (ptr == NULL)
 		return (NULL);
 	i = 0;

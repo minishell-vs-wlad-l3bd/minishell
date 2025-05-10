@@ -1,18 +1,17 @@
-#include "minishell.h"
+#include "../main/minishell.h"
 
-char *get_env_value(t_env *env, char *key)
+char *get_env_value(t_mini *mini, char *key)
 {
-    size_t key_len;
-    
-    if (!env || !key)
+    t_env *node;
+
+    node = mini->env;
+    if (!node || !key)
         return NULL;
-    
-    key_len = ft_strlen(key);
-    while (env)
+    while (node)
     {
-        if (env->value && strncmp(env->value, key, key_len) == 0 && env->value[key_len] == '=')
-            return env->value + key_len + 1;
-        env = env->next;
+        if (node->key && !ft_strcmp(node->key, key))
+            return node->value;
+        node = node->next;
     }
     return NULL;
 }

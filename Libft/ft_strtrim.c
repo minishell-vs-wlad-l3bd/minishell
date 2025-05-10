@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 15:15:31 by mohidbel          #+#    #+#             */
-/*   Updated: 2024/11/01 12:59:23 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:54:30 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	while (end > start && is_in_set(*(end - 1), set))
 		end--;
 	len = end - start;
-	t = malloc((len + 1) * sizeof(char));
+	t = ft_malloc((len + 1) * sizeof(char));
 	if (t == NULL)
 		return (NULL);
 	ft_strlcpy(t, start, len + 1);

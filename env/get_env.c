@@ -1,15 +1,121 @@
-#include "../minishell.h"
+#include "../main/minishell.h"
 
-t_env	*env_init(char **env)
+void update_env(t_env **env, char *key, char *value)
+{
+	size_t v_len;
+	char *new;
+	t_env *c;
+
+	if (!env || !key || !value)
+		return ;
+	v_len = ft_strlen(value);
+	new = ft_malloc(v_len + 1);
+	ft_memcpy(new, value, v_len);
+	new[v_len] = '\0';
+	c = *env;
+	while (c)
+	{
+		if (c->key && !ft_strcmp(c->key, key))
+		{
+			if (c->value)
+                free(c->value);
+			c->value = new;
+			return;
+		}
+		c = c->next;
+	}
+	c = ft_malloc(sizeof(t_env));
+	c->key = key;
+	c->value = new;
+	c->next = *env;
+	*env = c;
+}
+
+void	env_pre_add(t_env **head, int flg)
+{
+	if (!flg)
+	{
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("PWD", getcwd(NULL, MAX_PATH), 1));
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("SHLVL", "1", 1));
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("_", "/usr/bin/env", 1));
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("PATH",
+				"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0));
+	}
+	else
+	{
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("OLDPWD", NULL, 1));
+		ft_env_lstadd_back(head,
+			ft_env_lstnew("PWD", getcwd(NULL, MAX_PATH), 1));
+		// ft_env_lstadd_back(head,
+		// 	ft_env_lstnew("PATH",
+		// 		"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0));
+		ft_env_lstadd_back(head, ft_env_lstnew("SHLVL", "1", 1));
+	}
+}
+
+int	double_arr_len(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
+char	*ft_env_eqls(char **res)
 {
 	int		i;
-	t_env	*head;
+	char	*out;
+	char	*tmp;
 
-    if (!env)
-        return NULL;
-	head = NULL;
+	if (!res || !(*res))
+		return (0);
 	i = -1;
-	while (env[++i])
-		ft_env_lstadd_back(&head, ft_env_lstnew(ft_strdup(env[i]))); // fhmha bohdk mafiyach 3yit
+	out = NULL;
+	while (res[++i])
+	{
+		tmp = res[i];
+		if (out == NULL)
+		{
+			out = ft_strjoin(res[i], res[i + 1]);
+			i++;
+		}
+		else
+			out = ft_strjoin(out, res[i]);
+	}
+	return (out);
+}
+
+t_env	*env_init(char **env, int flag)
+{
+	t_env	*head;
+	t_env *new_node;
+	int		i;
+	char **tmp;
+
+	head = NULL;
+	i = 0;
+	if(!*env)
+	{
+		env_pre_add(&head, flag);
+		return (head);
+	}
+	while (env[i])
+	{
+		tmp = ft_split(env[i], '=');
+		if (double_arr_len(tmp) == 2)
+			ft_env_lstadd_back(&head, ft_env_lstnew(tmp[0], tmp[1], 1));
+		else if (double_arr_len(tmp) == 1)
+			ft_env_lstadd_back(&head, ft_env_lstnew(tmp[0], "", 1));
+		else if (double_arr_len(tmp) > 2)
+			ft_env_lstadd_back(&head, ft_env_lstnew(tmp[0], ft_env_eqls(tmp), 1));
+		i++;
+	}
 	return (head);
 }

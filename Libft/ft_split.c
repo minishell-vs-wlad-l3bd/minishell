@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 14:52:49 by mohidbel          #+#    #+#             */
-/*   Updated: 2024/11/09 01:10:44 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:54:30 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static char	*wordcopy(char const *str, char c)
 	i = 0;
 	while (str[i] && str[i] != c)
 		i++;
-	word = malloc((i +1) * sizeof(char));
+	word = ft_malloc((i +1) * sizeof(char));
 	if (!word)
 		return (NULL);
 	i = 0;
@@ -70,7 +70,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	arr = (char **)malloc((wordcount(s, c) + 1) * sizeof(char *));
+	arr = (char **)ft_malloc((wordcount(s, c) + 1) * sizeof(char *));
 	if (!arr)
 		return (NULL);
 	i = 0;

@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "../excute.h"
 
 void    do_echo(char **av)
 {
@@ -8,7 +8,6 @@ void    do_echo(char **av)
 
     i = 0;
     nl = 0;
-
     while (av[i] && ft_strncmp(av[i], "-n", 2) == 0)
     {
         j = 2;
@@ -19,15 +18,14 @@ void    do_echo(char **av)
         nl++;
         i++;
     }
-
     while (av[i])
     {
-        write(STDOUT_FILENO, av[i], ft_strlen(av[i]));
+        ft_putstr_fd(av[i], STDOUT_FILENO);
         if (av[i + 1])
-            write(STDOUT_FILENO, " ", 1);
+            ft_putchar_fd(STDOUT_FILENO, ' ');
         i++;
     }
-
     if (!nl)
-        write(STDOUT_FILENO, "\n", 1);
+        ft_putchar_fd(STDOUT_FILENO, '\n');
+
 }
