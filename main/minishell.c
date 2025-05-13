@@ -1,17 +1,6 @@
 #include "minishell.h"
 #include "../excute/excute.h"
 
-int is_only_spaces(const char *str)
-{
-    while (*str)
-    {
-        if (!(*str == ' ' || *str == '\t'))
-            return 0;
-        str++;
-    }
-    return 1;
-}
-
 void backup_std_fds(t_mini *mini)
 {
     if (mini->in == -1)
@@ -65,16 +54,12 @@ void norm_main(t_mini *mini)
             printf("exit\n");
             exit(mini->exit);
         }
-        if (*str)
-            add_history(str);
-        if (!*str || is_only_spaces(str))
-        {
-            continue ;
-        }
+		if (check_input(str, mini))
+			continue ;
         ft_execute(mini, str);
+		child_flag = 0;
     }
 }
-
 int main(int ac, char **av, char **env)
 {
     t_mini mini;
@@ -83,7 +68,7 @@ int main(int ac, char **av, char **env)
         return (1);
 
     signal(SIGINT, handler);
-    signal(SIGQUIT, SIG_IGN);
+    signal(SIGQUIT, handler);
     disable_echoctl();
     mini_init(&mini, ac, av, env);
     increment_shlvl(&mini);

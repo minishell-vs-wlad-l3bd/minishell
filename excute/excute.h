@@ -13,6 +13,7 @@ void	do_env(t_mini *mini);
 void	do_pwd(t_mini *mini);
 void	do_export(char **args, t_mini *mini);
 void	do_exit(char **args, t_mini *mini);
+int		double_arr_len(char **str);
 
 void execute_pipeline(char **cmds, char **paths, t_mini *mini);
 int handle_redirections(char **cmd, t_mini *mini);

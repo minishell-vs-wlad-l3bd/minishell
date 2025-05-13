@@ -30,7 +30,10 @@ void do_cd(char **cmd, t_mini *mini)
     if (!error && target)
     {
         if (chdir(target) != 0)
-            check_valid_rdir(target);
+        {
+            // check_valid_rdir(target);
+            error = "invalid folder";
+        }
         else
         {
             update_env(&mini->env, "OLDPWD", cwd);

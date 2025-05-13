@@ -25,6 +25,25 @@ void	remove_quotes(char *str)
 	str[j] = '\0';
 }
 
+int		check_quotes(char *line)
+{
+	int		i;
+	char	quote;
+
+	i = 0;
+	if (!line)
+		return (-1);
+	if (line[i] == '\'' || line[i] == '"')
+	{
+		quote = line[i];
+		while (line[i] && line [i] != quote)
+			i++;
+		if (!line[i])
+			return (-1);
+		return (i);
+	}
+	return (0);
+}
 void    quotes(char **str)
 {
 	int	i;
@@ -35,4 +54,8 @@ void    quotes(char **str)
 		remove_quotes(str[i]);
 		i++;
 	}
+}
+int	ft_isspace(char c)
+{
+	return (c == ' ' || (c >= 9 && c <= 13));
 }

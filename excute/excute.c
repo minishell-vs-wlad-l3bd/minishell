@@ -100,19 +100,19 @@ void ft_execute(t_mini *mini, char *str)
 {
 	pid_t pid;
     char **paths;
-    char **cmd;
+    // char **cmd;
 
     paths = ft_split(get_env_value(mini, "PATH"), ':');
-    cmd = ft_split(str, ' ');
+    // cmd = ft_split(str, ' ');
     if (check_type(str, paths, mini))
         return ;
-    if (is_builtin(cmd[0]))
+    if (is_builtin(mini->parss->cmd[0]))
 	{
-        execute_builtin(cmd, mini);
+        execute_builtin(mini->parss->cmd, mini);
 	}
     else
 	{
-		update_env(&mini->env, "_", find_cmd_path(paths, cmd[0]));
-		execute_cmd(paths, cmd, mini);
+		update_env(&mini->env, "_", find_cmd_path(paths, mini->parss->cmd[0]));
+		execute_cmd(paths, mini->parss->cmd, mini);
 	}
 }
