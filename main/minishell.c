@@ -59,8 +59,10 @@ void norm_main(t_mini *mini)
             add_history(str);
         else
             continue ;
+		if (check_input(str, mini))
+			continue ;
         ft_execute(mini, str);
-        mini->child = 0;
+		child_flag = 0;
     }
 }
 
@@ -73,6 +75,7 @@ int main(int ac, char **av, char **env)
     
     signal(SIGINT, handler);
     signal(SIGQUIT, handler);
+	
     mini_init(&mini, ac, av, env);
     norm_main(&mini);
     rl_clear_history();

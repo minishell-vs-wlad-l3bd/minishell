@@ -107,5 +107,8 @@ void ft_execute(t_mini *mini, char *str)
     else if (is_builtin(cmd[0]))
         execute_builtin(cmd, mini);
     else
+	{
+		child_flag = 1;
 		execute_cmd(paths, cmd, mini);
+	}
 }

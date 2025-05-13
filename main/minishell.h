@@ -11,12 +11,38 @@
 #include <limits.h>
 #include "../Libft/libft.h"
 #include "../excute/excute.h"
+#include <stdbool.h>
 
 #define RED "\033[31m"
 #define RESET "\033[0m"
 #define BLEU "\033[34m"
 
 #define MAX_PATH 4096
+
+int child_flag;
+
+typedef struct tokens
+{
+	int		CMD;
+	int     append;
+    int     heredoc;
+	int		pipe;
+	int		intput;
+	int		output;
+	char 	*file;
+	int		flag;
+	struct tokens *next;
+}	t_tokens;
+
+
+typedef struct s_parsing
+{
+    char    **cmd;
+	t_tokens *token;
+	struct s_parsing	*next;
+} t_parsing;
+
+
 
 typedef struct s_env
 {
@@ -26,20 +52,11 @@ typedef struct s_env
 	struct s_env *next;
 }   t_env;
 
-typedef enum e_redir
-{
-	R_NONE,
-	R_IN,      // <
-	R_OUT,     // >
-	R_APPEND,  // >>
-	R_PIPE,
-}   t_redir;
-
-
 typedef struct s_mini
 {
 	t_env	*env;
 	t_env	*export_env;
+	t_parsing *parss;
 	int		pipe_in;
 	int		pipe_out;
 	int		in;
@@ -50,10 +67,9 @@ typedef struct s_mini
 	pid_t	pid;
 } t_mini;
 
-
 char	*find_cmd_path(char **paths, char *cmd);
 char	*get_env_value(t_mini *mini, char *key);
-
+int		double_arr_len(char **str);
 // excute fonction
 void	execute_cmd(char **paths, char **cmd, t_mini *mini);
 void	execute_builtin(char **cmd, t_mini *mini);
@@ -77,4 +93,13 @@ void	handler_child(int sig);
 void    reset_std_fds(t_mini *mini);
 void    backup_std_fds(t_mini *mini);
 
+int			ft_isspace(char c);
+int			valid_line(char *line);
+int			check_quotes(char *line);
+int			check_syntax(char *str);
+int			analys_syntax(char *line);
+void    	valid_syntax(char *line, t_mini *mini);
+void		ft_lstadd_back_2(t_parsing **lst, t_parsing *new);
+char		**split_by_pipe(const char *s);
+int			check_input(char *str, t_mini *mini);
 #endif

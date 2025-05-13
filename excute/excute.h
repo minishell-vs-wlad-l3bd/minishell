@@ -14,6 +14,7 @@ void	do_env(t_mini *mini);
 void	do_pwd(void);
 void	do_export(char **args, t_mini *mini);
 void	do_exit(char **args, t_mini *mini);
+int		double_arr_len(char **str);
 
 
 int handle_redirections(char **cmd, t_mini *mini);
