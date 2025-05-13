@@ -1,6 +1,16 @@
 #include "minishell.h"
 #include "../excute/excute.h"
 
+int is_only_spaces(const char *str)
+{
+    while (*str)
+    {
+        if (!(*str == ' ' || *str == '\t'))
+            return 0;
+        str++;
+    }
+    return 1;
+}
 
 void backup_std_fds(t_mini *mini)
 {
@@ -33,8 +43,8 @@ void mini_init(t_mini *mini, int ac, char **av, char **env)
     (void)ac;
     (void)av;
     mini->exit = 0;
-    mini->child = 0;
     mini->ret = 0;
+    mini->ev = env; 
     mini->env = env_init(env, 0);
     mini->export_env = env_init(env, 1);
     mini->in = dup(STDIN_FILENO);
@@ -49,18 +59,19 @@ void norm_main(t_mini *mini)
     {
         reset_std_fds(mini);
         backup_std_fds(mini);
-        str = readline(BLEU"minishell "RESET RED"▶ "RESET);
+        str = readline("minishell $ ");
         if (!str)
         {
             printf("exit\n");
             exit(mini->exit);
         }
-        if (str && *str)
+        if (*str)
             add_history(str);
-        else
+        if (!*str || is_only_spaces(str))
+        {
             continue ;
+        }
         ft_execute(mini, str);
-        mini->child = 0;
     }
 }
 
@@ -70,10 +81,12 @@ int main(int ac, char **av, char **env)
 
     if (!isatty(0))
         return (1);
-    
+
     signal(SIGINT, handler);
-    signal(SIGQUIT, handler);
+    signal(SIGQUIT, SIG_IGN);
+    disable_echoctl();
     mini_init(&mini, ac, av, env);
+    increment_shlvl(&mini);
     norm_main(&mini);
     rl_clear_history();
     return 0;

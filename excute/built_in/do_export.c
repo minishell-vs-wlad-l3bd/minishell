@@ -14,12 +14,11 @@ void ft_sort(t_mini *mini)
 		next_node = current->next;
 		while (next_node)
 		{
-			if (strcmp(current->key, next_node->key) > 0)
+			if (ft_strcmp(current->key, next_node->key) > 0)
 			{
 				tmp = current->key;
 				current->key = next_node->key;
 				next_node->key = tmp;
-
 				tmp = current->value;
 				current->value = next_node->value;
 				next_node->value = tmp;
@@ -66,15 +65,15 @@ void env_add(t_mini *mini, char *s)
 	{
 		if (check(&mini->export_env, s) || check(&mini->env, s))
 			return ;
-		ft_env_lstadd_back(&mini->export_env, ft_env_lstnew(s, NULL, 1));
+		ft_env_lstadd_back(&mini->export_env, ft_env_lstnew(s, NULL));
 	}
 	else
 	{
 		tmp = ft_split(s, '=');
+
 		if(tmp)
 		{
-			if (check(&mini->env, tmp[0]))
-				update_env(&mini->env, tmp[0], tmp[1]);
+			update_env(&mini->env, tmp[0], tmp[1]);
 			update_env(&mini->export_env, tmp[0], tmp[1]);
 		}
 	}

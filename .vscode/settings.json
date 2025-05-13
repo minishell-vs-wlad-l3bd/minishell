@@ -5,6 +5,8 @@
 		"minishell.h": "c",
 		"sstream": "c",
 		"readline.h": "c",
-		"format": "c"
+		"format": "c",
+		"__hash_table": "c",
+		"unordered_map": "c"
 	}
 }

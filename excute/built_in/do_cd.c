@@ -9,8 +9,7 @@ void do_cd(char **cmd, t_mini *mini)
 
     if (!getcwd(cwd, sizeof(cwd)))
     {
-        perror("minishell: cd");
-        return;
+        ft_strlcpy(cwd, get_env_value(mini, "PWD"), MAX_PATH);
     }
     if (!cmd[1])
     {
@@ -31,7 +30,7 @@ void do_cd(char **cmd, t_mini *mini)
     if (!error && target)
     {
         if (chdir(target) != 0)
-            error = "fail chadir";
+            check_valid_rdir(target);
         else
         {
             update_env(&mini->env, "OLDPWD", cwd);
@@ -46,6 +45,6 @@ void do_cd(char **cmd, t_mini *mini)
     if (error)
     {
         ft_putstr_fd("minishell: cd: ", 2);
-        ft_putstr_fd(error, 2);
+        ft_putendl_fd(error, 2);
     }
 }

@@ -12,15 +12,14 @@ int is_builtin(char *str)
 
 void execute_builtin(char **cmd, t_mini *mini)
 {
-	quotes(&cmd[1]);
 	if (!strcmp(cmd[0], "cd"))
 		do_cd(cmd, mini);
 	else if(!strcmp(cmd[0], "echo"))
-		do_echo(&cmd[1]);
+		do_echo(cmd);
 	else if (!strcmp(cmd[0], "exit"))
 		do_exit(cmd, mini);
 	else if(!strcmp(cmd[0], "pwd"))
-		do_pwd();
+		do_pwd(mini);
 	else if(!strcmp(cmd[0], "export"))
 		do_export(cmd, mini);
 	else if(!strcmp(cmd[0], "unset"))
@@ -54,8 +53,7 @@ void execute_cmd(char **paths, char **cmd, t_mini *mini)
 	pid = fork();
 	if (pid == 0)
 	{
-		mini->child = 1;
-		execve(cmd_path, cmd, NULL);
+		execve(cmd_path, cmd, mini->ev);
 		perror("execve failed");
 	}
 	else
@@ -71,12 +69,16 @@ int check_type(char *str, char **paths, t_mini *mini)
 
     if (!cmd)
         return (1);
-
     if (ft_strchr(str, '|'))
     {
-        pipe_handle(cmds, paths, mini);
+        execute_pipeline(cmds, paths, mini);
         status = 1;
     }
+	else if (ft_strnstr(str, "<<", 2))
+	{
+		heredoc(mini, str);
+		status = 1;
+	}
     else if (ft_strchr(str, '>') || ft_strchr(str, '<'))
     {
         if (handle_redirections(cmd, mini))
@@ -104,8 +106,13 @@ void ft_execute(t_mini *mini, char *str)
     cmd = ft_split(str, ' ');
     if (check_type(str, paths, mini))
         return ;
-    else if (is_builtin(cmd[0]))
+    if (is_builtin(cmd[0]))
+	{
         execute_builtin(cmd, mini);
+	}
     else
+	{
+		update_env(&mini->env, "_", find_cmd_path(paths, cmd[0]));
 		execute_cmd(paths, cmd, mini);
+	}
 }

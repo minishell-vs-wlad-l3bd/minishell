@@ -19,7 +19,7 @@ void	ft_env_lstadd_back(t_env **lst, t_env *new)
 	new->next = NULL;
 }
 
-t_env	*ft_env_lstnew(void *key, void *value, int n)
+t_env	*ft_env_lstnew(void *key, void *value)
 {
 	t_env	*node1;
 
@@ -28,7 +28,6 @@ t_env	*ft_env_lstnew(void *key, void *value, int n)
 		return (NULL);
 	node1->value = value;
 	node1->key = key;
-	node1->is_export = n;
 	node1->next = NULL;
 	return (node1);
 }

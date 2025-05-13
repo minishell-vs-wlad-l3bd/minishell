@@ -9,12 +9,13 @@ void remove_env_var(char *var, t_mini *mini)
     len  = ft_strlen(var);
     while (temp)
     {
-        if (ft_strncmp(temp->value, var, len) == 0 && temp->value[len] == '=')
+        if (ft_strcmp(temp->key, var) == 0)
         {
             if (prev)
                 prev->next = temp->next;
             else
                 mini->env = temp->next;
+            free(temp->key);
             free(temp->value);
             free(temp);
             return;

@@ -6,8 +6,9 @@ void    do_echo(char **av)
     int     nl;
     int     j;
 
-    i = 0;
+    i = 1;
     nl = 0;
+    quotes(av);
     while (av[i] && ft_strncmp(av[i], "-n", 2) == 0)
     {
         j = 2;
@@ -22,10 +23,9 @@ void    do_echo(char **av)
     {
         ft_putstr_fd(av[i], STDOUT_FILENO);
         if (av[i + 1])
-            ft_putchar_fd(STDOUT_FILENO, ' ');
+            ft_putchar_fd(' ', STDOUT_FILENO);
         i++;
     }
     if (!nl)
-        ft_putchar_fd(STDOUT_FILENO, '\n');
-
+        ft_putchar_fd('\n', STDOUT_FILENO);
 }

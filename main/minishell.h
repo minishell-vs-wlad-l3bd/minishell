@@ -9,6 +9,7 @@
 #include <readline/readline.h>
 #include <signal.h>
 #include <limits.h>
+#include <termios.h>
 #include "../Libft/libft.h"
 #include "../excute/excute.h"
 
@@ -18,36 +19,38 @@
 
 #define MAX_PATH 4096
 
+int child;
+
 typedef struct s_env
 {
 	char *key;
 	char *value;
-	int is_export;
 	struct s_env *next;
 }   t_env;
 
-typedef enum e_redir
+typedef enum
 {
 	R_NONE,
-	R_IN,      // <
-	R_OUT,     // >
-	R_APPEND,  // >>
+	R_IN,
+	R_OUT,
+	R_APPEND,
 	R_PIPE,
 }   t_redir;
 
 
 typedef struct s_mini
 {
-	t_env	*env;
-	t_env	*export_env;
+	char	**ev;
 	int		pipe_in;
 	int		pipe_out;
+	int		prev_pipe;
 	int		in;
 	int		out;
 	int		ret;
 	int		exit;
-	int		child;
 	pid_t	pid;
+	t_env	*env;
+	t_env	*export_env;
 } t_mini;
 
 
@@ -61,18 +64,18 @@ void	ft_execute(t_mini *mini, char *str);
 int		is_builtin(char *str);
 
 // for init env (kan3mr env->value)
-t_env	*ft_env_lstnew(void *key, void *value, int n);
+t_env	*ft_env_lstnew(void *key, void *value);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 t_env	*env_init(char **env, int flag);
 void	update_env(t_env **env, char *key, char *value);
 
 // utils
 void *ft_malloc(size_t size);
-void pipe_handle(char **cmds, char **paths, t_mini *mini);
 void    quotes(char **strs);
 
 //signals
 void	handler(int sig);
+void disable_echoctl(void);
 void	handler_child(int sig);
 void    reset_std_fds(t_mini *mini);
 void    backup_std_fds(t_mini *mini);

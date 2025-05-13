@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 16:06:23 by mohidbel          #+#    #+#             */
-/*   Updated: 2024/11/01 12:28:54 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/02 15:49:25 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*ft_strchr(const char *s, int c)
 	int	i;
 
 	i = 0;
+	if (!s)
+		return NULL;
 	while (s[i] != '\0')
 	{
 		if (s[i] == (char)c)

@@ -1,59 +1,103 @@
 #include "../excute.h"
 
-void pipe_handle(char **cmds, char **paths, t_mini *mini)
+int create_pipe(t_mini *mini)
+{
+    int pipe_fds[2];
+
+    if (pipe(pipe_fds) == -1)
+    {
+        perror("minishell: pipe failed");
+        return 0;
+    }
+    mini->pipe_in = pipe_fds[0];
+    mini->pipe_out = pipe_fds[1];
+    return 1;
+}
+
+void setup_pipe_io(t_mini *mini, int is_first, int is_last)
+{
+    if (!is_first)
+    {
+        dup2(mini->prev_pipe, STDIN_FILENO);
+        close(mini->prev_pipe);
+    }
+    if (!is_last)
+        dup2(mini->pipe_out, STDOUT_FILENO);
+    close(mini->pipe_in);
+    close(mini->pipe_out);
+}
+
+char **remove_null_entries(char **cmd)
 {
     int count = 0;
-    int i = 0;
-    
-    while (cmds[count])
+    while (cmd[count])
         count++;
-    pid_t *pids = ft_malloc(sizeof(pid_t) * count);
-    int (*pipe_fds)[2] = ft_malloc(sizeof(int[2]) * (count - 1));
-    while (i < count - 1)
+    char **new_cmd = ft_calloc(count + 1, sizeof(char *));
+    if (!new_cmd)
+        return NULL;
+    
+    int j = 0;
+    int i = 0;
+    while (cmd[i])
     {
-        if (pipe(pipe_fds[i])) {
-            perror("pipe failed");
-            return;
-        }
+        if (cmd[i] != NULL)
+            new_cmd[j++] = ft_strdup(cmd[i]);
         i++;
     }
-    i = 0;
-    while (i < count)
+    new_cmd[j] = NULL;
+    for (int i = 0; cmd[i]; i++)
+        free(cmd[i]);
+    free(cmd);
+    return new_cmd;
+}
+
+void execute_pipeline(char **cmds, char **paths, t_mini *mini)
+{
+    int count_cmds = 0;
+    mini->prev_pipe = -1;
+    int i = -1;
+
+    while (cmds[count_cmds])
+        count_cmds++;
+    pid_t pids[count_cmds];
+    while (++i < count_cmds)
     {
+        if (i < count_cmds - 1)
+            if (!create_pipe(mini))
+                return;
         pids[i] = fork();
-        if (pids[i] == 0) 
+        if (pids[i] == 0)
         {
-            if (i > 0)
-                dup2(pipe_fds[i-1][0], STDIN_FILENO);
-            if (i < count - 1)
-                dup2(pipe_fds[i][1], STDOUT_FILENO);
-            for (int j = 0; j < count - 1; j++) {
-                close(pipe_fds[j][0]);
-                close(pipe_fds[j][1]);
-            }
+            setup_pipe_io(mini, i == 0, i == count_cmds - 1);
             char **cmd = ft_split(cmds[i], ' ');
+            if (!handle_redirections(cmd, mini))
+                exit(1);
+            cmd = remove_null_entries(cmd);
             if (is_builtin(cmd[0]))
             {
                 execute_builtin(cmd, mini);
-                mini->exit = 0;
                 exit(0);
             }
             else
             {
-            	char *cmd_path = find_cmd_path(paths, cmd[0]);
-                execve(cmd_path, cmd, NULL);
-		        perror("execve failed");
-		        mini->exit = 127;
-                exit(mini->exit);
+                execute_cmd(paths, cmd, mini);
+                exit(0);
             }
         }
-        i++;
+        else if (pids[i] < 0)
+        {
+            perror("minishell: fork");
+            return;
+        }
+        if (mini->prev_pipe != -1)
+            close(mini->prev_pipe);
+        if (i < count_cmds - 1)
+        {
+            mini->prev_pipe = mini->pipe_in;
+            close(mini->pipe_out);
+        }
     }
-    for (int i = 0; i < count - 1; i++) {
-        close(pipe_fds[i][0]);
-        close(pipe_fds[i][1]);
-    }
-    for (int i = 0; i < count; i++) {
+    i = -1;
+    while (++i < count_cmds)
         waitpid(pids[i], NULL, 0);
-    }
 }
