@@ -56,10 +56,8 @@ static char	*copy_word(const char *s, int len)
 	char	*word ;
 	int		i;
 
-	word = malloc(len + 1);
+	word = ft_malloc(len + 1);
 	i = 0;
-	if (!word)
-		return (NULL);
 	while (i < len)
 	{
 		word[i] = s[i];
@@ -76,34 +74,26 @@ static void	free_all(char **arr, int count)
 	free(arr);
 }
 
-char	**split_by_pipe(const char *s)
+char	**split_by_pipe(const char *s, t_mini *mini)
 {
 	char	**result;
 	int		i;
-	int		len;
-	int		words;
 
 	if (!s)
 		return (NULL);
 	i = 0;
-	words = count_words(s, '|');
-	result = malloc((words + 1) * sizeof(char *));
-	if (!result)
-		return (NULL);
+	if(count_words(s, '|') > 1)
+		mini->pipe = 1;
+	result = ft_malloc((count_words(s, '|') + 1) * sizeof(char *));
 	while (*s)
 	{
 		while (*s == '|')
 			s++;
 		if (!*s)
 			break;
-		len = word_len(s, '|');
-		result[i] = copy_word(s, len);
-		if (!result[i])
-		{
-			free_all(result, i);
-			return (NULL);
-		}
-		s += len;
+		if ((result[i] = copy_word(s, word_len(s, '|'))) == 0)
+			return (free_all(result, i), NULL);
+		s += word_len(s, '|');
 		i++;
 	}
 	result[i] = NULL;

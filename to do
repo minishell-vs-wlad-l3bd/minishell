@@ -14,5 +14,5 @@
 ======>run with path /bin/ls
 
 ======>split problem echo "ls -l"
-
-yes
+ls >> a >> b >> c
+yes               
