@@ -40,27 +40,31 @@ t_parsing *init_all(char **str)
 	int in = 0;
 
 	head = ft_malloc(sizeof(t_parsing));
-	current_token = ft_malloc(sizeof(t_tokens));
-	if (!head || !current_token)
-		return (NULL);
-	head->cmd = ft_malloc(sizeof(char *) * double_arr_len(str) + 1);
-	if (!head->cmd)
-		return (NULL); 
-	head->token = current_token;
+	head->cmd = ft_malloc(sizeof(char *) * (double_arr_len(str) + 1));
+	head->token = NULL;
+	current_token = NULL;
+	t_tokens *last_token = NULL;
 	while (str[i])
 	{
 		if (get_type(str[i]) && !ft_strchr(str[i], '\'') && !ft_strchr(str[i], '\"'))
 		{
-			init_redir(current_token, str[i]);
+			t_tokens *new_token = ft_calloc(1, sizeof(t_tokens));
+			if (!new_token)
+				return (NULL);
+			init_redir(new_token, str[i]);
 			if (str[i + 1])
 			{
-				current_token->file = str[i + 1];
+				new_token->file = str[i + 1];
 				i++;
 			}
-			current_token->next = ft_malloc(sizeof(t_tokens));
-			if (!current_token->next)
-				return (NULL);
-			current_token = current_token->next;
+			else
+				new_token->file = NULL;
+			if (!head->token)
+				head->token = new_token;
+			else
+				last_token->next = new_token;
+
+			last_token = new_token;
 		}
 		else
 			head->cmd[in++] = str[i];
@@ -69,6 +73,7 @@ t_parsing *init_all(char **str)
 	head->cmd[in] = NULL;
 	return head;
 }
+
 
 void    valid_syntax(char *line, t_mini *mini)
 {

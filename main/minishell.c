@@ -31,13 +31,13 @@ void mini_init(t_mini *mini, int ac, char **av, char **env)
 {
     (void)ac;
     (void)av;
-    mini->exit = 0;
-    mini->ret = 0;
-    mini->ev = env; 
+    ft_memset(mini, 0, sizeof(t_mini));
+    mini->ev = env;
+    mini->in = -1;
+    mini->out = -1;
     mini->env = env_init(env, 0);
     mini->export_env = env_init(env, 1);
-    mini->in = dup(STDIN_FILENO);
-    mini->out = dup(STDOUT_FILENO);
+    backup_std_fds(mini);
 }
 
 void norm_main(t_mini *mini)
@@ -51,13 +51,12 @@ void norm_main(t_mini *mini)
         str = readline("minishell $ ");
         if (!str)
         {
-            printf("exit\n");
-            exit(mini->exit);
+            ft_putstr_fd("exit\n", STDOUT_FILENO);
+            reset_std_fds(mini);
+            break;
         }
-		if (check_input(str, mini))
-			continue ;
-        ft_execute(mini, str);
-		child_flag = 0;
+		if (*str && !check_input(str, mini))
+            ft_execute(mini, str);
     }
 }
 int main(int ac, char **av, char **env)
@@ -68,7 +67,7 @@ int main(int ac, char **av, char **env)
         return (1);
 
     signal(SIGINT, handler);
-    signal(SIGQUIT, handler);
+    signal(SIGQUIT, SIG_IGN);
     disable_echoctl();
     mini_init(&mini, ac, av, env);
     increment_shlvl(&mini);

@@ -1,5 +1,16 @@
 #include "../excute.h"
 
+int ft_lstsize(t_parsing *parss)
+{
+    int i = 0;
+    while(parss)
+    {
+        i++;
+        parss = parss->next;
+    }
+    return i;
+}
+
 int create_pipe(t_mini *mini)
 {
     int pipe_fds[2];
@@ -30,14 +41,14 @@ void setup_pipe_io(t_mini *mini, int is_first, int is_last)
 char **remove_null_entries(char **cmd)
 {
     int count = 0;
+    int j = 0;
+    int i = 0;
     while (cmd[count])
         count++;
     char **new_cmd = ft_calloc(count + 1, sizeof(char *));
     if (!new_cmd)
         return NULL;
-    
-    int j = 0;
-    int i = 0;
+
     while (cmd[i])
     {
         if (cmd[i] != NULL)
@@ -51,14 +62,15 @@ char **remove_null_entries(char **cmd)
     return new_cmd;
 }
 
-void execute_pipeline(char **cmds, char **paths, t_mini *mini)
+void execute_pipeline(char *str, char **paths, t_mini *mini)
 {
     int count_cmds = 0;
     mini->prev_pipe = -1;
+    t_parsing *parss;
     int i = -1;
 
-    while (cmds[count_cmds])
-        count_cmds++;
+    parss = mini->parss;
+    count_cmds = ft_lstsize(parss);
     pid_t pids[count_cmds];
     while (++i < count_cmds)
     {
@@ -68,19 +80,19 @@ void execute_pipeline(char **cmds, char **paths, t_mini *mini)
         pids[i] = fork();
         if (pids[i] == 0)
         {
+            signal(SIGINT, SIG_DFL);
             setup_pipe_io(mini, i == 0, i == count_cmds - 1);
-            char **cmd = ft_split(cmds[i], ' ');
-            if (!handle_redirections(cmd, mini))
+            if (!check_type(str, paths, mini))
                 exit(1);
-            cmd = remove_null_entries(cmd);
-            if (is_builtin(cmd[0]))
+            parss->cmd = remove_null_entries(parss->cmd);
+            if (is_builtin(parss->cmd[0]))
             {
-                execute_builtin(cmd, mini);
+                execute_builtin(parss->cmd, mini);
                 exit(0);
             }
             else
             {
-                execute_cmd(paths, cmd, mini);
+                execute_cmd(paths, parss->cmd, mini);
                 exit(0);
             }
         }
@@ -96,6 +108,7 @@ void execute_pipeline(char **cmds, char **paths, t_mini *mini)
             mini->prev_pipe = mini->pipe_in;
             close(mini->pipe_out);
         }
+        parss = parss->next;
     }
     i = -1;
     while (++i < count_cmds)

@@ -103,4 +103,8 @@ void    	valid_syntax(char *line, t_mini *mini);
 void		ft_lstadd_back_2(t_parsing **lst, t_parsing *new);
 char		**split_by_pipe(const char *s);
 int			check_input(char *str, t_mini *mini);
+
+
+int handle_redirections(t_tokens *token);
+
 #endif

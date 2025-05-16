@@ -14,9 +14,9 @@ void	do_pwd(t_mini *mini);
 void	do_export(char **args, t_mini *mini);
 void	do_exit(char **args, t_mini *mini);
 int		double_arr_len(char **str);
+int check_type(char *str, char **paths, t_mini *mini);
 
-void execute_pipeline(char **cmds, char **paths, t_mini *mini);
-int handle_redirections(char **cmd, t_mini *mini);
+void execute_pipeline(char *str, char **paths, t_mini *mini);
 void    increment_shlvl(t_mini *mini);
 void heredoc(t_mini *mini, char *str);
 

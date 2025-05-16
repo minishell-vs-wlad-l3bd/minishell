@@ -28,18 +28,6 @@ void execute_builtin(char **cmd, t_mini *mini)
 		do_env(mini);
 }
 
-char **split_with_pipes(char *str)
-{
-	int i = 0;
-	char **cmds = ft_split(str, '|');
-	while (cmds[i])
-	{
-        cmds[i] = ft_strtrim(cmds[i], " ");
-		i++;
-	}
-	return cmds;
-}
-
 void execute_cmd(char **paths, char **cmd, t_mini *mini)
 {
 	pid_t pid;
@@ -53,8 +41,9 @@ void execute_cmd(char **paths, char **cmd, t_mini *mini)
 	pid = fork();
 	if (pid == 0)
 	{
+        signal(SIGINT, SIG_DFL);
+        signal(SIGQUIT, SIG_DFL);
 		execve(cmd_path, cmd, mini->ev);
-		perror("execve failed");
 	}
 	else
 		waitpid(pid, NULL, 0);
@@ -63,36 +52,26 @@ void execute_cmd(char **paths, char **cmd, t_mini *mini)
 
 int check_type(char *str, char **paths, t_mini *mini)
 {
-    char **cmd = ft_split(str, ' ');
-    char **cmds = split_with_pipes(str);
-    int status = 0;
+	t_tokens *tokens;
 
-    if (!cmd)
-        return (1);
-    if (ft_strchr(str, '|'))
-    {
-        execute_pipeline(cmds, paths, mini);
-        status = 1;
-    }
-	else if (ft_strnstr(str, "<<", 2))
+	tokens = mini->parss->token;
+	while(tokens && (tokens->heredoc || tokens->append || tokens->intput || tokens->output))
 	{
-		heredoc(mini, str);
-		status = 1;
+		if (tokens->heredoc)
+		{
+			heredoc(mini, str);
+			return 1;
+		}
+		else if (tokens->append || tokens->intput || tokens->output)
+		{
+			if(handle_redirections(tokens))
+				return 1;
+			else
+				return 0;
+		}
+		tokens = tokens->next;
 	}
-    else if (ft_strchr(str, '>') || ft_strchr(str, '<'))
-    {
-        if (handle_redirections(cmd, mini))
-        {
-            if (is_builtin(cmd[0]))
-                execute_builtin(cmd, mini);
-            else
-                execute_cmd(paths, cmd, mini);
-        }
-        else
-            mini->ret = 1;
-        status = 1;
-    }
-    return status;
+	return 1;
 }
 
 
@@ -100,19 +79,21 @@ void ft_execute(t_mini *mini, char *str)
 {
 	pid_t pid;
     char **paths;
-    // char **cmd;
 
     paths = ft_split(get_env_value(mini, "PATH"), ':');
-    // cmd = ft_split(str, ' ');
-    if (check_type(str, paths, mini))
+	update_env(&mini->env, "_", mini->parss->cmd[0]);
+	update_env(&mini->export_env, "_", mini->parss->cmd[0]);
+    if (ft_strchr(str, '|'))
+	{
+        execute_pipeline(str, paths, mini);
         return ;
+	}
+    if(!check_type(str, paths, mini))
+		return ;
+	if (!mini->parss->cmd[0])
+		return ;
     if (is_builtin(mini->parss->cmd[0]))
-	{
         execute_builtin(mini->parss->cmd, mini);
-	}
     else
-	{
-		update_env(&mini->env, "_", find_cmd_path(paths, mini->parss->cmd[0]));
 		execute_cmd(paths, mini->parss->cmd, mini);
-	}
 }

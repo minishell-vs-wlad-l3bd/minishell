@@ -21,7 +21,7 @@ char *find_cmd_path(char **paths, char *cmd)
     char *cmd_p;
     char *tmp;
     
-    if (!cmd || !paths)
+    if (!cmd)
         return NULL;
     if (ft_strchr(cmd, '/'))
     {
@@ -29,6 +29,8 @@ char *find_cmd_path(char **paths, char *cmd)
             return ft_strdup(cmd);
         return NULL;
     }
+    if (!paths)
+        return NULL;
 	int i = -1;
     while (paths[++i])
     {
