@@ -83,7 +83,7 @@ void ft_execute(t_mini *mini, char *str)
     paths = ft_split(get_env_value(mini, "PATH"), ':');
 	update_env(&mini->env, "_", mini->parss->cmd[0]);
 	update_env(&mini->export_env, "_", mini->parss->cmd[0]);
-    if (ft_strchr(str, '|'))
+    if (mini->pipe)
 	{
         execute_pipeline(str, paths, mini);
         return ;

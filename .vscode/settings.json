@@ -5,6 +5,7 @@
 		"minishell.h": "c",
 		"sstream": "c",
 		"readline.h": "c",
-		"format": "c"
+		"format": "c",
+		"__locale": "c"
 	}
 }

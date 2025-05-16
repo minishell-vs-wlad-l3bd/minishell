@@ -43,7 +43,6 @@ int	check_syntax(char *str)
 	end = ft_strlen(str) - 1;
 	while (end > start && str[end] == ' ')
 		end--;
-
 	if (start > end)
 		return (2);
 	if (str[start] == '|' || invalid_operator(&str[start]))
@@ -98,6 +97,45 @@ int	redir_syntax_error(char *str)
 	return (0);
 }
 
+int		check_redir_sequence(char *str, int *i)
+{
+	char	c;
+
+	c = str[*i];
+	while (str[*i] == c)
+	{
+		(*i)++;
+	}
+	while (str[*i] == ' ')
+		(*i)++;
+	if (str[*i] == '>' || str[*i] == '<')
+		return (1);
+	return (0);
+}
+int		mixed_redirection_error(char *str)
+{
+	int	i;
+	
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'' || str[i] == '"')
+		{
+			i += check_quotes(&str[i]) + 1;
+			continue;
+		}
+		if (str[i] == '>' || str[i] == '<')
+		{
+			if (check_redir_sequence(str, &i))
+				return (1);
+		}
+		else
+			i++;
+	}
+	return (0);
+}
+
+
 
 
 int		analys_syntax(char *line)
@@ -117,5 +155,7 @@ int		analys_syntax(char *line)
 		return (ft_putendl_fd("syntax error near unexpected end of line", 2), 0);
 	if (redir_syntax_error(line))
 		return (ft_putendl_fd("Error", 2), 0);
+	if (mixed_redirection_error(line))
+		return (ft_putendl_fd("syntax error: parse error nearn 'rederection'", 2), 0);
 	return (1);
 }

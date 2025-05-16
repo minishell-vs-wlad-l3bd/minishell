@@ -35,10 +35,10 @@ void print_sort_env(t_mini *mini)
 	ft_sort(mini);
 	while (node)
 	{
-		printf("export : ");
+		printf("declare -x ");
 		printf("%s", node->key);
 		if (node->value)
-			printf("=\"%s\"\n", node->value);
+			printf("=\'%s\'\n", node->value);
 		else
 			printf("\n"); 
 		node = node->next;

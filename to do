@@ -1,18 +1,14 @@
 ======> adding expand $
 
-======> small think about redir
-
-======> small think about heredoc
-    >put
-
 ======> $? exit status
 
 ======>errors msg
 
 ======>signals in child
 
-======>run with path /bin/ls
+======>run with path /bin/ls unset path
 
-======>split problem echo "ls -l"
 
-yes
+==> t9abi minishel to handel <=====
+=> ls >> a >> b >> c
+          

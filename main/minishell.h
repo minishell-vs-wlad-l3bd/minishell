@@ -27,7 +27,6 @@ typedef struct tokens
 	int		CMD;
 	int     append;
     int     heredoc;
-	int		pipe;
 	int		intput;
 	int		output;
 	char 	*file;
@@ -55,6 +54,7 @@ typedef struct s_env
 typedef struct s_mini
 {
 	char	**ev;
+	int		pipe;
 	int		pipe_in;
 	int		pipe_out;
 	int		prev_pipe;
@@ -101,10 +101,11 @@ int			check_syntax(char *str);
 int			analys_syntax(char *line);
 void    	valid_syntax(char *line, t_mini *mini);
 void		ft_lstadd_back_2(t_parsing **lst, t_parsing *new);
-char		**split_by_pipe(const char *s);
+char		**split_by_pipe(const char *s, t_mini *mini);
 int			check_input(char *str, t_mini *mini);
 
 
 int handle_redirections(t_tokens *token);
 
+char		**split(char const *s, char c);
 #endif
