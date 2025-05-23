@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 20:34:23 by mohidbel          #+#    #+#             */
-/*   Updated: 2024/11/08 20:27:15 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/17 22:46:36 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_putchar_fd(char c, int fd)
 {
-	if(fd < 0)
+	if (fd < 0)
 		return ;
 	write(fd, &c, 1);
 }

@@ -12,3 +12,21 @@
 ==> t9abi minishel to handel <=====
 => ls >> a >> b >> c
           
+
+=====> in cd :
+bash-3.2$ mkdir oll
+bash-3.2$ cd oll
+bash-3.2$ chmod 000 ../oll
+bash-3.2$ cd ..
+bash-3.2$ pwd
+/mnt/homes/mohidbel/Desktop/minishell
+bash-3.2$ cd oll
+bash: cd: oll: Permission denied
+??? handel errors and return exit
+
+====> in export :
+====> in echo :
+====> in exit :
+====> in env :
+====> in unset :
+====> in pwd :

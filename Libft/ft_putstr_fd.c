@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 20:43:32 by mohidbel          #+#    #+#             */
-/*   Updated: 2024/11/08 23:10:43 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/17 22:46:46 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_putstr_fd(char *s, int fd)
 {
-	if(!s || fd < 0)
+	if (!s || fd < 0)
 		return ;
 	while (*s)
 		write(fd, s++, 1);

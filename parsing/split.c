@@ -19,7 +19,7 @@ static int	word_len(const char *s, char sep)
 		else if (quote && s[i] == quote)
 			quote = 0;
 		else if (!quote && s[i] == sep)
-			break;
+			break ;
 		i++;
 	}
 	return (i);
@@ -76,13 +76,7 @@ static char	*wordcopy(const char *s, char sep)
 	return (word);
 }
 
-static char	**freearr(char **arr, int i)
-{
-	while (i >= 0)
-		free(arr[i--]);
-	free(arr);
-	return (NULL);
-}
+
 
 char	**split(const char *s, char sep)
 {
@@ -103,7 +97,7 @@ char	**split(const char *s, char sep)
 		{
 			arr[i] = wordcopy(s, sep);
 			if (!arr[i])
-				return (freearr(arr, i));
+				return (NULL);
 			s += word_len(s, sep);
 			i++;
 		}

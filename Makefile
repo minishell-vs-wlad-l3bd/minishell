@@ -11,7 +11,8 @@ SRCS = main/minishell.c utils/find_paths.c env/get_env.c\
 		excute/shlvl.c excute/redirections/heredoc.c\
 		excute/redirections/pipe.c excute/signals.c\
 		parsing/invalid_syntax.c parsing/parss_input.c parsing/parssing_tools.c\
-		parsing/split_pipe.c parsing/token.c parsing/valid_syntax.c parsing/split.c
+		parsing/split_pipe.c parsing/token.c parsing/valid_syntax.c parsing/split.c\
+		parsing/expand.c
 
 OBGS = $(SRCS:.c=.o)
 

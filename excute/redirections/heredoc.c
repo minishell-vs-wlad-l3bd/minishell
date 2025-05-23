@@ -1,14 +1,30 @@
-#include "../excute.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/22 13:36:25 by mohidbel          #+#    #+#             */
+/*   Updated: 2025/05/23 14:12:18 by mohidbel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../main/minishell.h"
+
 
 char *get_temp_file(void)
 {
     char *file;
     int fd;
-    
-    file = ft_strjoin("/tmp/heredoc_", ft_itoa(getpid()));
+    char *pid_str;
+
+    pid_str = ft_itoa(getpid());
+    if (!pid_str)
+        return NULL;
+    file = ft_strjoin("/tmp/heredoc_", pid_str);
     if (!file)
         return NULL;
-        
     fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1)
         return NULL;
@@ -16,95 +32,35 @@ char *get_temp_file(void)
     return file;
 }
 
-char *get_delimiter(char *str)
-{
-    int i = 0;
-    char *delimiter = NULL;
-    char **tmp = NULL;
+// void cleanup_heredoc(t_mini *mini, char *filename, int fd)
+// {
+//     if (filename)
+//         unlink(filename);
+//     if (fd != -1)
+//         close(fd);
+//     signal(SIGINT, handler);
+// }
 
-    tmp = ft_split(str, ' ');
-    if (!tmp)
+char *heredoc(t_mini *mini, char *delimiter)
+{
+    char *filename = get_temp_file();
+    int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    char *line;
+
+    if (!filename || fd == -1 || !delimiter)
         return NULL;
-        
-    while(tmp[i])
-    {
-        if(!ft_strcmp(tmp[i], "<<") && tmp[i + 1])
-        {
-            delimiter = ft_strdup(tmp[i + 1]);
-            break;
-        }
-        i++;
-    }
-    return delimiter;
-}
 
-void cleanup_heredoc(t_mini *mini, char *filename, char *delimiter, int fd)
-{
-    if (filename) {
-        unlink(filename);
-        free(filename);
-    }
-    if (delimiter)
-        free(delimiter);
-    if (fd != -1)
-        close(fd);
-    signal(SIGINT, handler);
-}
-
-void heredoc(t_mini *mini, char *str)
-{
-    char *filename = NULL;
-    char *line = NULL;
-    char *delimiter = NULL;
-    int fd = -1;
-    int input_fd = -1;
-
-    filename = get_temp_file();
-    if (!filename) {
-        mini->exit = 1;
-        return;
-    }
-
-    fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd == -1) {
-        cleanup_heredoc(mini, filename, NULL, -1);
-        mini->exit = 1;
-        return;
-    }
-
-    delimiter = get_delimiter(str);
-    if (!delimiter) {
-        cleanup_heredoc(mini, filename, NULL, fd);
-        mini->exit = 1;
-        return;
-    }
-
-    signal(SIGINT, SIG_DFL);
+    // signal(SIGINT, SIG_DFL);
     while (1)
     {
         line = readline("> ");
         if (!line)
-        {
-            ft_putstr_fd("minishell: warning: here-document delimited by end-of-file\n", STDERR_FILENO);
             break;
-        }
-        if (ft_strcmp(line, delimiter) == 0)
-        {
-            free(line);
+        if (!ft_strcmp(line, delimiter))
             break;
-        }
         ft_putendl_fd(line, fd);
-        free(line);
-	}
+    }
     close(fd);
-	input_fd = open(filename, O_RDONLY);
-	if (input_fd == -1 || dup2(input_fd, STDIN_FILENO) == -1)
-	{
-		perror("minishell: heredoc dup2/read");
-		cleanup_heredoc(mini, filename, delimiter, input_fd);
-		exit(1);
-	}
-	close(input_fd);
-    unlink(filename);
     signal(SIGINT, handler);
+    return filename;
 }

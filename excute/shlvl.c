@@ -1,4 +1,17 @@
-#include "excute.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shlvl.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/22 13:37:07 by mohidbel          #+#    #+#             */
+/*   Updated: 2025/05/23 14:11:17 by mohidbel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../main/minishell.h"
+
 
 char **env_list_to_array(t_env *env)
 {
@@ -17,7 +30,6 @@ char **env_list_to_array(t_env *env)
     {
         key_equal = ft_strjoin(tmp->key, "=");
         arr[i] = ft_strjoin(key_equal, tmp->value);
-        free(key_equal);
         tmp = tmp->next;
         i++;
     }
@@ -27,7 +39,7 @@ char **env_list_to_array(t_env *env)
 
 void    increment_shlvl(t_mini *mini)
 {
-    int shlvl;
+    long long shlvl;
     char *shlvl_value;
 
     shlvl_value = get_env_value(mini, "SHLVL");

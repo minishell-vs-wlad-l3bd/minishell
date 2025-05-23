@@ -66,9 +66,10 @@ int		check_input(char *str, t_mini *mini)
 {
 	if (*str)
         add_history(str);
-	if (!*str || is_only_spaces(str) || !ft_strncmp(str, ":", 1) || !valid_line(str))
+	if (!*str || is_only_spaces(str) || !valid_line(str))
 		return (1);
 	valid_syntax(str, mini);
+	replace_expand_to_value(mini);
 	return (0);
 }
 

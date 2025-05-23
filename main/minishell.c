@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
+/*   Updated: 2025/05/23 14:14:41 by mohidbel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-#include "../excute/excute.h"
 
 void backup_std_fds(t_mini *mini)
 {
@@ -35,6 +46,7 @@ void mini_init(t_mini *mini, int ac, char **av, char **env)
     mini->ev = env;
     mini->in = -1;
     mini->out = -1;
+    mini->prev_pipe = -1;
     mini->env = env_init(env, 0);
     mini->export_env = env_init(env, 1);
     backup_std_fds(mini);
@@ -46,6 +58,8 @@ void norm_main(t_mini *mini)
 
     while (1)
     {
+        if (child_flag == 1)
+            signal(SIGINT, SIG_DFL);
         reset_std_fds(mini);
         backup_std_fds(mini);
         str = readline("minishell $ ");
@@ -57,15 +71,17 @@ void norm_main(t_mini *mini)
         }
 		if (*str && !check_input(str, mini))
             ft_execute(mini, str);
+        free(str);
     }
 }
+
+
 int main(int ac, char **av, char **env)
 {
     t_mini mini;
 
     if (!isatty(0))
         return (1);
-
     signal(SIGINT, handler);
     signal(SIGQUIT, SIG_IGN);
     disable_echoctl();
@@ -73,5 +89,6 @@ int main(int ac, char **av, char **env)
     increment_shlvl(&mini);
     norm_main(&mini);
     rl_clear_history();
+    ft_free_all();
     return 0;
 }

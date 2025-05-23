@@ -11,7 +11,6 @@
 #include <limits.h>
 #include <termios.h>
 #include "../Libft/libft.h"
-#include "../excute/excute.h"
 #include <stdbool.h>
 
 #define RED "\033[31m"
@@ -37,12 +36,16 @@ typedef struct tokens
 
 typedef struct s_parsing
 {
+	char *heredoc_file;
     char    **cmd;
 	t_tokens *token;
 	struct s_parsing	*next;
 } t_parsing;
 
-
+typedef struct s_heredoc {
+    char *filename;
+    struct s_heredoc *next;
+} t_heredoc;
 
 typedef struct s_env
 {
@@ -53,6 +56,7 @@ typedef struct s_env
 
 typedef struct s_mini
 {
+	t_heredoc *heredocs;
 	char	**ev;
 	int		pipe;
 	int		pipe_in;
@@ -68,6 +72,14 @@ typedef struct s_mini
 	t_parsing *parss;
 } t_mini;
 
+
+// for garbeg collectr
+typedef struct s_node
+{
+	void            *ptr;
+	struct s_node   *next;
+}   t_node;
+
 char	*find_cmd_path(char **paths, char *cmd);
 char	*get_env_value(t_mini *mini, char *key);
 int		double_arr_len(char **str);
@@ -77,6 +89,20 @@ void	execute_builtin(char **cmd, t_mini *mini);
 void	ft_execute(t_mini *mini, char *str);
 int		is_builtin(char *str);
 
+void    do_cd(char **cmd, t_mini *mini);
+void    do_echo(char **av);
+void    do_unset(char **args, t_mini *mini);
+void	do_env(t_mini *mini);
+void	do_pwd(t_mini *mini);
+void	do_export(char **args, t_mini *mini);
+void	do_exit(char **args, t_mini *mini);
+int		double_arr_len(char **str);
+int check_type(char *str, char **paths, t_mini *mini, int flag);
+
+void execute_pipeline(char *str, char **paths, t_mini *mini);
+void    increment_shlvl(t_mini *mini);
+char *heredoc(t_mini *mini, char *delimiter);
+
 // for init env (kan3mr env->value)
 t_env	*ft_env_lstnew(void *key, void *value);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
@@ -85,12 +111,12 @@ void	update_env(t_env **env, char *key, char *value);
 
 // utils
 void *ft_malloc(size_t size);
+void ft_free_all(void);
 void    quotes(char **strs);
 
 //signals
 void	handler(int sig);
 void disable_echoctl(void);
-void	handler_child(int sig);
 void    reset_std_fds(t_mini *mini);
 void    backup_std_fds(t_mini *mini);
 
@@ -108,4 +134,6 @@ int			check_input(char *str, t_mini *mini);
 int handle_redirections(t_tokens *token);
 
 char		**split(char const *s, char c);
+void replace_expand_to_value(t_mini *mini);
+
 #endif

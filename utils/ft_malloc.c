@@ -1,29 +1,44 @@
 #include "../main/minishell.h"
 
-void ft_free(void *ptr, int flag)
+void ft_free_all(void)
 {
-    static void *collecter[INT_MAX];
-    static int i;
-    int j;
+    static t_node *head;
+    t_node *tmp;
+    t_node *to_free;
 
-    if (flag)
+	
+    tmp = head;
+    while (tmp)
     {
-        j = 0;
-        while(collecter[j])
-            free(collecter[j++]);
+        free(tmp->ptr);
+        to_free = tmp;
+        free(to_free);
+        tmp = tmp->next;
     }
-    else
-        collecter[i++] = ptr;
+    head = NULL;
 }
 
 void *ft_malloc(size_t size)
 {
+    static t_node *head;
+    t_node *new_node;
     void *ptr;
 
     ptr = malloc(size);
     if (!ptr)
+    {
+        ft_free_all();
         exit(2);
-    ft_free(ptr, 0);
-    return (ptr);
+    }
+    new_node = malloc(sizeof(t_node));
+    if (!new_node)
+    {
+        free(ptr);
+        exit(2);
+    }
+    new_node->ptr = ptr;
+    new_node->next = head;
+    head = new_node;
+    return ptr;
 }
 

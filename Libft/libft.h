@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:01:35 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/11 10:08:40 by aayad            ###   ########.fr       */
+/*   Updated: 2025/05/18 18:53:57 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 int		ft_strcmp(const char *s1, const char *s2);
 void *ft_malloc(size_t size);
+
 
 #endif

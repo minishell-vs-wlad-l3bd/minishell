@@ -1,4 +1,17 @@
-#include "../excute.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   do_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/22 13:34:27 by mohidbel          #+#    #+#             */
+/*   Updated: 2025/05/23 14:12:28 by mohidbel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../main/minishell.h"
+
 
 void ft_sort(t_mini *mini)
 {
@@ -73,11 +86,7 @@ int check(t_env **env, char *key)
     value_part = parts[1];
     
     if (value_part[0] != '=')
-    {
-        free(parts);
         return;
-    }
-    
     existing_value = get_env_value(mini, key);
     value_part++;
     
@@ -86,14 +95,12 @@ int check(t_env **env, char *key)
         new_value = ft_strjoin(existing_value, value_part);
         update_env(&mini->env, key, new_value);
         update_env(&mini->export_env, key, new_value);
-        free(new_value);
     }
     else
     {
         update_env(&mini->env, key, value_part);
         update_env(&mini->export_env, key, value_part);
     }
-    free(parts);
 }
 
 int is_valid_env_name(const char *name)
@@ -133,13 +140,11 @@ void env_add(t_mini *mini, char *s)
         mini->exit = 1;
         return;
     }
-
     if (ft_strnstr(s, "+=",ft_strlen(s)))
     {
         handle_append(mini, s);
         return;
     }
-    
     if(!ft_strchr(s, '='))
     {
         if (check(&mini->export_env, s) || check(&mini->env, s))

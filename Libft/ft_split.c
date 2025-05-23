@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 14:52:49 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/14 12:04:14 by aayad            ###   ########.fr       */
+/*   Updated: 2025/05/18 19:06:08 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,6 @@ static char	*wordcopy(char const *str, char c)
 	return (word);
 }
 
-static char	**freearr(char **arr, int i)
-{
-	while (i >= 0)
-	{
-		free(arr[i]);
-		i--;
-	}
-	free(arr);
-	return (NULL);
-}
 
 char	**ft_split(char const *s, char c)
 {
@@ -82,7 +72,7 @@ char	**ft_split(char const *s, char c)
 		{
 			arr[i] = wordcopy(s, c);
 			if (!arr[i])
-				return (freearr(arr, i));
+				return (NULL);
 			i++;
 		}
 		while (*s && *s != c)

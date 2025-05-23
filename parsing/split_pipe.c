@@ -67,12 +67,6 @@ static char	*copy_word(const char *s, int len)
 	return (word);
 }
 
-static void	free_all(char **arr, int count)
-{
-	while (--count >= 0)
-		free(arr[count]);
-	free(arr);
-}
 
 char	**split_by_pipe(const char *s, t_mini *mini)
 {
@@ -92,7 +86,7 @@ char	**split_by_pipe(const char *s, t_mini *mini)
 		if (!*s)
 			break;
 		if ((result[i] = copy_word(s, word_len(s, '|'))) == 0)
-			return (free_all(result, i), NULL);
+			return (NULL);
 		s += word_len(s, '|');
 		i++;
 	}

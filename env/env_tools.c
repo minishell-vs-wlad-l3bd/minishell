@@ -24,8 +24,6 @@ t_env	*ft_env_lstnew(void *key, void *value)
 	t_env	*node1;
 
 	node1 = ft_malloc(sizeof(t_env));
-	if (node1 == NULL)
-		return (NULL);
 	node1->value = value;
 	node1->key = key;
 	node1->next = NULL;

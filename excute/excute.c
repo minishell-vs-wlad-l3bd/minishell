@@ -1,4 +1,16 @@
-#include "excute.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   excute.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/22 13:36:44 by mohidbel          #+#    #+#             */
+/*   Updated: 2025/05/23 14:12:51 by mohidbel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../main/minishell.h"
 
 int is_builtin(char *str)
 {
@@ -41,38 +53,49 @@ void execute_cmd(char **paths, char **cmd, t_mini *mini)
 	pid = fork();
 	if (pid == 0)
 	{
-        signal(SIGINT, SIG_DFL);
-        signal(SIGQUIT, SIG_DFL);
+		child_flag = 1;
 		execve(cmd_path, cmd, mini->ev);
+		child_flag = 0;
 	}
 	else
 		waitpid(pid, NULL, 0);
 }
 
 
-int check_type(char *str, char **paths, t_mini *mini)
+int check_type(char *str, char **paths, t_mini *mini, int falg)
 {
-	t_tokens *tokens;
+	t_tokens *tokens = mini->parss->token;
+	char *last_heredoc_file = NULL;
 
-	tokens = mini->parss->token;
-	while(tokens && (tokens->heredoc || tokens->append || tokens->intput || tokens->output))
+	while (tokens)
 	{
-		if (tokens->heredoc)
+		if (tokens->heredoc && falg)
 		{
-			heredoc(mini, str);
-			return 1;
+			if (last_heredoc_file)
+				unlink(last_heredoc_file);
+			last_heredoc_file = heredoc(mini, tokens->file);
 		}
-		else if (tokens->append || tokens->intput || tokens->output)
+		if (tokens->append || tokens->intput || tokens->output)
 		{
-			if(handle_redirections(tokens))
-				return 1;
-			else
+			if (!handle_redirections(tokens))
 				return 0;
 		}
 		tokens = tokens->next;
 	}
+	if (last_heredoc_file)
+	{
+		int fd = open(last_heredoc_file, O_RDONLY);
+		if (fd == -1 || dup2(fd, STDIN_FILENO) == -1)
+		{
+			perror("minishell: heredoc dup2");
+			exit(1);
+		}
+		close(fd);
+		unlink(last_heredoc_file);
+	}
 	return 1;
 }
+
 
 
 void ft_execute(t_mini *mini, char *str)
@@ -81,14 +104,12 @@ void ft_execute(t_mini *mini, char *str)
     char **paths;
 
     paths = ft_split(get_env_value(mini, "PATH"), ':');
-	update_env(&mini->env, "_", mini->parss->cmd[0]);
-	update_env(&mini->export_env, "_", mini->parss->cmd[0]);
     if (mini->pipe)
 	{
         execute_pipeline(str, paths, mini);
         return ;
 	}
-    if(!check_type(str, paths, mini))
+    if(!check_type(str, paths, mini, 1))
 		return ;
 	if (!mini->parss->cmd[0])
 		return ;

@@ -6,6 +6,8 @@
 		"sstream": "c",
 		"readline.h": "c",
 		"format": "c",
-		"__locale": "c"
+		"__locale": "c",
+		"cdefs.h": "c",
+		"availability.h": "c"
 	}
 }

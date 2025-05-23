@@ -1,4 +1,17 @@
-#include "../excute.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   do_unset.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/22 13:35:04 by mohidbel          #+#    #+#             */
+/*   Updated: 2025/05/23 14:12:21 by mohidbel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../main/minishell.h"
+
 
 void remove_env_var(char *var, t_mini *mini)
 {
@@ -15,9 +28,6 @@ void remove_env_var(char *var, t_mini *mini)
                 prev->next = temp->next;
             else
                 mini->env = temp->next;
-            free(temp->key);
-            free(temp->value);
-            free(temp);
             return;
         }
         prev = temp;
