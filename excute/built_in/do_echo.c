@@ -3,42 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   do_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/23 14:12:37 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/27 10:49:05 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main/minishell.h"
 
 
-void    do_echo(char **av)
+int is_valid_n_flag(const char *str)
 {
-    int     i;
-    int     nl;
-    int     j;
+    if (str[0] != '-')
+        return 0;
+    for (int i = 1; str[i]; i++)
+    {
+        if (str[i] != 'n')
+            return 0;
+    }
+    return 1;
+}
 
+void do_echo(t_mini *mini)
+{
+    t_parsing *parss;
+    char *buff;
+    char *tmp;
+    int i;
+    int nl;
+
+    parss = mini->parss;
     i = 1;
     nl = 0;
-    quotes(av);
-    while (av[i] && ft_strncmp(av[i], "-n", 2) == 0)
+
+    while (parss->cmd[i] && is_valid_n_flag(parss->cmd[i]))
     {
-        j = 2;
-        while (av[i][j] == 'n')
-            j++;
-        if (av[i][j] != '\0')
-            break ;
-        nl++;
+        nl = 1;
         i++;
     }
-    while (av[i])
+    buff = ft_strdup("");
+    while (parss->cmd[i])
     {
-        ft_putstr_fd(av[i], STDOUT_FILENO);
-        if (av[i + 1])
-            ft_putchar_fd(' ', STDOUT_FILENO);
+        if (!parss->cmd[i] || !parss->cmd[i][0])
+        {
+            i++;
+            continue;
+        }
+        if (parss->cmd[i + 1])
+            tmp = ft_strjoin(parss->cmd[i], " ");
+        else
+            tmp = ft_strdup(parss->cmd[i]);
+        buff = ft_strjoin(buff, tmp);
         i++;
     }
-    if (!nl)
-        ft_putchar_fd('\n', STDOUT_FILENO);
+    if (nl == 1)
+        printf("%s", buff);
+    else
+        printf("%s\n", buff);
 }

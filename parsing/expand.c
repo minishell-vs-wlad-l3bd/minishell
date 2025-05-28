@@ -58,15 +58,16 @@ char *prepare_and_expand(char *result, char *var_start, t_mini *mini, char **new
 
 char *expand_string(char *str, t_mini *mini)
 {
-    char *result = ft_strdup(str);
+    char *result;
     char *var_start;
     char *new_result;
 
     if (!result)
-        return NULL;
-
+		return NULL;
+	result = ft_strdup(str);
     while ((var_start = ft_strchr(result, '$')))
     {
+
         if (var_start > result && *(var_start - 1) == '\\')
         {
             ft_memmove(var_start - 1, var_start, ft_strlen(var_start));
@@ -80,17 +81,17 @@ char *expand_string(char *str, t_mini *mini)
         free(result);
         result = new_result;
     }
-
     return result;
 }
 
 void replace_expand_to_value(t_mini *mini)
 {
-    t_parsing *parss = mini->parss;
+    t_parsing *parss ;
     char *expanded;
     char *original;
     int i;
-
+	
+	parss = mini->parss;
     while (parss)
     {
         i = 0;
@@ -100,11 +101,10 @@ void replace_expand_to_value(t_mini *mini)
             expanded = expand_string(original, mini);
             if (expanded && expanded != original)
             {
-                // just split it becauss in cdm[i] has ls -l
                 parss->cmd[i] = expanded;
             }
             else
-                parss->cmd[i] = NULL;
+                parss->cmd[i] = "";
             i++;
         }
         parss = parss->next;

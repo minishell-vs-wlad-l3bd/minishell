@@ -90,7 +90,7 @@ void	ft_execute(t_mini *mini, char *str);
 int		is_builtin(char *str);
 
 void    do_cd(char **cmd, t_mini *mini);
-void    do_echo(char **av);
+void 	do_echo(t_mini *mini);
 void    do_unset(char **args, t_mini *mini);
 void	do_env(t_mini *mini);
 void	do_pwd(t_mini *mini);
@@ -135,5 +135,8 @@ int handle_redirections(t_tokens *token);
 
 char		**split(char const *s, char c);
 void replace_expand_to_value(t_mini *mini);
+int	wordcount(char const *s, char c);
+char	*add_spaces(char *line);
+void	remove_quotes(char *str);
 
 #endif

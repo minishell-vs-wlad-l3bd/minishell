@@ -11,24 +11,25 @@ int is_only_spaces(const char *str)
     return 1;
 }
 
-int		special_char(char *line)
+int	special_char(char *line)
 {
-	int		i;
-	int		skip;
+	int		i = 0;
+	char	quote = 0;
 
-	i = 0;
 	while (line[i])
 	{
-		skip = check_quotes(&line[i]);
-		if (skip > 0)
-			i += skip;
-		else
-			if (line[i] == ';' || line[i] == '\\' || line[i] == '&')
-				return (1);
+		if ((line[i] == '\'' || line[i] == '"') && quote == 0)
+			quote = line[i];
+		else if (line[i] == quote)
+			quote = 0;
+		else if (quote == 0 && (line[i] == ';'
+			|| line[i] == '\\' || line[i] == '&'))
+			return (1);
 		i++;
 	}
 	return (0);
 }
+
 
 int		incorect_quotes(char *line)
 {
@@ -61,6 +62,67 @@ int		valid_line(char *line)
 		return (0);
 	return (1);
 }
+int	is_inside_single_quotes(char *str, int pos)
+{
+	int i;
+	int in_single;
+	int in_double;
+
+	i = 0;
+	in_single = 0;
+	in_double = 0;
+	while (i < pos)
+	{
+		if (str[i] == '\'' && !in_double)
+			in_single = !in_single;
+		else if (str[i] == '"' && !in_single)
+			in_double = !in_double;
+		i++;
+	}
+	return (in_single);
+}
+
+int	is_inside_double_quotes(char *str, int pos)
+{
+	int i;
+	int in_single;
+	int in_double;
+
+	i = 0;
+	in_single = 0;
+	in_double = 0;
+	while (i < pos)
+	{
+		if (str[i] == '\'' && !in_double)
+			in_single = !in_single;
+		else if (str[i] == '"' && !in_single)
+			in_double = !in_double;
+		i++;
+	}
+	return (in_double);
+}
+
+int	check_quotes_expand(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == '$')
+		{
+			if (str[i + 1] == '"')
+				return (1);
+			if (is_inside_single_quotes(str, i))
+				return (1);
+			if (is_inside_double_quotes(str, i))
+				return (0);
+			return (0);
+		}
+		i++;
+	}
+	return (0);
+}
 
 int		check_input(char *str, t_mini *mini)
 {
@@ -69,6 +131,8 @@ int		check_input(char *str, t_mini *mini)
 	if (!*str || is_only_spaces(str) || !valid_line(str))
 		return (1);
 	valid_syntax(str, mini);
+	if(check_quotes_expand(str))
+		return (0);
 	replace_expand_to_value(mini);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excute.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:44 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/23 14:12:51 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:45:15 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int is_builtin(char *str)
 {
+	remove_quotes(str);
 	if (!ft_strcmp(str, "echo") || !ft_strcmp(str, "cd")
 		|| !ft_strcmp(str, "pwd") || !ft_strcmp(str, "export")
 		|| !ft_strcmp(str, "unset") || !ft_strcmp(str, "env")
@@ -24,10 +25,11 @@ int is_builtin(char *str)
 
 void execute_builtin(char **cmd, t_mini *mini)
 {
+	// quotes(mini->parss->cmd);
 	if (!strcmp(cmd[0], "cd"))
 		do_cd(cmd, mini);
 	else if(!strcmp(cmd[0], "echo"))
-		do_echo(cmd);
+		do_echo(mini);
 	else if (!strcmp(cmd[0], "exit"))
 		do_exit(cmd, mini);
 	else if(!strcmp(cmd[0], "pwd"))
@@ -43,18 +45,45 @@ void execute_builtin(char **cmd, t_mini *mini)
 void execute_cmd(char **paths, char **cmd, t_mini *mini)
 {
 	pid_t pid;
-	char *cmd_path = find_cmd_path(paths, cmd[0]);
-	if (!cmd_path)
-    {
-		printf("minishell: %s: command not found\n", cmd[0]);
-        mini->exit = 127;
-		return ;
-    }
+	char **check;
+	int flag = 0;
+
+	quotes(mini->parss->cmd);
+	if (wordcount(cmd[0], ' ') > 1)
+	{
+		flag = 1;
+		check = ft_split(cmd[0], ' ');
+	}
 	pid = fork();
 	if (pid == 0)
 	{
 		child_flag = 1;
-		execve(cmd_path, cmd, mini->ev);
+		if (flag)
+		{
+			char *cmd_path = find_cmd_path(paths, check[0]);
+			if (!cmd_path)
+			{
+				printf("minishell: %s: command not found\n", cmd[0]);
+				mini->exit = 127;
+				return ;
+			}
+			execve(cmd_path, check, mini->ev);
+			printf("minishell: %s: command not found\n", cmd[0]);
+			exit(127);
+		}
+		else
+		{
+			char *cmd_path = find_cmd_path(paths, cmd[0]);
+			if (!cmd_path)
+			{
+				printf("minishell: %s: command not found\n", cmd[0]);
+				mini->exit = 127;
+				return ;
+			}
+			execve(cmd_path, cmd, mini->ev);
+			printf("minishell: %s: command not found\n", cmd[0]);
+			exit(127);
+		}
 		child_flag = 0;
 	}
 	else
@@ -65,18 +94,21 @@ void execute_cmd(char **paths, char **cmd, t_mini *mini)
 int check_type(char *str, char **paths, t_mini *mini, int falg)
 {
 	t_tokens *tokens = mini->parss->token;
+	
 	char *last_heredoc_file = NULL;
 
 	while (tokens)
 	{
 		if (tokens->heredoc && falg)
 		{
+			remove_quotes(tokens->file);
 			if (last_heredoc_file)
 				unlink(last_heredoc_file);
 			last_heredoc_file = heredoc(mini, tokens->file);
 		}
 		if (tokens->append || tokens->intput || tokens->output)
 		{
+			remove_quotes(tokens->file);
 			if (!handle_redirections(tokens))
 				return 0;
 		}
@@ -102,7 +134,7 @@ void ft_execute(t_mini *mini, char *str)
 {
 	pid_t pid;
     char **paths;
-
+	
     paths = ft_split(get_env_value(mini, "PATH"), ':');
     if (mini->pipe)
 	{

@@ -25,7 +25,7 @@ static int	word_len(const char *s, char sep)
 	return (i);
 }
 
-static int	wordcount(const char *s, char sep)
+static int	word_count(const char *s, char sep)
 {
 	int i;
 	int count;
@@ -64,12 +64,7 @@ static char	*wordcopy(const char *s, char sep)
 		return (NULL);
 	while (i < len)
 	{
-		if (!quote && is_quote(s[i]))
-			quote = s[i]; 
-		else if (quote && s[i] == quote)
-			quote = 0;
-		else
-			word[j++] = s[i];
+		word[j++] = s[i];
 		i++;
 	}
 	word[j] = '\0';
@@ -85,7 +80,7 @@ char	**split(const char *s, char sep)
 
 	if (!s)
 		return (NULL);
-	arr = ft_malloc((wordcount(s, sep) + 1) * sizeof(char *));
+	arr = ft_malloc((word_count(s, sep) + 1) * sizeof(char *));
 	if (!arr)
 		return (NULL);
 	i = 0;

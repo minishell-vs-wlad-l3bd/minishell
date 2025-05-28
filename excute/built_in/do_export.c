@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   do_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:27 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/23 14:12:28 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/25 15:55:55 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void print_sort_env(t_mini *mini)
 		printf("declare -x ");
 		printf("%s", node->key);
 		if (node->value)
-			printf("=\'%s\'\n", node->value);
+			printf("=\"%s\"\n", node->value);
 		else
 			printf("\n"); 
 		node = node->next;
