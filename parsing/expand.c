@@ -10,6 +10,8 @@ char *extract_name(char *str)
         return ft_strdup("?");
     while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
         i++;
+    if (i == 0)
+        return ft_strdup("");
     return ft_substr(str, 0, i);
 }
 
@@ -22,6 +24,8 @@ char *expand_value(char *str, t_mini *mini)
     value = NULL;
     if (!var_name)
         return NULL;
+    if (ft_strlen(var_name) == 0)
+        return ft_strdup("");
     if (ft_strcmp(var_name, "?") == 0)
         value = ft_itoa(mini->exit);
     else
@@ -49,9 +53,10 @@ char *prepare_and_expand(char *result, char *var_start, t_mini *mini, char **new
         var_len += ft_strlen(var_name);
     }
     after = ft_strdup(var_start + var_len);
-    if (!after || !value)
-        return NULL;
-    tmp = ft_strjoin(before, value);
+    if (value)
+        tmp = ft_strjoin(before, value);
+    else
+        tmp = ft_strjoin(before, "");
     *new_result = ft_strjoin(tmp, after);
     return *new_result;
 }
@@ -99,31 +104,28 @@ void replace_expand_to_value(t_mini *mini)
             original = parss->cmd[i];
             expanded = expand_string(original, mini);
             if (expanded && expanded != original)
-            {
-                // just split it becauss in cdm[i] has ls -l
                 parss->cmd[i] = expanded;
-            }
             else
-                parss->cmd[i] = NULL;
+                parss->cmd[i] = "";
             i++;
         }
         parss = parss->next;
     }
 }
 
-int check_valid_file(char *file, t_mini *mini)
-{
-    char *file_tmp;
-    char **split;
+// int check_valid_file(char *file, t_mini *mini)
+// {
+//     char *file_tmp;
+//     char **split;
 
-    if (ft_strchr(file, '$'))
-    {
-        file_tmp = expand_string(file, mini);
-        if (!file_tmp)
-            return 0;
-        split = ft_split(file_tmp, ' ');
-        if (!split || split[1])
-            return 0;
-    }
-    return 1;
-}
+//     if (ft_strchr(file, '$'))
+//     {
+//         file_tmp = expand_string(file, mini);
+//         if (!file_tmp)
+//             return 0;
+//         split = ft_split(file_tmp, ' ');
+//         if (!split || split[1])
+//             return 0;
+//     }
+//     return 1;
+// }

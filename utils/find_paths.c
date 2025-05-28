@@ -25,25 +25,27 @@ char *find_cmd_path(char **paths, char *cmd)
         return NULL;
     if (ft_strchr(cmd, '/'))
     {
-        if (access(cmd, F_OK | X_OK) == 0)
+        if (access(cmd, F_OK) == -1)
+            return (printf("minishell: %s: No such file or directory\n", cmd), NULL);
+        if (access(cmd, X_OK) == 0)
             return ft_strdup(cmd);
-        return NULL;
+        return (printf("minishell: %s: Permission denied\n", cmd), NULL);
     }
     if (!paths)
-        return NULL;
-	int i = -1;
+        return (printf("minishell: %s: command not found\n", cmd), NULL);
+    int i = -1;
     while (paths[++i])
     {
         tmp = ft_strjoin(paths[i], "/");
         if (!tmp)
-			return NULL;
+            return (NULL);
         cmd_p = ft_strjoin(tmp, cmd);
         free(tmp);
         if (!cmd_p)
-			return NULL;
+            return (NULL);
         if (access(cmd_p, F_OK | X_OK) == 0)
-            return cmd_p;
+            return (cmd_p);
         free(cmd_p);
     }
-    return NULL;
+    return (printf("minishell: %s: command not found\n", cmd), NULL);
 }

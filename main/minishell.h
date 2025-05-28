@@ -12,6 +12,7 @@
 #include <termios.h>
 #include "../Libft/libft.h"
 #include <stdbool.h>
+#include <dirent.h>
 
 #define RED "\033[31m"
 #define RESET "\033[0m"
@@ -19,7 +20,7 @@
 
 #define MAX_PATH 4096
 
-int child_flag;
+extern int g_child;
 
 typedef struct tokens
 {
@@ -80,6 +81,9 @@ typedef struct s_node
 	struct s_node   *next;
 }   t_node;
 
+
+
+
 char	*find_cmd_path(char **paths, char *cmd);
 char	*get_env_value(t_mini *mini, char *key);
 int		double_arr_len(char **str);
@@ -90,7 +94,7 @@ void	ft_execute(t_mini *mini, char *str);
 int		is_builtin(char *str);
 
 void    do_cd(char **cmd, t_mini *mini);
-void    do_echo(char **av);
+void    do_echo(t_mini *mini);
 void    do_unset(char **args, t_mini *mini);
 void	do_env(t_mini *mini);
 void	do_pwd(t_mini *mini);
@@ -115,7 +119,10 @@ void ft_free_all(void);
 void    quotes(char **strs);
 
 //signals
-void	handler(int sig);
+void setup_child_signals(void);
+void setup_parent_signals(void);
+// void	handler(int sig);
+void	handler_heredoc(int sig);
 void disable_echoctl(void);
 void    reset_std_fds(t_mini *mini);
 void    backup_std_fds(t_mini *mini);
@@ -135,5 +142,7 @@ int handle_redirections(t_tokens *token);
 
 char		**split(char const *s, char c);
 void replace_expand_to_value(t_mini *mini);
+char **env_list_to_array(t_env *env);
+
 
 #endif

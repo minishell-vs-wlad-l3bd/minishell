@@ -6,25 +6,33 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:53 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/23 14:12:31 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:46:56 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main/minishell.h"
 
-
-int	is_too_big(char *str)
+char *normalize_number(char *str)
 {
-	int		len;
-	char	*max = "9223372036854775807";
-	char	*min = "9223372036854775808";
+	while (*str == '0' && *(str + 1) != '\0')
+		str++;
+	return str;
+}
 
-	len = ft_strlen(str);
+int is_too_big(char *str)
+{
+	int len;
+	char *max = "9223372036854775807";
+	char *min = "9223372036854775808";
+
 	if (str[0] == '+' || str[0] == '-')
 		str++;
-	if (strlen(str) < 19)
+	str = normalize_number(str);
+	len = ft_strlen(str);
+
+	if (len < 19)
 		return (0);
-	else if (ft_strlen(str) > 19)
+	else if (len > 19)
 		return (1);
 
 	if (str[-1] == '-')
@@ -54,13 +62,16 @@ void do_exit(char **args, t_mini *mini)
 		}
 		if (!is_numeric || is_too_big(args[1]))
 		{
+			ft_putstr_fd("exit\n", STDERR_FILENO);
 			ft_putstr_fd("minishell: exit: numeric argument required\n", STDERR_FILENO);
 			exit(255);
 		}
 		status = ft_atoi(args[1]);
 		if (args[2])
 		{
+			ft_putstr_fd("exit\n", STDERR_FILENO);
 			ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
+			mini->exit = 1;
 			return ;
 		}
 	}
@@ -68,6 +79,6 @@ void do_exit(char **args, t_mini *mini)
 		close(mini->in);
 	if (mini->out != STDOUT_FILENO)
 		close(mini->out);
-    printf("exit\n");
+	ft_putstr_fd("exit\n", STDERR_FILENO);
 	exit(status % 256);
 }

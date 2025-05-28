@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/23 14:12:18 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/24 14:15:59 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,35 +32,37 @@ char *get_temp_file(void)
     return file;
 }
 
-// void cleanup_heredoc(t_mini *mini, char *filename, int fd)
-// {
-//     if (filename)
-//         unlink(filename);
-//     if (fd != -1)
-//         close(fd);
-//     signal(SIGINT, handler);
-// }
-
 char *heredoc(t_mini *mini, char *delimiter)
 {
+    pid_t pid;
     char *filename = get_temp_file();
     int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     char *line;
+    int status;
 
     if (!filename || fd == -1 || !delimiter)
         return NULL;
-
-    // signal(SIGINT, SIG_DFL);
-    while (1)
+    pid = fork();
+    signal(SIGINT, SIG_IGN);
+    if (pid == 0)
     {
-        line = readline("> ");
-        if (!line)
-            break;
-        if (!ft_strcmp(line, delimiter))
-            break;
-        ft_putendl_fd(line, fd);
+        while (1)
+        {
+            signal(SIGINT, handler_heredoc);
+            line = readline("> ");
+            if (!line)
+                break;
+            if (!ft_strcmp(line, delimiter))
+            {
+                close(fd);
+                exit(0);
+            }
+            ft_putendl_fd(line, fd);
+        }
+        close(fd);
     }
-    close(fd);
-    signal(SIGINT, handler);
+    waitpid(pid, &status, 0);
+    mini->exit = WEXITSTATUS(status);
+    setup_parent_signals();
     return filename;
 }

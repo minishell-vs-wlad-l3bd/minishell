@@ -1,18 +1,3 @@
-======> adding expand $
-
-======> $? exit status
-
-======>errors msg
-
-======>signals in child
-
-======>run with path /bin/ls unset path
-
-
-==> t9abi minishel to handel <=====
-=> ls >> a >> b >> c
-          
-
 =====> in cd :
 bash-3.2$ mkdir oll
 bash-3.2$ cd oll
@@ -22,7 +7,7 @@ bash-3.2$ pwd
 /mnt/homes/mohidbel/Desktop/minishell
 bash-3.2$ cd oll
 bash: cd: oll: Permission denied
-??? handel errors and return exit
+
 
 ====> in export :
 ====> in echo :
@@ -30,3 +15,104 @@ bash: cd: oll: Permission denied
 ====> in env :
 ====> in unset :
 ====> in pwd :
+
+
+================= more =================
+
+/mnt/homes/mohidbel/Desktop/minishell/p/e/e
+minishell $ ls
+e       ec
+minishell $ rm -rf ../e/
+rm: ../e//e: Permission denied
+rm: ../e/: Directory not empty
+minishell $ rm -rf ../../e/
+rm: ../../e//e/e: Permission denied
+rm: ../../e//e: Directory not empty
+rm: ../../e/: Directory not empty
+minishell $ cd .
+cd: error retrieving current directory: getcwd:                                         cannot access parent directories: No such file or                directory
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell/p/e/e/.
+minishell $ cd .
+cd: error retrieving current directory: getcwd:                                         cannot access parent directories: No such file or                directory
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell/p/e/e/./.
+minishell $ cd /
+minishell $ cd .
+minishell $ pwd
+/
+minishell $ cd .
+minishell $ pwd
+/
+minishell $ cd .
+minishell $ pwd
+/
+minishell $ pwd
+/
+minishell $ 
+exit
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell
+minishell $ ls
+Libft           README.md       env             m               minishell       test.c          utils
+Makefile        a               excute          main            parsing         to do
+minishell $ cd m
+minishell: cd: Permission denied
+minishell $ rm -rf m
+rm: m: Permission denied
+minishell $ mkdir a
+minishell $ cd a/
+minishell $ rm -rf ../a/
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell/a
+minishell $ cd .
+cd: error retrieving current directory: getcwd:                                         cannot access parent directories: No such file or                directory
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell/a/.
+minishell $ cd .
+cd: error retrieving current directory: getcwd:                                         cannot access parent directories: No such file or                directory
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell/a/./.
+minishell $ cd .
+cd: error retrieving current directory: getcwd:                                         cannot access parent directories: No such file or                directory
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell/a/././.
+minishell $ cd .
+cd: error retrieving current directory: getcwd:                                         cannot access parent directories: No such file or                directory
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell/a/./././.
+minishell $ cd .
+cd: error retrieving current directory: getcwd:                                         cannot access parent directories: No such file or                directory
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell/a/././././.
+minishell $ unset PWD
+minishell $ PWD
+PWD: .: No such file or directory
+minishell $ pwd
+(null)
+minishell $ pwd
+(null)
+minishell $ pwd
+(null)
+minishell $ p
+minishell: p: command not found
+minishell $ cd ..a ane
+[1]    40166 segmentation fault  ./minishell
+
+
+
+
+rm: ../u: is a directory
+minishell $ pwd
+minishell $ rm -rf ../u
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell/u
+minishell $ cd .
+cd: error retrieving current directory: getcwd:                                         cannot access parent directories: No such file or                directory
+minishell $ ../minishell 
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell
+minishell $ ls
+minishell $ pwd
+/mnt/homes/mohidbel/Desktop/minishell
+minishell $ 
