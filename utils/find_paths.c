@@ -22,7 +22,7 @@ char *find_cmd_path(char **paths, char *cmd)
     char *tmp;
     
     if (!cmd)
-        return NULL;
+        return (NULL);
     if (ft_strchr(cmd, '/'))
     {
         if (access(cmd, F_OK | X_OK) == 0)
@@ -45,5 +45,5 @@ char *find_cmd_path(char **paths, char *cmd)
             return cmd_p;
         free(cmd_p);
     }
-    return NULL;
+    return (NULL);
 }

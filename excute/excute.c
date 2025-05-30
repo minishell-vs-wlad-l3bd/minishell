@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:44 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/28 14:45:15 by aayad            ###   ########.fr       */
+/*   Updated: 2025/05/30 10:17:08 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,49 +42,49 @@ void execute_builtin(char **cmd, t_mini *mini)
 		do_env(mini);
 }
 
-void execute_cmd(char **paths, char **cmd, t_mini *mini)
+void execute_cmd(char **paths, t_parsing *parss, t_mini *mini)
 {
 	pid_t pid;
 	char **check;
 	int flag = 0;
 
 	quotes(mini->parss->cmd);
-	if (wordcount(cmd[0], ' ') > 1)
-	{
-		flag = 1;
-		check = ft_split(cmd[0], ' ');
-	}
 	pid = fork();
 	if (pid == 0)
 	{
-		child_flag = 1;
-		if (flag)
+		if (mini->parss->is_expand)
 		{
-			char *cmd_path = find_cmd_path(paths, check[0]);
+			child_flag = 1;
+			if (!parss->expand[0])
+				exit(0);
+			char *cmd_path = find_cmd_path(paths, parss->expand[0]);
 			if (!cmd_path)
 			{
-				printf("minishell: %s: command not found\n", cmd[0]);
+				printf("minishell: %s: command not found1\n", parss->expand[0]);
 				mini->exit = 127;
 				return ;
 			}
-			execve(cmd_path, check, mini->ev);
-			printf("minishell: %s: command not found\n", cmd[0]);
+			execve(cmd_path, parss->expand, mini->ev);
+			printf("minishell: %s: command not found\n", parss->expand[0]);
 			exit(127);
+			child_flag = 0;
 		}
 		else
 		{
-			char *cmd_path = find_cmd_path(paths, cmd[0]);
+			child_flag = 1;
+			char *cmd_path = find_cmd_path(paths, parss->cmd[0]);
 			if (!cmd_path)
 			{
-				printf("minishell: %s: command not found\n", cmd[0]);
+				printf("minishell: %s: command not found\n", parss->cmd[0]);
 				mini->exit = 127;
 				return ;
 			}
-			execve(cmd_path, cmd, mini->ev);
-			printf("minishell: %s: command not found\n", cmd[0]);
+			execve(cmd_path, parss->cmd, mini->ev);
+			printf("minishell: %s: command not found\n", parss->cmd[0]);
 			exit(127);
+			child_flag = 0;
 		}
-		child_flag = 0;
+	
 	}
 	else
 		waitpid(pid, NULL, 0);
@@ -108,7 +108,7 @@ int check_type(char *str, char **paths, t_mini *mini, int falg)
 		}
 		if (tokens->append || tokens->intput || tokens->output)
 		{
-			remove_quotes(tokens->file);
+			// remove_quotes(tokens->file);
 			if (!handle_redirections(tokens))
 				return 0;
 		}
@@ -148,5 +148,5 @@ void ft_execute(t_mini *mini, char *str)
     if (is_builtin(mini->parss->cmd[0]))
         execute_builtin(mini->parss->cmd, mini);
     else
-		execute_cmd(paths, mini->parss->cmd, mini);
+		execute_cmd(paths, mini->parss, mini);
 }

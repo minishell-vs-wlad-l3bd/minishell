@@ -35,3 +35,4 @@ bash: cd: oll: Permission denied
 
 
 
+if cmd[0] == $a ==> "expand[0] ->"ls" expand[1] = "-l"

@@ -83,7 +83,19 @@ char *expand_string(char *str, t_mini *mini)
     }
     return result;
 }
+void	expand_cmd(char *cmd, t_mini *mini)
+{
+	char	*tmp;
+	t_parsing *parss;
 
+	parss = mini->parss;
+	parss->is_expand = 1;
+	tmp = get_env_value(mini, cmd + 1);
+	if(!tmp)
+		parss->expand = ft_split("", ' ');
+	else
+		parss->expand = ft_split(tmp, ' ');
+}
 void replace_expand_to_value(t_mini *mini)
 {
     t_parsing *parss ;
@@ -92,38 +104,48 @@ void replace_expand_to_value(t_mini *mini)
     int i;
 	
 	parss = mini->parss;
+	parss->is_expand = 0;
     while (parss)
     {
         i = 0;
         while (parss->cmd && parss->cmd[i])
         {
-            original = parss->cmd[i];
-            expanded = expand_string(original, mini);
-            if (expanded && expanded != original)
-            {
-                parss->cmd[i] = expanded;
-            }
-            else
-                parss->cmd[i] = "";
-            i++;
+			if (parss->cmd[0][0] == '$')
+			{
+				expand_cmd(parss->cmd[0], mini);
+				i++;
+			}
+			else
+			{
+				original = parss->cmd[i];
+				expanded = expand_string(original, mini);
+				if (expanded && expanded != original)
+				{
+					parss->cmd[i] = expanded;
+				}
+				else
+					parss->cmd[i] = "";
+				i++;
+			}
+            
         }
         parss = parss->next;
     }
 }
 
-int check_valid_file(char *file, t_mini *mini)
-{
-    char *file_tmp;
-    char **split;
+// int check_valid_file(char *file, t_mini *mini)
+// {
+//     char *file_tmp;
+//     char **split;
 
-    if (ft_strchr(file, '$'))
-    {
-        file_tmp = expand_string(file, mini);
-        if (!file_tmp)
-            return 0;
-        split = ft_split(file_tmp, ' ');
-        if (!split || split[1])
-            return 0;
-    }
-    return 1;
-}
+//     if (ft_strchr(file, '$'))
+//     {
+//         file_tmp = expand_string(file, mini);
+//         if (!file_tmp)
+//             return 0;
+//         split = ft_split(file_tmp, ' ');
+//         if (!split || split[1])
+//             return 0;
+//     }
+//     return 1;
+// }

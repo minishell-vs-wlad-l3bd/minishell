@@ -102,17 +102,18 @@ int	is_inside_double_quotes(char *str, int pos)
 	return (in_double);
 }
 
-int	check_quotes_expand(char *str)
+int	check_quotes_expand(char *str, t_mini *mini)
 {
 	int i;
 
 	i = 0;
+	mini->flag_expand = 0;
 	while (str && str[i])
 	{
 		if (str[i] == '$')
 		{
 			if (str[i + 1] == '"')
-				return (1);
+				return (mini->flag_expand = 1, 1);
 			if (is_inside_single_quotes(str, i))
 				return (1);
 			if (is_inside_double_quotes(str, i))
@@ -128,10 +129,12 @@ int		check_input(char *str, t_mini *mini)
 {
 	if (*str)
         add_history(str);
-	if (!*str || is_only_spaces(str) || !valid_line(str))
+	if (!*str || is_only_spaces(str))
 		return (1);
+	if (!valid_line(str))
+		return (mini->exit = 258, 1);
 	valid_syntax(str, mini);
-	if(check_quotes_expand(str))
+	if(check_quotes_expand(str, mini))
 		return (0);
 	replace_expand_to_value(mini);
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redr.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/23 14:12:09 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/30 10:33:05 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@ int handle_redirections(t_tokens *token)
 {
     int i = 0;
 
-
     if ((token->output || token->append || token->intput) && !token->file)
     {
-        fprintf(stderr, "minishell: redirection error: missing file\n");
+        fprintf(stderr, "minishell: ambiguous redirect\n");
         return 0;
     }
     if (token->output)

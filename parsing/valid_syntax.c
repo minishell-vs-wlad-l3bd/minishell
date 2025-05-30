@@ -1,6 +1,5 @@
 #include "../main/minishell.h"
 
-
 int		get_type(char *str)
 {
 	int		len;
@@ -32,48 +31,56 @@ void init_redir(t_tokens *head, char *str)
 		head->output = 1;
 }
 
-t_parsing *init_all(char **str)
+static t_tokens	*create_token(char **str, int *i, t_mini *mini)
 {
-	t_parsing *head;
-	t_tokens *current_token;
-	int i = 0;
-	int in = 0;
+	t_tokens	*new;
 
+	new = ft_malloc(sizeof(t_tokens));
+	init_redir(new, str[*i]);
+	remove_quotes(str[*i + 1]);
+	if (str[*i + 1] && str[*i + 1][0] == '$' && !new->heredoc)
+	{
+		new->file = get_env_value(mini, str[*i + 1] + 1);
+	}
+	else if (str[*i + 1])
+	{
+		new->file = str[*i + 1];
+		(*i)++;
+	}
+	return (new);
+}
+
+t_parsing	*init_all(char **str, t_mini *mini)
+{
+	t_parsing	*head;
+	t_tokens	*last;
+	int			i;
+	int			in;
+
+	i = 0;
+	in = 0;
 	head = ft_malloc(sizeof(t_parsing));
 	head->cmd = ft_malloc(sizeof(char *) * (double_arr_len(str) + 1));
 	head->token = NULL;
-	current_token = NULL;
-	t_tokens *last_token = NULL;
+	last = NULL;
 	while (str[i])
 	{
 		if (get_type(str[i]) && !ft_strchr(str[i], '\'') && !ft_strchr(str[i], '\"'))
 		{
-			t_tokens *new_token = ft_calloc(1, sizeof(t_tokens));
-			if (!new_token)
-				return (NULL);
-			init_redir(new_token, str[i]);
-			if (str[i + 1])
-			{
-				new_token->file = str[i + 1];
-				i++;
-			}
-			else
-				new_token->file = NULL;
+			t_tokens *new = create_token(str, &i, mini);
 			if (!head->token)
-				head->token = new_token;
+				head->token = new;
 			else
-				last_token->next = new_token;
-
-			last_token = new_token;
+				last->next = new;
+			last = new;
 		}
 		else
 			head->cmd[in++] = str[i];
 		i++;
 	}
 	head->cmd[in] = NULL;
-	return head;
+	return (head);
 }
-
 
 void    valid_syntax(char *line, t_mini *mini)
 {
@@ -90,7 +97,7 @@ void    valid_syntax(char *line, t_mini *mini)
     {
 		spaces = add_spaces(pipes[i]);
         redir = split(spaces, ' ');
-        new = init_all(redir);
+        new = init_all(redir, mini);
         ft_lstadd_back_2(&head, new);
         i++;
     }

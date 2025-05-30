@@ -146,7 +146,7 @@ int		analys_syntax(char *line)
 	if (check == 2)
 		return (ft_putendl_fd("syntax error: duplicated token 1", 2), 0);
 	if (check == 4)
-		return (ft_putendl_fd("syntax error: near unexpected token 2", 2), 0);
+		return (ft_putendl_fd("syntax error near unexpected token `newline'", 2), 0);
 	if (check == 0)
 		return (ft_putendl_fd("syntax error: near unexpected token 3", 2), 0);
 	if (check == 3)
