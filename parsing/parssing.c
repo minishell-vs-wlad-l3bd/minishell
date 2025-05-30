@@ -25,7 +25,7 @@ void	remove_quotes(char *str)
 	str[j] = '\0';
 }
 
-int		check_quotes(char *line)
+int	check_quotes(char *line)
 {
 	int		i;
 	char	quote;
@@ -36,7 +36,8 @@ int		check_quotes(char *line)
 	if (line[i] == '\'' || line[i] == '"')
 	{
 		quote = line[i];
-		while (line[i] && line [i] != quote)
+		i++; 
+		while (line[i] && line[i] != quote)
 			i++;
 		if (!line[i])
 			return (-1);
@@ -44,11 +45,14 @@ int		check_quotes(char *line)
 	}
 	return (0);
 }
+
 void    quotes(char **str)
 {
 	int	i;
 
 	i = 0;
+	if (!str || !*str)
+		return ;
 	while (str[i])
 	{
 		remove_quotes(str[i]);

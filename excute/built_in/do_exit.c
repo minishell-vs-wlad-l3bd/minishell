@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:53 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/27 19:46:56 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:46:02 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,10 @@ int is_too_big(char *str)
 		str++;
 	str = normalize_number(str);
 	len = ft_strlen(str);
-
 	if (len < 19)
 		return (0);
 	else if (len > 19)
 		return (1);
-
 	if (str[-1] == '-')
 		return (ft_strcmp(str, min) > 0);
 	else

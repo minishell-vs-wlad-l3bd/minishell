@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/24 14:15:59 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:49:11 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,27 +21,29 @@ char *get_temp_file(void)
 
     pid_str = ft_itoa(getpid());
     if (!pid_str)
-        return NULL;
+        return (NULL);
     file = ft_strjoin("/tmp/heredoc_", pid_str);
     if (!file)
-        return NULL;
+        return (NULL);
     fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1)
-        return NULL;
+        return (NULL);
     close(fd);
-    return file;
+    return (file);
 }
 
 char *heredoc(t_mini *mini, char *delimiter)
 {
     pid_t pid;
-    char *filename = get_temp_file();
-    int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    char *filename;
+    int fd;
     char *line;
     int status;
 
+    filename = get_temp_file();
+    fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (!filename || fd == -1 || !delimiter)
-        return NULL;
+        return (NULL);
     pid = fork();
     signal(SIGINT, SIG_IGN);
     if (pid == 0)
@@ -64,5 +66,5 @@ char *heredoc(t_mini *mini, char *delimiter)
     waitpid(pid, &status, 0);
     mini->exit = WEXITSTATUS(status);
     setup_parent_signals();
-    return filename;
+    return (filename);
 }

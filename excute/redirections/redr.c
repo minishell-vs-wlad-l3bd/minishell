@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/23 17:29:42 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:38:12 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ int handle_redirections(t_tokens *token)
     int i = 0;
 
 
-    if ((token->output || token->append || token->intput) && !token->file)
-    {
-        fprintf(stderr, "minishell: redirection error: missing file\n");
-        return 0;
-    }
+    // if ((token->output || token->append || token->intput) && !token->file)
+    // {
+    //     fprintf(stderr, "minishell: redirection error: missing file\n");
+    //     return 0;
+    // }
     if (token->output)
     {
         int fd = open(token->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);

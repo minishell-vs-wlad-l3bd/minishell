@@ -112,19 +112,22 @@ int		check_redir_sequence(char *str, int *i)
 		return (1);
 	return (0);
 }
-int		mixed_redirection_error(char *str)
+int	mixed_redirection_error(char *str)
 {
 	int	i;
-	
+	int	in_string;
+
 	i = 0;
+	in_string = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'' || str[i] == '"')
+		if (str[i] == '"' && (i == 0 || str[i - 1] != '\\'))
 		{
-			i += check_quotes(&str[i]) + 1;
+			in_string = !in_string;
+			i++;
 			continue;
 		}
-		if (str[i] == '>' || str[i] == '<')
+		if (!in_string && (str[i] == '>' || str[i] == '<'))
 		{
 			if (check_redir_sequence(str, &i))
 				return (1);
@@ -135,20 +138,17 @@ int		mixed_redirection_error(char *str)
 	return (0);
 }
 
-
-
-
 int		analys_syntax(char *line)
 {
 	int		check;
 
 	check = check_syntax(line);
 	if (check == 2)
-		return (ft_putendl_fd("syntax error: duplicated token", 2), 0);
+		return (ft_putendl_fd("syntax error: duplicated token 1", 2), 0);
 	if (check == 4)
-		return (ft_putendl_fd("syntax error: near unexpected token", 2), 0);
+		return (ft_putendl_fd("syntax error: near unexpected token 2", 2), 0);
 	if (check == 0)
-		return (ft_putendl_fd("syntax error: near unexpected token", 2), 0);
+		return (ft_putendl_fd("syntax error: near unexpected token 3", 2), 0);
 	if (check == 3)
 		return (ft_putendl_fd("syntax error near unexpected token `&'", 2), 0);
 	if (check == 5)

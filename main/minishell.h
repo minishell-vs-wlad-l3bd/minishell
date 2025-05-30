@@ -20,8 +20,6 @@
 
 #define MAX_PATH 4096
 
-extern int g_child;
-
 typedef struct tokens
 {
 	int		CMD;
@@ -38,6 +36,8 @@ typedef struct tokens
 typedef struct s_parsing
 {
 	char *heredoc_file;
+	int		is_expand;
+	char	**expand;
     char    **cmd;
 	t_tokens *token;
 	struct s_parsing	*next;
@@ -84,17 +84,17 @@ typedef struct s_node
 
 
 
-char	*find_cmd_path(char **paths, char *cmd);
+char *find_cmd_path(char **paths, char *cmd, t_mini *mini);
 char	*get_env_value(t_mini *mini, char *key);
 int		double_arr_len(char **str);
 // excute fonction
-void	execute_cmd(char **paths, char **cmd, t_mini *mini);
-void	execute_builtin(char **cmd, t_mini *mini);
+void execute_cmd(char **paths, char **cmd, t_mini *mini);
+void execute_builtin(char **cmd, t_mini *mini);
 void	ft_execute(t_mini *mini, char *str);
 int		is_builtin(char *str);
 
 void    do_cd(char **cmd, t_mini *mini);
-void    do_echo(t_mini *mini);
+void do_echo(t_mini *mini);
 void    do_unset(char **args, t_mini *mini);
 void	do_env(t_mini *mini);
 void	do_pwd(t_mini *mini);
@@ -112,6 +112,7 @@ t_env	*ft_env_lstnew(void *key, void *value);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 t_env	*env_init(char **env, int flag);
 void	update_env(t_env **env, char *key, char *value);
+char *expand_string(char *str, t_mini *mini);
 
 // utils
 void *ft_malloc(size_t size);
@@ -139,7 +140,7 @@ int			check_input(char *str, t_mini *mini);
 
 
 int handle_redirections(t_tokens *token);
-
+char	*add_spaces(char *line);
 char		**split(char const *s, char c);
 void replace_expand_to_value(t_mini *mini);
 char **env_list_to_array(t_env *env);

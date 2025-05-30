@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:27 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/23 14:12:28 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:44:56 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,16 @@ void ft_sort(t_mini *mini)
 
 void print_sort_env(t_mini *mini)
 {
-	t_env *node = mini->export_env;
+	t_env *node;
+    
 	ft_sort(mini);
+    node = mini->export_env;
 	while (node)
 	{
 		printf("declare -x ");
 		printf("%s", node->key);
 		if (node->value)
-			printf("=\'%s\'\n", node->value);
+			printf("=\"%s\"\n", node->value);
 		else
 			printf("\n"); 
 		node = node->next;
@@ -60,14 +62,16 @@ void print_sort_env(t_mini *mini)
 
 int check(t_env **env, char *key)
 {
-	t_env *node = *env;
+	t_env *node;
+    
+    node = *env;
 	while(node)
 	{
 		if (!ft_strcmp(node->key, key))
-			return 1;
+			return (1);
 		node = node->next;
 	}
-	return 0;
+	return (0);
  }
 
  void handle_append(t_mini *mini, char *str)
@@ -81,31 +85,27 @@ int check(t_env **env, char *key)
     parts = ft_split(str, '+');
     if (!parts || !parts[0] || !parts[1])
         return;
-    
     key = parts[0];
     value_part = parts[1];
-    
     if (value_part[0] != '=')
         return;
     existing_value = get_env_value(mini, key);
-    value_part++;
-    
     if (existing_value)
     {
-        new_value = ft_strjoin(existing_value, value_part);
+        new_value = ft_strjoin(existing_value, ++value_part);
         update_env(&mini->env, key, new_value);
         update_env(&mini->export_env, key, new_value);
     }
     else
     {
-        update_env(&mini->env, key, value_part);
-        update_env(&mini->export_env, key, value_part);
+        update_env(&mini->env, key, ++value_part);
+        update_env(&mini->export_env, key, ++value_part);
     }
 }
 
-int is_valid_env_name(const char *name)
+int is_valid_env_name(char *name)
 {
-    const char *p = name;
+    char *p = name;
 
     if (!name || !*name)
         return 0;
@@ -122,7 +122,6 @@ int is_valid_env_name(const char *name)
             return 0;
         }
     }
-    
     return 1;
 }
 

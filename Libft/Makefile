@@ -5,7 +5,7 @@ NAME = libft.a
 
 COMP = cc
 
-FLAG = -Wall -Wextra -Werror
+FLAG = -Wall -Wextra -Werror 
 
 OBJLIBC = $(SRCLIBC:.c=.o)
 

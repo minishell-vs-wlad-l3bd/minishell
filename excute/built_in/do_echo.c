@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/27 10:18:17 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:15:00 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,16 @@
 
 int is_valid_n_flag(const char *str)
 {
+	int i;
+
+	i = 1;
 	if (str[0] != '-')
 		return 0;
-	for (int i = 1; str[i]; i++)
+	while (str[i])
 	{
 		if (str[i] != 'n')
 			return 0;
+		i++;
 	}
 	return 1;
 }
@@ -34,7 +38,7 @@ void do_echo(t_mini *mini)
 	int nl;
 
 	parss = mini->parss;
-	i = 1;
+	i = 0;
 	nl = 0;
 
 	while (parss->cmd[i] && is_valid_n_flag(parss->cmd[i]))

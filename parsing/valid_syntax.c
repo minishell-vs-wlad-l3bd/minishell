@@ -86,23 +86,13 @@ void    valid_syntax(char *line, t_mini *mini)
 
 	mini->pipe = 0;
     pipes = split_by_pipe(line, mini);
-	// printf("pipe is =====>%d\n", mini->pipe);
     while (pipes[i])
     {
-		// spaces = add_spaces(pipes[i]);
-        redir = split(pipes[i], ' ');
+		spaces = add_spaces(pipes[i]);
+        redir = split(spaces, ' ');
         new = init_all(redir);
         ft_lstadd_back_2(&head, new);
         i++;
     }
     mini->parss = head;
-	// // just for debug
-	// int k = 0;
-	// while(mini->parss)
-	// {
-	// 	for(int i = 0; mini->parss->cmd[i]; i++)
-	// 		printf("command is : ==>%d, %s\n", k, mini->parss->cmd[i]); 
-	// 	k++;
-	// 	mini->parss = mini->parss->next;
-	// }
 }

@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/25 15:02:27 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:16:02 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ void	execute_pipeline(char *str, char **paths, t_mini *mini)
 		parent_cleanup(mini, i, count_cmds);
 		parss = parss->next;
 	}
+	setup_parent_signals();
 	i = -1;
 	while (++i < count_cmds)
 		waitpid(pids[i], NULL, 0);

@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/24 14:21:00 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:29:36 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ void norm_main(t_mini *mini)
 		str = readline("minishell $ ");
 		if (!str)
 		{
-			ft_putstr_fd("exit\n", STDOUT_FILENO);
+			ft_putstr_fd("exit\n", STDERR_FILENO);
 			reset_std_fds(mini);
-			exit(1);
+			exit(0);
 		}
 		if (*str && !check_input(str, mini))
 			ft_execute(mini, str);

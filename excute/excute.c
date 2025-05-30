@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:44 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/28 14:05:58 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:31:51 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,44 +44,44 @@ void execute_cmd(char **paths, char **cmd, t_mini *mini)
 {
 	int status;
 	pid_t pid;
-	char *cmd_path = find_cmd_path(paths, cmd[0]);
 	DIR *dir;
-	
-	mini->ev=env_list_to_array(mini->env);
-	if ((dir = opendir(cmd[0])) != NULL)
-    {
-        closedir(dir);
-        printf("minishell: %s: is a directory\n", cmd[0]);
-        mini->exit = 126;
-        return ;
-    }
+	char *cmd_path;
+
+	quotes(cmd);
+	cmd_path = find_cmd_path(paths, *cmd, mini);
 	if (!cmd_path)
-    {
-        mini->exit = 127;
 		return ;
-    }
+	mini->ev=env_list_to_array(mini->env);
+	if ((dir = opendir(*cmd)) != NULL)
+	{
+		closedir(dir);
+		printf("minishell: %s: is a directory\n", *cmd);
+		mini->exit = 126;
+		return ;
+	}
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
 	{
 		setup_child_signals();
 		execve(cmd_path, cmd, mini->ev);
-		exit(126);
+		exit(errno);
 	}
 	else
 	{
-        waitpid(pid, &status, 0);
+		waitpid(pid, &status, 0);
 		mini->exit = WEXITSTATUS(status);
-        setup_parent_signals();
+		setup_parent_signals();
 	}
 }
 
-
 int check_type(char *str, char **paths, t_mini *mini, int falg)
 {
-	t_tokens *tokens = mini->parss->token;
-	char *last_heredoc_file = NULL;
+	t_tokens *tokens;
+	char *last_heredoc_file;
 
+	tokens = mini->parss->token;
+	last_heredoc_file = NULL;
 	while (tokens)
 	{
 		if (tokens->heredoc && falg)
@@ -93,7 +93,7 @@ int check_type(char *str, char **paths, t_mini *mini, int falg)
 		if (tokens->append || tokens->intput || tokens->output)
 		{
 			if (!handle_redirections(tokens))
-				return 0;
+				return (0);
 		}
 		tokens = tokens->next;
 	}
@@ -101,37 +101,27 @@ int check_type(char *str, char **paths, t_mini *mini, int falg)
 	{
 		int fd = open(last_heredoc_file, O_RDONLY);
 		if (fd == -1 || dup2(fd, STDIN_FILENO) == -1)
-		{
 			exit(1);
-		}
 		close(fd);
 		unlink(last_heredoc_file);
 	}
-	return 1;
+	return (1);
 }
 
 void ft_execute(t_mini *mini, char *str)
 {
-	pid_t pid;
 	char **paths;
-
+	
 	paths = ft_split(get_env_value(mini, "PATH"), ':');
 	if (mini->pipe)
 	{
 		execute_pipeline(str, paths, mini);
 		return ;
 	}
-	if(!check_type(str, paths, mini, 1))
+	if (!check_type(str, paths, mini, 1))
 		return ;
-	for (int i = 0; mini->parss->cmd[i]; i++)
-	{
-		if (mini->parss->cmd[i] && mini->parss->cmd[i][0] != '\0')
-		{
-			if (is_builtin(mini->parss->cmd[i]))
-				execute_builtin(&mini->parss->cmd[i], mini);
-			else
-				execute_cmd(paths, &mini->parss->cmd[i], mini);
-			return ;
-		}
-	}
+	if (is_builtin(mini->parss->cmd[0]))
+		execute_builtin(mini->parss->cmd, mini);
+	else
+		execute_cmd(paths, mini->parss->cmd, mini);
 }
