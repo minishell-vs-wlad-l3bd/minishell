@@ -1,9 +1,21 @@
-# include "../main/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parssing.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 10:19:31 by aayad             #+#    #+#             */
+/*   Updated: 2025/05/31 10:20:33 by aayad            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../main/minishell.h"
 
 void	remove_quotes(char *str)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	quote;
 
 	i = 0;
@@ -36,7 +48,7 @@ int	check_quotes(char *line)
 	if (line[i] == '\'' || line[i] == '"')
 	{
 		quote = line[i];
-		i++; 
+		i++;
 		while (line[i] && line[i] != quote)
 			i++;
 		if (!line[i])
@@ -46,7 +58,7 @@ int	check_quotes(char *line)
 	return (0);
 }
 
-void    quotes(char **str)
+void	quotes(char **str)
 {
 	int	i;
 
@@ -59,6 +71,7 @@ void    quotes(char **str)
 		i++;
 	}
 }
+
 int	ft_isspace(char c)
 {
 	return (c == ' ' || (c >= 9 && c <= 13));

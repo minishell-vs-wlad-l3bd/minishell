@@ -1,11 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   valid_syntax.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 10:31:52 by aayad             #+#    #+#             */
+/*   Updated: 2025/05/31 14:36:56 by aayad            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../main/minishell.h"
 
-int		get_type(char *str)
+int	get_type(char *str)
 {
 	int		len;
 
 	len = ft_strlen(str);
-	
 	if (ft_strnstr(str, ">>", len))
 		return (1);
 	if (ft_strnstr(str, "<<", len))
@@ -17,10 +28,11 @@ int		get_type(char *str)
 	return (0);
 }
 
-void init_redir(t_tokens *head, char *str)
+void	init_redir(t_tokens *head, char *str)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	if (str[i] == '<' && str[i + 1] == '<')
 		head->heredoc = 1;
 	else if (str[i] == '>' && str[i + 1] == '>')
@@ -56,6 +68,7 @@ t_parsing	*init_all(char **str, t_mini *mini)
 	t_tokens	*last;
 	int			i;
 	int			in;
+	t_tokens	*new;
 
 	i = 0;
 	in = 0;
@@ -67,7 +80,7 @@ t_parsing	*init_all(char **str, t_mini *mini)
 	{
 		if (get_type(str[i]) && !ft_strchr(str[i], '\'') && !ft_strchr(str[i], '\"'))
 		{
-			t_tokens *new = create_token(str, &i, mini);
+			new = create_token(str, &i, mini);
 			if (!head->token)
 				head->token = new;
 			else
@@ -82,24 +95,26 @@ t_parsing	*init_all(char **str, t_mini *mini)
 	return (head);
 }
 
-void    valid_syntax(char *line, t_mini *mini)
+void	valid_syntax(char *line, t_mini *mini)
 {
-    char        **pipes;
-    char        **redir;
-    int            i = 0;
-    t_parsing    *head = NULL;
-    t_parsing    *new;
+	char		**pipes;
+	char		**redir;
+	int			i;
+	t_parsing	*head;
+	t_parsing	*new;
 	char		*spaces;
 
+	head = NULL;
 	mini->pipe = 0;
-    pipes = split_by_pipe(line, mini);
-    while (pipes[i])
-    {
+	i = 0;
+	pipes = split_by_pipe(line, mini);
+	while (pipes[i])
+	{
 		spaces = add_spaces(pipes[i]);
-        redir = split(spaces, ' ');
-        new = init_all(redir, mini);
-        ft_lstadd_back_2(&head, new);
-        i++;
-    }
-    mini->parss = head;
+		redir = split(spaces, ' ');
+		new = init_all(redir, mini);
+		ft_lstadd_back_2(&head, new);
+		i++;
+	}
+	mini->parss = head;
 }

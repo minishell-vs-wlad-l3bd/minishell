@@ -1,10 +1,22 @@
-# include "../main/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_tools.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 18:15:23 by mohidbel          #+#    #+#             */
+/*   Updated: 2025/05/29 18:15:23 by mohidbel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../main/minishell.h"
 
 void	ft_env_lstadd_back(t_env **lst, t_env *new)
 {
 	t_env	*tmp;
 
-	if(!lst)
+	if (!lst)
 		return ;
 	if (!*lst)
 	{

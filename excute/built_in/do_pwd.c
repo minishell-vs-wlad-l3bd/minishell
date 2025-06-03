@@ -6,14 +6,14 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:59 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/23 14:12:24 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:40:43 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main/minishell.h"
 
 
-void do_pwd(t_mini *mini)
+void    do_pwd(t_mini *mini)
 {
     char cwd[MAX_PATH];
 

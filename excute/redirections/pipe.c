@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/28 18:41:15 by aayad            ###   ########.fr       */
+/*   Updated: 2025/05/30 19:46:01 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,11 @@ void setup_pipe_io(t_mini *mini, int is_first, int is_last)
         close(mini->prev_pipe);
     }
     if (!is_last)
+	{
         dup2(mini->pipe_out, STDOUT_FILENO);
-    close(mini->pipe_in);
-    close(mini->pipe_out);
+		close(mini->pipe_out);
+	}
+  	close(mini->pipe_in);
 }
 
 char **remove_null_entries(char **cmd)
@@ -97,21 +99,20 @@ char **remove_null_entries(char **cmd)
 static void	child_process(char *str, char **paths,
 	t_mini *mini, t_parsing *parss, int i, int total_cmds)
 {
-	child_flag = 1;
+	int fd;
 	setup_pipe_io(mini, i == 0, i == total_cmds - 1);
 	if (parss->heredoc_file)
 	{
-		int fd = open(parss->heredoc_file, O_RDONLY);
+		fd = open(parss->heredoc_file, O_RDONLY);
 		if (fd == -1 || dup2(fd, STDIN_FILENO) == -1)
 		{
-			perror("minishell: heredoc dup2");
+			// perror("minishell: heredoc dup2");
 			exit(1);
 		}
 		close(fd);
 	}
 	if (!check_type(str, paths, mini, 0))
 		exit(1);
-	parss->cmd = remove_null_entries(parss->cmd);
 	if (is_builtin(parss->cmd[0]))
 	{
 		execute_builtin(parss->cmd, mini);
@@ -119,20 +120,22 @@ static void	child_process(char *str, char **paths,
 	}
 	else
 	{
-		execute_cmd(paths, parss, mini);
+		execute_cmd(paths, parss->cmd, mini);
 		exit(0);
 	}
 }
 
-static void	parent_cleanup(t_mini *mini, int i, int total_cmds)
+static void parent_cleanup(t_mini *mini, int i, int total_cmds)
 {
-	if (mini->prev_pipe != -1)
-		close(mini->prev_pipe);
-	if (i < total_cmds - 1)
-	{
-		mini->prev_pipe = mini->pipe_in;
-		close(mini->pipe_out);
-	}
+    if (mini->prev_pipe != -1) {
+        close(mini->prev_pipe);
+        mini->prev_pipe = -1;
+    }
+    if (i < total_cmds - 1)
+        mini->prev_pipe = mini->pipe_in;
+    else
+        close(mini->pipe_in);
+    close(mini->pipe_out);
 }
 
 void	execute_pipeline(char *str, char **paths, t_mini *mini)
@@ -155,10 +158,15 @@ void	execute_pipeline(char *str, char **paths, t_mini *mini)
 		if (pids[i] == 0)
 			child_process(str, paths, mini, parss, i, count_cmds);
 		else if (pids[i] < 0)
+		{
+			close(mini->pipe_in);
+    		close(mini->pipe_out);
 			return (perror("minishell: fork"));
+		}
 		parent_cleanup(mini, i, count_cmds);
 		parss = parss->next;
 	}
+	setup_parent_signals();
 	i = -1;
 	while (++i < count_cmds)
 		waitpid(pids[i], NULL, 0);

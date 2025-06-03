@@ -2,8 +2,9 @@
 
 char *extract_name(char *str)
 {
-    int i = 0;
-    
+    int	i;
+
+i	 = 0;
     if (!str || !*str)
         return NULL;
     if (str[i] == '?')
@@ -17,9 +18,11 @@ char *expand_value(char *str, t_mini *mini)
 {
     char *var_name;
     char *value;
+	int		i;
 
     var_name = extract_name(str);
     value = NULL;
+	i = 0;
     if (!var_name)
         return NULL;
     if (ft_strcmp(var_name, "?") == 0)
@@ -34,13 +37,18 @@ char *expand_value(char *str, t_mini *mini)
 
 char *prepare_and_expand(char *result, char *var_start, t_mini *mini, char **new_result)
 {
-    char *before = ft_substr(result, 0, var_start - result);
-    char *var_name = extract_name(var_start + 1);
-    char *value = NULL;
-    int var_len = 1;
-    char *after = NULL;
-    char *tmp = NULL;
-
+    char *before;
+    char *var_name;
+    char *value;
+    int var_len;
+    char *after;
+    char *tmp;
+	
+	value = NULL;
+	var_len = 1;
+	tmp = NULL;
+	var_name = extract_name(var_start + 1);
+	before = ft_substr(result, 0, var_start - result);
     if (!before)
         return NULL;
     if (var_name)
@@ -67,12 +75,6 @@ char *expand_string(char *str, t_mini *mini)
 	result = ft_strdup(str);
     while ((var_start = ft_strchr(result, '$')))
     {
-
-        if (var_start > result && *(var_start - 1) == '\\')
-        {
-            ft_memmove(var_start - 1, var_start, ft_strlen(var_start));
-            continue;
-        }
         if (!prepare_and_expand(result, var_start, mini, &new_result))
         {
             free(result);
@@ -83,55 +85,47 @@ char *expand_string(char *str, t_mini *mini)
     }
     return result;
 }
-void	expand_cmd(char *cmd, t_mini *mini)
-{
-	char	*tmp;
-	t_parsing *parss;
 
-	parss = mini->parss;
-	parss->is_expand = 1;
-	tmp = get_env_value(mini, cmd + 1);
-	if(!tmp)
-		parss->expand = ft_split("", ' ');
-	else
-		parss->expand = ft_split(tmp, ' ');
+void remove_token(char **arr, int idx)
+{
+    free(arr[idx]);
+    while (arr[idx])
+    {
+        arr[idx] = arr[idx + 1];
+        idx++;
+    }
 }
+
 void replace_expand_to_value(t_mini *mini)
 {
     t_parsing *parss ;
     char *expanded;
     char *original;
     int i;
-	
+
 	parss = mini->parss;
-	parss->is_expand = 0;
     while (parss)
     {
         i = 0;
         while (parss->cmd && parss->cmd[i])
         {
-			if (parss->cmd[0][0] == '$')
-			{
-				expand_cmd(parss->cmd[0], mini);
-				i++;
-			}
-			else
-			{
-				original = parss->cmd[i];
-				expanded = expand_string(original, mini);
-				if (expanded && expanded != original)
-				{
-					parss->cmd[i] = expanded;
-				}
-				else
-					parss->cmd[i] = "";
-				i++;
-			}
-            
+			original = parss->cmd[i];
+			expanded = expand_string(original, mini);
+			if (expanded)
+            {
+                if (expanded != original)
+                {
+                    parss->cmd[i] = expanded;
+                }
+                i++;
+            }
+            else
+                remove_token(parss->cmd, i);
         }
         parss = parss->next;
     }
 }
+
 
 // int check_valid_file(char *file, t_mini *mini)
 // {

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_env.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 18:15:27 by mohidbel          #+#    #+#             */
+/*   Updated: 2025/05/29 18:15:27 by mohidbel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../main/minishell.h"
 
-void update_env(t_env **env, char *key, char *value)
+void	update_env(t_env **env, char *key, char *value)
 {
 	size_t	v_len;
 	char	*new;
@@ -18,7 +30,7 @@ void update_env(t_env **env, char *key, char *value)
 		if (c->key && !ft_strcmp(c->key, key))
 		{
 			if (c->value)
-                free(c->value);
+				free(c->value);
 			c->value = new;
 			return ;
 		}
@@ -71,13 +83,13 @@ int	double_arr_len(char **str)
 t_env	*env_init(char **env, int flag)
 {
 	t_env	*head;
-	t_env *new_node;
+	t_env	*new_node;
 	int		i;
-	char **tmp;
+	char	**tmp;
 
-	head = NULL;
 	i = 0;
-	if(!env || !*env)
+	head = NULL;
+	if (!env || !*env)
 	{
 		env_pre_add(&head, flag);
 		return (head);

@@ -12,14 +12,13 @@
 #include <termios.h>
 #include "../Libft/libft.h"
 #include <stdbool.h>
+#include <dirent.h>
 
 #define RED "\033[31m"
 #define RESET "\033[0m"
 #define BLEU "\033[34m"
 
 #define MAX_PATH 4096
-
-int child_flag;
 
 typedef struct tokens
 {
@@ -83,17 +82,20 @@ typedef struct s_node
 	struct s_node   *next;
 }   t_node;
 
-char	*find_cmd_path(char **paths, char *cmd);
+
+
+
+char *find_cmd_path(char **paths, char *cmd, t_mini *mini);
 char	*get_env_value(t_mini *mini, char *key);
 int		double_arr_len(char **str);
 // excute fonction
-void	execute_cmd(char **paths, t_parsing *parss, t_mini *mini);
-void	execute_builtin(char **cmd, t_mini *mini);
+void execute_cmd(char **paths, char **cmd, t_mini *mini);
+void execute_builtin(char **cmd, t_mini *mini);
 void	ft_execute(t_mini *mini, char *str);
 int		is_builtin(char *str);
 
 void    do_cd(char **cmd, t_mini *mini);
-void 	do_echo(t_mini *mini);
+void do_echo(t_mini *mini);
 void    do_unset(char **args, t_mini *mini);
 void	do_env(t_mini *mini);
 void	do_pwd(t_mini *mini);
@@ -111,6 +113,7 @@ t_env	*ft_env_lstnew(void *key, void *value);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 t_env	*env_init(char **env, int flag);
 void	update_env(t_env **env, char *key, char *value);
+char *expand_string(char *str, t_mini *mini);
 
 // utils
 void *ft_malloc(size_t size);
@@ -118,7 +121,10 @@ void ft_free_all(void);
 void    quotes(char **strs);
 
 //signals
-void	handler(int sig);
+void setup_child_signals(void);
+void setup_parent_signals(void);
+// void	handler(int sig);
+void	handler_heredoc(int sig);
 void disable_echoctl(void);
 void    reset_std_fds(t_mini *mini);
 void    backup_std_fds(t_mini *mini);
@@ -135,11 +141,16 @@ int			check_input(char *str, t_mini *mini);
 
 
 int handle_redirections(t_tokens *token);
-
+char	*add_spaces(char *line);
 char		**split(char const *s, char c);
 void replace_expand_to_value(t_mini *mini);
-int	wordcount(char const *s, char c);
-char	*add_spaces(char *line);
+char **env_list_to_array(t_env *env);
 void	remove_quotes(char *str);
+
+int	check_redir_sequence(char *str, int *i);
+int	mixed_redirection_error(char *str);
+int	redir_syntax_error(char *str);
+int	check_quotes_expand(char *str, t_mini *mini);
+
 
 #endif //MINISHELL_H

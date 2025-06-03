@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/30 11:38:48 by aayad            ###   ########.fr       */
+/*   Updated: 2025/05/31 15:57:20 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,46 +21,50 @@ char *get_temp_file(void)
 
     pid_str = ft_itoa(getpid());
     if (!pid_str)
-        return NULL;
+        return (NULL);
     file = ft_strjoin("/tmp/heredoc_", pid_str);
     if (!file)
-        return NULL;
+        return (NULL);
     fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1)
-        return NULL;
+        return (NULL);
     close(fd);
-    return file;
+    return (file);
 }
-
-// void cleanup_heredoc(t_mini *mini, char *filename, int fd)
-// {
-//     if (filename)
-//         unlink(filename);
-//     if (fd != -1)
-//         close(fd);
-//     signal(SIGINT, handler);
-// }
 
 char *heredoc(t_mini *mini, char *delimiter)
 {
-    char *filename = get_temp_file();
-    int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    pid_t pid;
+    char *filename;
+    int fd;
     char *line;
+    int status;
 
+    filename = get_temp_file();
+    fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (!filename || fd == -1 || !delimiter)
-        return NULL;
-
-    // signal(SIGINT, SIG_DFL);
-    while (1)
+        return (NULL);
+    pid = fork();
+    signal(SIGINT, SIG_IGN);
+    if (pid == 0)
     {
-        line = readline("> ");
-        if (!line)
-            break;
-        if (!ft_strcmp(line, delimiter))
-            break;
-        ft_putendl_fd(line, fd);
+        while (1)
+        {
+            signal(SIGINT, handler_heredoc);
+            line = readline("> ");
+            if (!line)
+                break;
+            if (!ft_strcmp(line, delimiter))
+            {
+                close(fd);
+                exit(0);
+            }
+            ft_putendl_fd(line, fd);
+        }
+        close(fd);
     }
-    close(fd);
-    signal(SIGINT, handler);
-    return filename;
+    waitpid(pid, &status, 0);
+    mini->exit = WEXITSTATUS(status);
+    setup_parent_signals();
+    return (filename);
 }

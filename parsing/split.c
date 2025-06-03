@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   split.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 10:26:00 by aayad             #+#    #+#             */
+/*   Updated: 2025/05/31 10:26:01 by aayad            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../main/minishell.h"
 
 static int	is_quote(char c)
@@ -7,8 +19,8 @@ static int	is_quote(char c)
 
 static int	word_len(const char *s, char sep)
 {
-	int i;
-	char quote;
+	int		i;
+	char	quote;
 
 	quote = 0;
 	i = 0;
@@ -27,9 +39,9 @@ static int	word_len(const char *s, char sep)
 
 static int	word_count(const char *s, char sep)
 {
-	int i;
-	int count;
-	int len;
+	int	i;
+	int	count;
+	int	len;
 
 	i = 0;
 	count = 0;
@@ -51,10 +63,12 @@ static char	*wordcopy(const char *s, char sep)
 {
 	int		len;
 	char	*word ;
-	int		i = 0;
+	int		i;
 	int		j;
-	char	quote = 0;
+	char	quote;
 
+	j = 0;
+	quote = 0;
 	len = word_len(s, sep);
 	word = ft_malloc(len + 1);
 	i = 0;
@@ -70,8 +84,6 @@ static char	*wordcopy(const char *s, char sep)
 	word[j] = '\0';
 	return (word);
 }
-
-
 
 char	**split(const char *s, char sep)
 {
