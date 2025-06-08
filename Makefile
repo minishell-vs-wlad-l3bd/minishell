@@ -27,7 +27,6 @@ SRCS = 	main/minishell.c\
 		parsing/parss_input.c\
 		parsing/parssing_tools.c\
 		parsing/split_pipe.c\
-		parsing/token.c\
 		parsing/valid_syntax.c\
 		parsing/split.c\
 		parsing/expand.c\

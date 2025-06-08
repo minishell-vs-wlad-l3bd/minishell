@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   split_pipe.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 10:20:59 by aayad             #+#    #+#             */
+/*   Updated: 2025/05/31 10:24:29 by aayad            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../main/minishell.h"
 
 static bool	in_quote(char c, char *quote)
@@ -21,10 +33,10 @@ static int	word_len(const char *s, char sep)
 		if (in_quote(s[i], &quote))
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		if (!quote && s[i] == sep)
-			break;
+			break ;
 		i++;
 	}
 	return (i);
@@ -67,7 +79,6 @@ static char	*copy_word(const char *s, int len)
 	return (word);
 }
 
-
 char	**split_by_pipe(const char *s, t_mini *mini)
 {
 	char	**result;
@@ -76,7 +87,7 @@ char	**split_by_pipe(const char *s, t_mini *mini)
 	if (!s)
 		return (NULL);
 	i = 0;
-	if(count_words(s, '|') > 1)
+	if (count_words(s, '|') > 1)
 		mini->pipe = 1;
 	result = ft_malloc((count_words(s, '|') + 1) * sizeof(char *));
 	while (*s)
@@ -84,8 +95,9 @@ char	**split_by_pipe(const char *s, t_mini *mini)
 		while (*s == '|')
 			s++;
 		if (!*s)
-			break;
-		if ((result[i] = copy_word(s, word_len(s, '|'))) == 0)
+			break ;
+		result[i] = copy_word(s, word_len(s, '|'));
+		if (result[i] == 0)
 			return (NULL);
 		s += word_len(s, '|');
 		i++;

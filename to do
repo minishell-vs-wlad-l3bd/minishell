@@ -54,3 +54,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Shadow gap:              cc
 ==69242==ABORTING
 [1]    69242 abort      ./minishell
+
+
+
+====> norm 

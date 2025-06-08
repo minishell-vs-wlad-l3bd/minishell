@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/06 16:48:21 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/08 16:33:23 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	do_echo(t_mini *mini)
 	char		*buff;
 
 	parss = mini->parss;
+	i = 1;
 	i = 1;
 	nl = 0;
 	// quotes(parss->cmd);

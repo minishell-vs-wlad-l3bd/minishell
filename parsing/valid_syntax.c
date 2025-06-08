@@ -9,10 +9,11 @@ int get_type(char *str)
 			!ft_strcmp(str, "<") || !ft_strcmp(str, "<<"));
 }
 
-void init_redir(t_tokens *head, char *str)
+void	init_redir(t_tokens *head, char *str)
 {
 	int i;
 
+	i = 0;
 	i = 0;
 	if (str[i] == '<' && str[i + 1] == '<')
 		head->heredoc = 1;
@@ -130,17 +131,19 @@ t_parsing	*init_all(char **str, t_mini *mini)
 
 void    valid_syntax(char *line, t_mini *mini)
 {
-    char        **pipes;
-    char        **redir;
-    int            i = 0;
-    t_parsing    *head = NULL;
-    t_parsing    *new;
+	char		**pipes;
+	char		**redir;
+	int			i;
+	t_parsing	*head;
+	t_parsing	*new;
 	char		*spaces;
 
+	head = NULL;
 	mini->pipe = 0;
-    pipes = split_by_pipe(line, mini);
-    while (pipes[i])
-    {
+	i = 0;
+	pipes = split_by_pipe(line, mini);
+	while (pipes[i])
+	{
 		spaces = add_spaces(pipes[i]);
         redir = split(spaces, 1);
         new = init_all(redir, mini);

@@ -47,7 +47,7 @@ int	check_quotes(char *line)
 	if (line[i] == '\'' || line[i] == '"')
 	{
 		quote = line[i];
-		i++; 
+		i++;
 		while (line[i] && line[i] != quote)
 			i++;
 		if (!line[i])
@@ -71,6 +71,7 @@ void    quotes(char **str)
 		i++;
 	}
 }
+
 int	ft_isspace(char c)
 {
 	return (c == ' ' || (c >= 9 && c <= 13));

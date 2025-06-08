@@ -61,6 +61,7 @@ typedef struct s_mini
 	int		pipe_in;
 	int		pipe_out;
 	int		prev_pipe;
+	int		flag_expand;
 	int		in;
 	int		out;
 	int		ret;
@@ -129,4 +130,4 @@ int	check_quotes_expand(char *str, t_mini *mini);
 
 void remove_quotes_from_value(char *str);
 
-#endif
+#endif //MINISHELL_H

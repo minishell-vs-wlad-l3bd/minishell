@@ -2,8 +2,9 @@
 
 char *extract_name(char *str)
 {
-    int i = 0;
-    
+    int	i;
+
+i	 = 0;
     if (!str || !*str)
         return NULL;
     if (str[i] == '?')
@@ -17,9 +18,11 @@ char *expand_value(char *str, t_mini *mini)
 {
     char *var_name;
     char *value;
+	int		i;
 
     var_name = extract_name(str);
     value = NULL;
+	i = 0;
     if (!var_name)
         return NULL;
     if (ft_strcmp(var_name, "?") == 0)
@@ -34,13 +37,18 @@ char *expand_value(char *str, t_mini *mini)
 
 char *prepare_and_expand(char *result, char *var_start, t_mini *mini, char **new_result)
 {
-    char *before = ft_substr(result, 0, var_start - result);
-    char *var_name = extract_name(var_start + 1);
-    char *value = NULL;
-    int var_len = 1;
-    char *after = NULL;
-    char *tmp = NULL;
-
+    char *before;
+    char *var_name;
+    char *value;
+    int var_len;
+    char *after;
+    char *tmp;
+	
+	value = NULL;
+	var_len = 1;
+	tmp = NULL;
+	var_name = extract_name(var_start + 1);
+	before = ft_substr(result, 0, var_start - result);
     if (!before)
         return NULL;
     if (var_name)

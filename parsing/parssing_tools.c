@@ -1,10 +1,22 @@
-# include "../main/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parssing_tools.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 10:18:33 by aayad             #+#    #+#             */
+/*   Updated: 2025/05/31 10:18:56 by aayad            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../main/minishell.h"
 
 void	ft_lstadd_back_2(t_parsing **lst, t_parsing *new)
 {
 	t_parsing	*tmp;
 
-	if(!lst)
+	if (!lst)
 		return ;
 	if (!*lst)
 	{

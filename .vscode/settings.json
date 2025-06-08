@@ -9,6 +9,6 @@
 		"__locale": "c",
 		"cdefs.h": "c",
 		"availability.h": "c",
-		"dirent.h": "c"
+		"__node_handle": "c"
 	}
 }

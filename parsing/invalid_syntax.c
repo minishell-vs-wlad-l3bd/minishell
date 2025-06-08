@@ -1,6 +1,6 @@
 #include "../main/minishell.h"
 
-int 	skip_spaces(char *str)
+int	skip_spaces(char *str)
 {
 	int		i;
 
@@ -9,7 +9,8 @@ int 	skip_spaces(char *str)
 		i++;
 	return (i);
 }
-int		invalid_operator(char *str)
+
+int	invalid_operator(char *str)
 {
 	int		i;
 	int		count;
@@ -33,6 +34,7 @@ int		invalid_operator(char *str)
 	}
 	return (0);
 }
+
 int	check_syntax(char *str)
 {
 	int	start;
