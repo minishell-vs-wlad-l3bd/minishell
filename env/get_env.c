@@ -83,7 +83,6 @@ int	double_arr_len(char **str)
 t_env	*env_init(char **env, int flag)
 {
 	t_env	*head;
-	t_env	*new_node;
 	int		i;
 	char	**tmp;
 

@@ -55,9 +55,9 @@ int		incorect_quotes(char *line)
 int		valid_line(char *line)
 {
 	if (special_char(line))
-		return (ft_putendl_fd("Error : d'ont seport special char", 2), 0);
+		return (ft_putendl_fd("Error : d'ont seport special char", 2),g_exit_status = 1, 0);
 	if (incorect_quotes(line))
-		return (ft_putendl_fd("Error : incorect quotes", 2), 0);
+		return (ft_putendl_fd("Error : incorect quotes", 2),g_exit_status = 1, 0);
 	if (!analys_syntax(line))
 		return (0);
 	return (1);
@@ -102,11 +102,13 @@ int	is_inside_double_quotes(char *str, int pos)
 	return (in_double);
 }
 
-int	check_quotes_expand(char *str)
+int	check_quotes_expand(char *str, t_mini *mini)
 {
 	int i;
 
 	i = 0;
+	if (mini->parss)
+		mini->parss->is_expand = 0;
 	while (str && str[i])
 	{
 		if (str[i] == '$')
@@ -114,7 +116,10 @@ int	check_quotes_expand(char *str)
 			if (!str[i + 1])
 				return (1);
 			if (str[i + 1] == '"')
+			{
+				mini->parss->is_expand = 1;
 				return (1);
+			}
 			if (is_inside_single_quotes(str, i))
 				return (1);
 			if (is_inside_double_quotes(str, i))
@@ -133,10 +138,6 @@ int		check_input(char *str, t_mini *mini)
 	if (!*str || is_only_spaces(str) || !valid_line(str))
 		return (1);
 	valid_syntax(str, mini);
-	if(check_quotes_expand(str))
-		return (0);
-	if (ft_strchr(str, '$'))
-		replace_expand_to_value(mini);
 	return (0);
 }
 

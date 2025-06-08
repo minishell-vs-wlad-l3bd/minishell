@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/29 16:49:11 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:51:12 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char *get_temp_file(void)
     return (file);
 }
 
-char *heredoc(t_mini *mini, char *delimiter)
+char *heredoc(char *delimiter)
 {
     pid_t pid;
     char *filename;
@@ -41,30 +41,36 @@ char *heredoc(t_mini *mini, char *delimiter)
     int status;
 
     filename = get_temp_file();
+    if (!filename || !delimiter)
+        return (NULL);
     fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (!filename || fd == -1 || !delimiter)
+    if (fd == -1)
         return (NULL);
     pid = fork();
-    signal(SIGINT, SIG_IGN);
+    if (pid == -1)
+        return (close(fd), NULL);
     if (pid == 0)
     {
+        signal(SIGINT, handler_heredoc);
         while (1)
         {
-            signal(SIGINT, handler_heredoc);
             line = readline("> ");
             if (!line)
-                break;
-            if (!ft_strcmp(line, delimiter))
-            {
-                close(fd);
                 exit(0);
-            }
+            if (!ft_strcmp(line, delimiter))
+                exit(0);
             ft_putendl_fd(line, fd);
         }
-        close(fd);
     }
+    close(fd);
+    signal(SIGINT, SIG_IGN);
     waitpid(pid, &status, 0);
-    mini->exit = WEXITSTATUS(status);
     setup_parent_signals();
+    if (WIFEXITED(status))
+    g_exit_status = WEXITSTATUS(status);
+    else if (WIFSIGNALED(status))
+        g_exit_status = 128 + WTERMSIG(status);
+    if (WIFSIGNALED(status))
+        return (unlink(filename), NULL);
     return (filename);
 }

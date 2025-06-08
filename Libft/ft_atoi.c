@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 20:09:23 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/18 18:55:04 by mohidbel         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:10:10 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,3 @@ int	ft_atoi(const char	*str)
 	}
 	return (result * sign);
 }
-

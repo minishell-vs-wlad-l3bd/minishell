@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:27 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/29 16:44:56 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:42:17 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ int is_valid_env_name(char *name)
 
 void env_add(t_mini *mini, char *s)
 {
-    char **tmp;
     char *equal_sign;
     char *key;
     char *value;
@@ -136,7 +135,7 @@ void env_add(t_mini *mini, char *s)
     if (!is_valid_env_name(s))
     {
         printf("export: `%s`: not a valid identifier\n", s);
-        mini->exit = 1;
+        g_exit_status = 1;
         return;
     }
     if (ft_strnstr(s, "+=",ft_strlen(s)))
@@ -161,7 +160,7 @@ void env_add(t_mini *mini, char *s)
         if (!is_valid_env_name(key))
         {
             printf("export: `%s`: not a valid identifier\n", s);
-            mini->exit = 1;
+            g_exit_status = 1;
             return;
         }
         update_env(&mini->env, key, value);
@@ -172,7 +171,6 @@ void env_add(t_mini *mini, char *s)
 void do_export(char **args, t_mini *mini)
 {
 	int i = 0;
-	quotes(args);
 	if (!args[1])
 		print_sort_env(mini);
 	else

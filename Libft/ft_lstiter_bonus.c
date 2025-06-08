@@ -1,35 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strmapi.c                                       :+:      :+:    :+:   */
+/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/27 17:41:04 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/06 15:06:02 by mohidbel         ###   ########.fr       */
+/*   Created: 2024/11/03 10:11:56 by mohidbel          #+#    #+#             */
+/*   Updated: 2024/11/13 20:39:14 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-	unsigned int	i;
-	char			*new_str;
-	unsigned int	len;
-
-	if (s == NULL || f == NULL)
-		return (NULL);
-	i = 0;
-	len = ft_strlen(s);
-	new_str = ft_malloc((len + 1) * sizeof(char));
-	if (new_str == NULL)
-		return (NULL);
-	while (i < len)
+	if (!lst || !f)
+		return ;
+	while (lst)
 	{
-		new_str[i] = f(i, s[i]);
-		i++;
+		f(lst->content);
+		lst = lst->next;
 	}
-	new_str[len] = '\0';
-	return (new_str);
 }

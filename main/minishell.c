@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/30 16:29:36 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:24:55 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ void norm_main(t_mini *mini)
 		{
 			ft_putstr_fd("exit\n", STDERR_FILENO);
 			reset_std_fds(mini);
-			exit(0);
+			break ;
 		}
 		if (*str && !check_input(str, mini))
-			ft_execute(mini, str);
+			ft_execute(mini);
 		free(str);
 	}
 }

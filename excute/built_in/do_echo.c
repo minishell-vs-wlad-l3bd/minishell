@@ -6,14 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/30 16:15:00 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/06 16:48:21 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main/minishell.h"
 
-
-int is_valid_n_flag(const char *str)
+static int is_valid_n_flag(const char *str)
 {
 	int i;
 
@@ -29,39 +28,51 @@ int is_valid_n_flag(const char *str)
 	return 1;
 }
 
-void do_echo(t_mini *mini)
+static char	*join_args(char **cmd, int i)
 {
-	t_parsing *parss;
-	char *buff;
-	char *tmp;
-	int i;
-	int nl;
+	char	*buff;
+	char	*tmp;
+	char	*joined;
+
+	buff = ft_strdup("");
+	while (cmd[i])
+	{
+		if (!cmd[i][0])
+		{
+			i++;
+			continue;
+		}
+		if (cmd[i + 1])
+			tmp = ft_strjoin(cmd[i], " ");
+		else
+			tmp = ft_strdup(cmd[i]);
+		joined = ft_strjoin(buff, tmp);
+		free(buff);
+		free(tmp);
+		buff = joined;
+		i++;
+	}
+	return (buff);
+}
+
+void	do_echo(t_mini *mini)
+{
+	t_parsing	*parss;
+	int			i;
+	int			nl;
+	char		*buff;
 
 	parss = mini->parss;
-	i = 0;
+	i = 1;
 	nl = 0;
-
+	// quotes(parss->cmd);
 	while (parss->cmd[i] && is_valid_n_flag(parss->cmd[i]))
 	{
 		nl = 1;
 		i++;
 	}
-	buff = ft_strdup("");
-	while (parss->cmd[i])
-	{
-		if (!parss->cmd[i] || !parss->cmd[i][0])
-		{
-			i++;
-			continue;
-		}
-		if (parss->cmd[i + 1])
-			tmp = ft_strjoin(parss->cmd[i], " ");
-		else
-			tmp = ft_strdup(parss->cmd[i]);
-		buff = ft_strjoin(buff, tmp);
-		i++;
-	}
-	if (nl == 1)
+	buff = join_args(parss->cmd, i);
+	if (nl)
 		printf("%s", buff);
 	else
 		printf("%s\n", buff);

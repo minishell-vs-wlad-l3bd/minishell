@@ -12,65 +12,61 @@
 
 #include "../../main/minishell.h"
 
-void	check_valid_folder(char *str, t_mini *mini)
+static void	update_pwd(t_mini *mini, char *cwd, char *target)
 {
-	mini->exit = 1;
-	if (access(str, F_OK) == -1)
-		ft_putendl_fd("minishell: cd: No such file or directory",
-			STDERR_FILENO);
-	else if (!opendir(str))
+	char	new_pwd[MAX_PATH];
+	char	*tmp;
+	char	*pwd;
+
+	if (!getcwd(new_pwd, sizeof(new_pwd)))
 	{
-		if (access(str, X_OK) == -1)
-			ft_putendl_fd("minishell: cd: Permission denied", STDERR_FILENO);
-		else
-			ft_putendl_fd("minishell: cd: Not a directory", STDERR_FILENO);
+		tmp = ft_strjoin(cwd, "/");
+		pwd = ft_strjoin(tmp, target);
+		update_env(&mini->env, "PWD", pwd);
+		update_env(&mini->export_env, "PWD", pwd);
+	}
+	else
+	{
+		update_env(&mini->env, "PWD", new_pwd);
+		update_env(&mini->export_env, "PWD", new_pwd);
 	}
 }
 
-void	do_cd(char **cmd, t_mini *mini)
+static char	*get_cd_target(char **cmd, t_mini *mini)
 {
-	char	cwd[MAX_PATH];
 	char	*target;
-	char	*new_pwd;
-	char	*tmp;
 
-	if (!getcwd(cwd, sizeof(cwd)))
-		ft_strlcpy(cwd, get_env_value(mini, "PWD"), MAX_PATH);
 	if (!cmd[1])
 	{
 		target = get_env_value(mini, "HOME");
 		if (!target)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-			mini->exit = 1;
+			g_exit_status = 1;
 		}
 	}
 	else
 		target = cmd[1];
-	if (target)
+	return (target);
+}
+
+void	do_cd(char **cmd, t_mini *mini)
+{
+	char	cwd[MAX_PATH];
+	char	*target;
+
+	if (!getcwd(cwd, sizeof(cwd)))
+		ft_strlcpy(cwd, get_env_value(mini, "PWD"), MAX_PATH);
+	target = get_cd_target(cmd, mini);
+	if (!target)
+		return ;
+	if (chdir(target) != 0)
 	{
-		if (chdir(target))
-			check_valid_folder(target, mini);
-		else
-		{
-			update_env(&mini->env, "OLDPWD", cwd);
-			update_env(&mini->export_env, "OLDPWD", cwd);
-			new_pwd = getcwd(NULL, 0);
-			if (!new_pwd)
-			{
-				tmp = ft_strjoin(cwd, "/");
-				new_pwd = ft_strjoin(tmp, target);
-				ft_putendl_fd("cd: error retrieving current directory: getcwd: "
-					"cannot access parent directories: No such file or "
-					"directory", STDERR_FILENO);
-				update_env(&mini->env, "PWD", new_pwd);
-				update_env(&mini->export_env, "PWD", new_pwd);
-			}
-			else
-			{
-				update_env(&mini->env, "PWD", cwd);
-				update_env(&mini->export_env, "PWD", cwd);
-			}
-		}
+		perror("minishell: cd");
+		g_exit_status = 1;
+		return ;
 	}
+	update_env(&mini->env, "OLDPWD", cwd);
+	update_env(&mini->export_env, "OLDPWD", cwd);
+	update_pwd(mini, cwd, target);
 }

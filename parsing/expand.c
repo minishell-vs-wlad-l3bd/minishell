@@ -23,7 +23,7 @@ char *expand_value(char *str, t_mini *mini)
     if (!var_name)
         return NULL;
     if (ft_strcmp(var_name, "?") == 0)
-        value = ft_itoa(mini->exit);
+        value = ft_itoa(g_exit_status);
     else
         value = get_env_value(mini, var_name);
     if (value)
@@ -62,77 +62,15 @@ char *expand_string(char *str, t_mini *mini)
     char *var_start;
     char *new_result;
 
-    if (!result)
+    if (!str)
 		return NULL;
 	result = ft_strdup(str);
     while ((var_start = ft_strchr(result, '$')))
     {
         if (!prepare_and_expand(result, var_start, mini, &new_result))
-        {
-            free(result);
             return NULL;
-        }
         free(result);
         result = new_result;
     }
     return result;
 }
-
-void remove_token(char **arr, int idx)
-{
-    free(arr[idx]);
-    while (arr[idx])
-    {
-        arr[idx] = arr[idx + 1];
-        idx++;
-    }
-}
-
-void replace_expand_to_value(t_mini *mini)
-{
-    t_parsing *parss ;
-    char *expanded;
-    char *original;
-    int i;
-
-	parss = mini->parss;
-    while (parss)
-    {
-        i = 0;
-        while (parss->cmd && parss->cmd[i])
-        {
-			original = parss->cmd[i];
-			expanded = expand_string(original, mini);
-			if (expanded)
-            {
-                if (expanded != original)
-                {
-                    free(parss->cmd[i]);
-                    parss->cmd[i] = expanded;
-                }
-                i++;
-            }
-            else
-                remove_token(parss->cmd, i);
-        }
-        parss = parss->next;
-    }
-}
-
-
-// int check_valid_file(char *file, t_mini *mini)
-// {
-//     char *file_tmp;
-//     char **split;
-
-//     if (ft_strchr(file, '$'))
-//     {
-//         file_tmp = expand_string(file, mini);
-//         if (!file_tmp)
-//             return 0;
-//         split = ft_split(file_tmp, ' ');
-//         if (!split || split[1])
-//             return 0;
-//     }
-//     return 1;
-// }

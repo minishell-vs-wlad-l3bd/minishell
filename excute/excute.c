@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:44 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/30 16:31:51 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:43:53 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,14 @@ void execute_builtin(char **cmd, t_mini *mini)
 		do_env(mini);
 }
 
-void execute_cmd(char **paths, char **cmd, t_mini *mini)
+void execute_cmd(char **cmd, t_mini *mini)
 {
 	int status;
 	pid_t pid;
 	DIR *dir;
 	char *cmd_path;
 
-	quotes(cmd);
-	cmd_path = find_cmd_path(paths, *cmd, mini);
+	cmd_path = find_cmd_path(mini->paths, *cmd);
 	if (!cmd_path)
 		return ;
 	mini->ev=env_list_to_array(mini->env);
@@ -56,7 +55,7 @@ void execute_cmd(char **paths, char **cmd, t_mini *mini)
 	{
 		closedir(dir);
 		printf("minishell: %s: is a directory\n", *cmd);
-		mini->exit = 126;
+		g_exit_status = 126;
 		return ;
 	}
 	signal(SIGINT, SIG_IGN);
@@ -70,12 +69,15 @@ void execute_cmd(char **paths, char **cmd, t_mini *mini)
 	else
 	{
 		waitpid(pid, &status, 0);
-		mini->exit = WEXITSTATUS(status);
+		if (WIFEXITED(status))
+			g_exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_exit_status = 128 + WTERMSIG(status);
 		setup_parent_signals();
 	}
 }
 
-int check_type(char *str, char **paths, t_mini *mini, int falg)
+int check_type(t_mini *mini, int falg)
 {
 	t_tokens *tokens;
 	char *last_heredoc_file;
@@ -88,7 +90,7 @@ int check_type(char *str, char **paths, t_mini *mini, int falg)
 		{
 			if (last_heredoc_file)
 				unlink(last_heredoc_file);
-			last_heredoc_file = heredoc(mini, tokens->file);
+			last_heredoc_file = heredoc(tokens->file);
 		} 
 		if (tokens->append || tokens->intput || tokens->output)
 		{
@@ -108,20 +110,18 @@ int check_type(char *str, char **paths, t_mini *mini, int falg)
 	return (1);
 }
 
-void ft_execute(t_mini *mini, char *str)
-{
-	char **paths;
-	
-	paths = ft_split(get_env_value(mini, "PATH"), ':');
+void ft_execute(t_mini *mini)
+{	
+	mini->paths = ft_split(get_env_value(mini, "PATH"), ':');
 	if (mini->pipe)
 	{
-		execute_pipeline(str, paths, mini);
+		execute_pipeline(mini);
 		return ;
 	}
-	if (!check_type(str, paths, mini, 1))
+	if (!check_type(mini, 1))
 		return ;
 	if (is_builtin(mini->parss->cmd[0]))
 		execute_builtin(mini->parss->cmd, mini);
 	else
-		execute_cmd(paths, mini->parss->cmd, mini);
+		execute_cmd(mini->parss->cmd, mini);
 }

@@ -5,98 +5,110 @@ static int	is_quote(char c)
 	return (c == '\'' || c == '"');
 }
 
-static int	word_len(const char *s, char sep)
+static int word_len(const char *s, int use_quote)
 {
-	int i;
-	char quote;
+    int i = 0;
+    char quote = 0;
 
-	quote = 0;
-	i = 0;
-	while (s[i])
-	{
-		if (!quote && is_quote(s[i]))
-			quote = s[i];
-		else if (quote && s[i] == quote)
-			quote = 0;
-		else if (!quote && s[i] == sep)
-			break ;
-		i++;
-	}
-	return (i);
+    if (!use_quote)
+    {
+        while (s[i] && !ft_isspace(s[i]))
+            i++;
+        return i;
+    }
+    while (s[i])
+    {
+        if (!quote && is_quote(s[i]))
+            quote = s[i++];
+        else if (quote && s[i] == quote)
+        {
+            quote = 0;
+            i++;
+        }
+        else if (!quote && ft_isspace(s[i]))
+            break;
+        else
+            i++;
+    }
+    return i;
 }
 
-static int	word_count(const char *s, char sep)
+static int	word_count(const char *s, int use_quote)
 {
-	int i;
-	int count;
+	int i = 0;
+	int count = 0;
 	int len;
 
-	i = 0;
-	count = 0;
 	while (s[i])
 	{
-		while (s[i] && s[i] == sep)
+		while (ft_isspace(s[i]))
 			i++;
 		if (s[i])
 		{
-			len = word_len(&s[i], sep);
+			len = word_len(&s[i], use_quote);
 			i += len;
 			count++;
 		}
 	}
-	return (count);
+	return count;
 }
 
-static char	*wordcopy(const char *s, char sep)
+static char *wordcopy(const char *s, int use_quote)
 {
-	int		len;
-	char	*word ;
-	int		i = 0;
-	int		j;
-	char	quote = 0;
+    int len = word_len(s, use_quote);
+    char *word = malloc(len + 1);
+    int i = 0, j = 0;
+    char quote = 0;
 
-	len = word_len(s, sep);
-	word = ft_malloc(len + 1);
-	i = 0;
-	j = 0;
-	quote = 0;
-	if (!word)
-		return (NULL);
-	while (i < len)
-	{
-		word[j++] = s[i];
-		i++;
-	}
-	word[j] = '\0';
-	return (word);
+    if (!word)
+        return NULL;
+
+    if (!use_quote)
+    {
+        while (i < len)
+            word[j++] = s[i++];
+    }
+    else
+    {
+        while (i < len)
+        {
+            if (!quote && is_quote(s[i]))
+                quote = s[i];
+            else if (quote && s[i] == quote)
+                quote = 0;
+            word[j++] = s[i++];
+        }
+    }
+    word[j] = '\0';
+    return word;
 }
 
 
-
-char	**split(const char *s, char sep)
+char **split(const char *s, int use_quote)
 {
-	char	**arr;
-	int		i;
+	char **arr;
+	int i = 0;
+	int count;
 
 	if (!s)
-		return (NULL);
-	arr = ft_malloc((word_count(s, sep) + 1) * sizeof(char *));
+		return NULL;
+	count = word_count(s, use_quote);
+	arr = malloc((count + 1) * sizeof(char *));
 	if (!arr)
-		return (NULL);
-	i = 0;
+		return NULL;
 	while (*s)
 	{
-		while (*s && *s == sep)
+		while (ft_isspace(*s))
 			s++;
 		if (*s)
 		{
-			arr[i] = wordcopy(s, sep);
+			arr[i] = wordcopy(s, use_quote);
 			if (!arr[i])
-				return (NULL);
-			s += word_len(s, sep);
+				return NULL;
+			s += word_len(s, use_quote);
 			i++;
 		}
 	}
 	arr[i] = NULL;
-	return (arr);
+	return arr;
 }

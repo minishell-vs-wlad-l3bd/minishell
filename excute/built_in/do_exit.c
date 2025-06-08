@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:53 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/05/29 16:46:02 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:42:17 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,57 +19,65 @@ char *normalize_number(char *str)
 	return str;
 }
 
-int is_too_big(char *str)
+int	is_too_big(char *str)
 {
-	int len;
-	char *max = "9223372036854775807";
-	char *min = "9223372036854775808";
+	int		len;
+	char	*max = "9223372036854775807";
+	char	*min = "9223372036854775808";
+	int		is_negative;
 
-	if (str[0] == '+' || str[0] == '-')
+	is_negative = (*str == '-');
+	if (*str == '+' || *str == '-')
 		str++;
 	str = normalize_number(str);
 	len = ft_strlen(str);
 	if (len < 19)
 		return (0);
-	else if (len > 19)
+	if (len > 19)
 		return (1);
-	if (str[-1] == '-')
+	if (is_negative)
 		return (ft_strcmp(str, min) > 0);
-	else
-		return (ft_strcmp(str, max) > 0);
+	return (ft_strcmp(str, max) > 0);
 }
 
-void do_exit(char **args, t_mini *mini)
+int	is_numeric_str(char *s)
 {
-	long status = 0;
-	int i = 0;
-	int is_numeric = 1;
+	int	i;
 
+	if (!s)
+		return (0);
+	i = 0;
+	if (s[i] == '+' || s[i] == '-')
+		i++;
+	while (s[i])
+	{
+		if (!ft_isdigit(s[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	do_exit(char **args, t_mini *mini)
+{
+	long	status;
+
+	status = 0;
 	if (args[1])
 	{
-		if (args[1][i] == '+' || args[1][i] == '-')
-			i++;
-		while (args[1][i])
+		if (!is_numeric_str(args[1]) || is_too_big(args[1]))
 		{
-			if (!ft_isdigit(args[1][i]))
-			{
-				is_numeric = 0;
-				break;
-			}
-			i++;
-		}
-		if (!is_numeric || is_too_big(args[1]))
-		{
-			ft_putstr_fd("exit\n", STDERR_FILENO);
-			ft_putstr_fd("minishell: exit: numeric argument required\n", STDERR_FILENO);
+			ft_putstr_fd("exit\n", 2);
+			ft_putstr_fd("minishell: exit: numeric argument required\n", 2);
+			ft_free_all();
 			exit(255);
 		}
 		status = ft_atoi(args[1]);
 		if (args[2])
 		{
-			ft_putstr_fd("exit\n", STDERR_FILENO);
-			ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
-			mini->exit = 1;
+			ft_putstr_fd("exit\n", 2);
+			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+			g_exit_status = 1;
 			return ;
 		}
 	}
@@ -77,6 +85,15 @@ void do_exit(char **args, t_mini *mini)
 		close(mini->in);
 	if (mini->out != STDOUT_FILENO)
 		close(mini->out);
-	ft_putstr_fd("exit\n", STDERR_FILENO);
-	exit(status % 256);
+	if (mini->pipe)
+	{
+		ft_free_all();
+		exit(status % 256);
+	}
+	else
+	{
+		ft_putstr_fd("exit\n", 2);
+		ft_free_all();
+		exit(status % 256);
+	}
 }
