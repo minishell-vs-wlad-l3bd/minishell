@@ -12,7 +12,7 @@
 
 #include "../../main/minishell.h"
 
-static void	update_pwd(t_mini *mini, char *cwd, char *target)
+static void	update_pwd(t_mini *mini, char *cwd, char *target, t_garbege **head)
 {
 	char	new_pwd[MAX_PATH];
 	char	*tmp;
@@ -20,15 +20,15 @@ static void	update_pwd(t_mini *mini, char *cwd, char *target)
 
 	if (!getcwd(new_pwd, sizeof(new_pwd)))
 	{
-		tmp = ft_strjoin(cwd, "/");
-		pwd = ft_strjoin(tmp, target);
-		update_env(&mini->env, "PWD", pwd);
-		update_env(&mini->export_env, "PWD", pwd);
+		tmp = ft_strjoin(cwd, "/", head);
+		pwd = ft_strjoin(tmp, target, head);
+		update_env(&mini->env, "PWD", pwd, head);
+		update_env(&mini->export_env, "PWD", pwd, head);
 	}
 	else
 	{
-		update_env(&mini->env, "PWD", new_pwd);
-		update_env(&mini->export_env, "PWD", new_pwd);
+		update_env(&mini->env, "PWD", new_pwd, head);
+		update_env(&mini->export_env, "PWD", new_pwd, head);
 	}
 }
 
@@ -42,7 +42,7 @@ static char	*get_cd_target(char **cmd, t_mini *mini)
 		if (!target)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-			g_exit_status = 1;
+			mini->exit = 1;
 		}
 	}
 	else
@@ -50,7 +50,7 @@ static char	*get_cd_target(char **cmd, t_mini *mini)
 	return (target);
 }
 
-void	do_cd(char **cmd, t_mini *mini)
+void	do_cd(char **cmd, t_mini *mini, t_garbege **head)
 {
 	char	cwd[MAX_PATH];
 	char	*target;
@@ -63,10 +63,10 @@ void	do_cd(char **cmd, t_mini *mini)
 	if (chdir(target) != 0)
 	{
 		perror("minishell: cd");
-		g_exit_status = 1;
+		mini->exit = 1;
 		return ;
 	}
-	update_env(&mini->env, "OLDPWD", cwd);
-	update_env(&mini->export_env, "OLDPWD", cwd);
-	update_pwd(mini, cwd, target);
+	update_env(&mini->env, "OLDPWD", cwd, head);
+	update_env(&mini->export_env, "OLDPWD", cwd, head);
+	update_pwd(mini, cwd, target, head);
 }

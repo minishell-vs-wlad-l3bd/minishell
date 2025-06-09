@@ -6,13 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/08 16:35:00 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:08:00 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main/minishell.h"
 
-int handle_redirections(t_tokens *token)
+int handle_redirections(t_tokens *token, t_mini *mini)
 {
 
     if ((token->output || token->append || token->intput) && !token->file)
@@ -46,7 +46,7 @@ int handle_redirections(t_tokens *token)
         if (fd < 0 || dup2(fd, STDIN_FILENO) < 0)
 		{
 			ft_putendl_fd("minishell: No such file or directory", 2);
-            g_exit_status = 1;
+            mini->exit = 1;
             return 0;
 		}
         close(fd);

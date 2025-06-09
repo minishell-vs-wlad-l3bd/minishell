@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:35:04 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/08 15:57:16 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/09 13:14:37 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void remove_env_var(char *var, t_mini *mini)
     }
 }
 
-static int  is_invalid_identifier(char *str)
+static int  is_invalid_identifier(char *str, t_mini *mini)
 {
     int i;
 
@@ -44,7 +44,7 @@ static int  is_invalid_identifier(char *str)
     if (!str[i] || (!ft_isalpha(str[i]) && str[i] != '_'))
     {
         ft_putendl_fd("unset: invalid identifier", STDERR_FILENO);
-        g_exit_status = 1;
+        mini->exit = 1;
         return (1);
     }
     while (str[++i])
@@ -52,7 +52,7 @@ static int  is_invalid_identifier(char *str)
         if (!ft_isalnum(str[i]) && str[i] != '_')
         {
             ft_putendl_fd("unset: invalid identifier", STDERR_FILENO);
-            g_exit_status = 1;
+            mini->exit = 1;
             return (1);
         }
     }
@@ -66,7 +66,7 @@ void do_unset(char **args, t_mini *mini)
     i = 0;
     while (args[i])
     {
-        if (!is_invalid_identifier(args[i]))
+        if (!is_invalid_identifier(args[i], mini))
             remove_env_var(args[i], mini);
         i++;
     }

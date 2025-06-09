@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/08 16:34:23 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:12:34 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int create_pipe(t_mini *mini)
     return 1;
 }
 
-void prepare_heredocs(t_mini *mini)
+void prepare_heredocs(t_mini *mini, t_garbege **head)
 {
     t_parsing *parss = mini->parss;
     while (parss)
@@ -50,7 +50,7 @@ void prepare_heredocs(t_mini *mini)
             {
                 if (parss->heredoc_file)
                     unlink(parss->heredoc_file);
-                parss->heredoc_file = heredoc(tokens->file);
+                parss->heredoc_file = heredoc(tokens->file, mini, head);
                 if (!parss->heredoc_file)
 					return;
             }
@@ -62,28 +62,20 @@ void prepare_heredocs(t_mini *mini)
 
 void setup_pipe_io(t_mini *mini, int is_first, int is_last)
 {
-    if (!is_first && mini->prev_pipe != -1)
+    if (!is_first)
     {
-        if (dup2(mini->prev_pipe, STDIN_FILENO) == -1)
-        {
-            perror("dup2 input failed");
-            exit(1);
-        }
+        dup2(mini->prev_pipe, STDIN_FILENO);
         close(mini->prev_pipe);
     }
-
     if (!is_last)
-    {
-        if (dup2(mini->pipe_out, STDOUT_FILENO) == -1)
-        {
-            perror("dup2 output failed");
-            exit(1);
-        }
-        close(mini->pipe_out);
-    }
+	{
+        dup2(mini->pipe_out, STDOUT_FILENO);
+    	close(mini->pipe_out);
+	}
+   	close(mini->pipe_in);
 }
 
-static void	child_process(t_mini *mini, t_parsing *parss, int i, int total_cmds)
+static void	child_process(t_mini *mini, t_parsing *parss, int i, int total_cmds, t_garbege **head)
 {
 	int fd;
 
@@ -101,21 +93,24 @@ static void	child_process(t_mini *mini, t_parsing *parss, int i, int total_cmds)
 		}
 		close(fd);
 	}
-	if (i != 0)
-        close(mini->pipe_in);
-    if (i != total_cmds - 1)
-        close(mini->pipe_out);
-	if (!check_type(mini, 0))
+	if (!check_type(mini, 0, head))
 		exit(1);
+	char *cmd_path;
+
+	cmd_path = find_cmd_path(mini->paths, parss->cmd[0], mini, head);
+
+	mini->ev=env_list_to_array(mini->env, head);
 	if (is_builtin(parss->cmd[0]))
 	{
-		execute_builtin(parss->cmd, mini);
-		exit(g_exit_status);
+		execute_builtin(parss->cmd, mini, head);
+		exit(mini->exit);
 	}
 	else
-	{
-		execute_cmd(parss->cmd, mini);
-		exit(g_exit_status);
+	{	if (!cmd_path)
+			exit(127);
+		execve(cmd_path, parss->cmd, mini->ev);
+		perror("minishell: ");
+		exit(errno);
 	}
 }
 
@@ -134,7 +129,7 @@ void parent_cleanup(t_mini *mini, int i, int total_cmds)
 }
 
 
-void	execute_pipeline(t_mini *mini)
+void	execute_pipeline(t_mini *mini, t_garbege **head)
 {
 	t_parsing	*parss;
 	int			count_cmds;
@@ -144,16 +139,17 @@ void	execute_pipeline(t_mini *mini)
 
 	parss = mini->parss;
 	count_cmds = ft_lstsize_pipe(parss);
-	prepare_heredocs(mini);
+	prepare_heredocs(mini, head);
 	i = -1;
-    pids = ft_malloc(sizeof(pid_t) * count_cmds);
+    pids = ft_malloc(sizeof(pid_t) * count_cmds, head);
 	while (++i < count_cmds)
 	{
 		if (i < count_cmds - 1 && !create_pipe(mini))
 			return ;
+		signal(SIGINT, SIG_IGN);
 		pids[i] = fork();
 		if (pids[i] == 0)
-			child_process(mini, parss, i, count_cmds);
+			child_process(mini, parss, i, count_cmds, head);
 		else if (pids[i] < 0)
 		{
 			close(mini->pipe_in);
@@ -163,11 +159,20 @@ void	execute_pipeline(t_mini *mini)
 		parent_cleanup(mini, i, count_cmds);
 		parss = parss->next;
 	}
-	setup_parent_signals();
 	i = -1;
 	while (++i < count_cmds)
 		waitpid(pids[i], &status, 0);
-	g_exit_status = WEXITSTATUS(status);
+	if (WIFEXITED(status))
+		mini->exit = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+			ft_putstr_fd("Quit: 3\n", STDERR_FILENO);
+		else if (WTERMSIG(status) == SIGINT)
+			ft_putstr_fd("\n", STDERR_FILENO);
+		mini->exit = 128 + WTERMSIG(status);
+	}
+	setup_parent_signals();
 	parss = mini->parss;
 	while (parss)
 	{

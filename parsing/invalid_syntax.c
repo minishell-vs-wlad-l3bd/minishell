@@ -143,24 +143,24 @@ int	mixed_redirection_error(char *str)
 	return (0);
 }
 
-int		analys_syntax(char *line)
+int		analys_syntax(char *line, t_mini *mini)
 {
 	int		check;
 
 	check = check_syntax(line);
 	if (check == 2)
-		return (ft_putendl_fd("syntax error: duplicated token 1", 2),g_exit_status = 258, 0);
+		return (ft_putendl_fd("syntax error: duplicated token 1", 2),mini->exit = 258, 0);
 	if (check == 4)
-		return (ft_putendl_fd("syntax error: near unexpected token 2", 2),g_exit_status = 258, 0);
+		return (ft_putendl_fd("syntax error: near unexpected token 2", 2),mini->exit = 258, 0);
 	if (check == 0)
-		return (ft_putendl_fd("syntax error: near unexpected token 3", 2),g_exit_status = 258, 0);
+		return (ft_putendl_fd("syntax error: near unexpected token 3", 2),mini->exit = 258, 0);
 	if (check == 3)
-		return (ft_putendl_fd("syntax error near unexpected token `&'", 2),g_exit_status = 258, 0);
+		return (ft_putendl_fd("syntax error near unexpected token `&'", 2),mini->exit = 258, 0);
 	if (check == 5)
-		return (ft_putendl_fd("syntax error near unexpected end of line", 2),g_exit_status = 258, 0);
+		return (ft_putendl_fd("syntax error near unexpected end of line", 2),mini->exit = 258, 0);
 	if (redir_syntax_error(line))
-		return (ft_putendl_fd("Error", 2),g_exit_status = 258, 0);
+		return (ft_putendl_fd("Error", 2),mini->exit = 258, 0);
 	if (mixed_redirection_error(line))
-		return (ft_putendl_fd("syntax error: parse error nearn 'rederection'", 2),g_exit_status = 258, 0);
+		return (ft_putendl_fd("syntax error: parse error nearn 'rederection'", 2),mini->exit = 258, 0);
 	return (1);
 }

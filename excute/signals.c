@@ -6,13 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:13 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/08 15:41:52 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:13:40 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main/minishell.h"
 
-int g_exit_status = 0;
+int g_check_signal = 0;
 
 void disable_echoctl(void)
 {
@@ -31,8 +31,8 @@ void	handler(int sig)
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
+		g_check_signal = 1;
 		rl_redisplay();
-		g_exit_status = 1;
 	}
 }
 
@@ -41,7 +41,6 @@ void	handler_heredoc(int sig)
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
-		g_exit_status = 1;
 		exit(1);
 	}
 }

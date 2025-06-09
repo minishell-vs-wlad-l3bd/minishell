@@ -6,13 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 12:04:16 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/06 15:06:02 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/09 15:01:41 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2, t_garbege **head)
 {
 	char	*alls;
 	int		maxlen;
@@ -22,13 +22,13 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (!s1 && !s2)
 		return (NULL);
 	if (!s1)
-		return (ft_strdup(s2));
+		return (ft_strdup(s2, head));
 	if (!s2)
-		return (ft_strdup(s1));
+		return (ft_strdup(s1, head));
 	j = 0;
 	i = 0;
 	maxlen = ft_strlen(s1) + ft_strlen(s2);
-	alls = ft_malloc((maxlen + 1) * (sizeof(char)));
+	alls = ft_malloc((maxlen + 1) * (sizeof(char)), head);
 	if (alls == NULL)
 		return (NULL);
 	while (s1[i])

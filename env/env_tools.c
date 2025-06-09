@@ -31,11 +31,11 @@ void	ft_env_lstadd_back(t_env **lst, t_env *new)
 	new->next = NULL;
 }
 
-t_env	*ft_env_lstnew(void *key, void *value)
+t_env	*ft_env_lstnew(void *key, void *value, t_garbege **head)
 {
 	t_env	*node1;
 
-	node1 = ft_malloc(sizeof(t_env));
+	node1 = ft_malloc(sizeof(t_env), head);
 	node1->value = value;
 	node1->key = key;
 	node1->next = NULL;

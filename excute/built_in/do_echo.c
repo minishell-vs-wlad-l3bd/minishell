@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/08 16:33:23 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:46:49 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ static int is_valid_n_flag(const char *str)
 	return 1;
 }
 
-static char	*join_args(char **cmd, int i)
+static char	*join_args(char **cmd, int i, t_garbege **head)
 {
 	char	*buff;
 	char	*tmp;
 	char	*joined;
 
-	buff = ft_strdup("");
+	buff = ft_strdup("", head);
 	while (cmd[i])
 	{
 		if (!cmd[i][0])
@@ -43,19 +43,19 @@ static char	*join_args(char **cmd, int i)
 			continue;
 		}
 		if (cmd[i + 1])
-			tmp = ft_strjoin(cmd[i], " ");
+			tmp = ft_strjoin(cmd[i], " ", head);
 		else
-			tmp = ft_strdup(cmd[i]);
-		joined = ft_strjoin(buff, tmp);
-		free(buff);
-		free(tmp);
+			tmp = ft_strdup(cmd[i], head);
+		joined = ft_strjoin(buff, tmp, head);
+		// free(buff);
+		// free(tmp);
 		buff = joined;
 		i++;
 	}
 	return (buff);
 }
 
-void	do_echo(t_mini *mini)
+void	do_echo(t_mini *mini, t_garbege **head)
 {
 	t_parsing	*parss;
 	int			i;
@@ -72,7 +72,7 @@ void	do_echo(t_mini *mini)
 		nl = 1;
 		i++;
 	}
-	buff = join_args(parss->cmd, i);
+	buff = join_args(parss->cmd, i, head);
 	if (nl)
 		printf("%s", buff);
 	else

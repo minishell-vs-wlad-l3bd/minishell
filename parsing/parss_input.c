@@ -54,13 +54,13 @@ int	incorect_quotes(char *line)
 	return (0);
 }
 
-int	valid_line(char *line)
+int	valid_line(char *line, t_mini *mini)
 {
 	if (special_char(line))
-		return (ft_putendl_fd("Error : d'ont seport special char", 2),g_exit_status = 1, 0);
+		return (ft_putendl_fd("Error : d'ont seport special char", 2),mini->exit = 1, 0);
 	if (incorect_quotes(line))
-		return (ft_putendl_fd("Error : incorect quotes", 2),g_exit_status = 1, 0);
-	if (!analys_syntax(line))
+		return (ft_putendl_fd("Error : incorect quotes", 2),mini->exit = 1, 0);
+	if (!analys_syntax(line, mini))
 		return (0);
 	return (1);
 }
@@ -133,14 +133,14 @@ int	check_quotes_expand(char *str, t_mini *mini)
 	return (0);
 }
 
-int		check_input(char *str, t_mini *mini)
+int		check_input(char *str, t_mini *mini, t_garbege **head)
 {
 	if (*str)
 		add_history(str);
 	if (!*str || is_only_spaces(str))
 		return (1);
-	if (!valid_line(str))
+	if (!valid_line(str, mini))
 		return (mini->exit = 258, 1);
-	valid_syntax(str, mini);
+	valid_syntax(str, mini, head);
 	return (0);
 }

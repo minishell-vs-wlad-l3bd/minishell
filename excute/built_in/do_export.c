@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:27 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/08 16:33:47 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/09 15:13:43 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int check(t_env **env, char *key)
 	return (0);
  }
 
- void handle_append(t_mini *mini, char *str)
+ void handle_append(t_mini *mini, char *str, t_garbege **head)
 {
     char **parts;
     char *existing_value;
@@ -82,7 +82,7 @@ int check(t_env **env, char *key)
     char *key;
     char *value_part;
 
-    parts = ft_split(str, '+');
+    parts = ft_split(str, '+', head);
     if (!parts || !parts[0] || !parts[1])
         return;
     key = parts[0];
@@ -92,14 +92,14 @@ int check(t_env **env, char *key)
     existing_value = get_env_value(mini, key);
     if (existing_value)
     {
-        new_value = ft_strjoin(existing_value, ++value_part);
-        update_env(&mini->env, key, new_value);
-        update_env(&mini->export_env, key, new_value);
+        new_value = ft_strjoin(existing_value, ++value_part, head);
+        update_env(&mini->env, key, new_value, head);
+        update_env(&mini->export_env, key, new_value, head);
     }
     else
     {
-        update_env(&mini->env, key, ++value_part);
-        update_env(&mini->export_env, key, ++value_part);
+        update_env(&mini->env, key, ++value_part, head);
+        update_env(&mini->export_env, key, ++value_part, head);
     }
 }
 
@@ -125,7 +125,7 @@ int is_valid_env_name(char *name)
     return 1;
 }
 
-void env_add(t_mini *mini, char *s)
+void env_add(t_mini *mini, char *s, t_garbege **head)
 {
     char *equal_sign;
     char *key;
@@ -135,40 +135,40 @@ void env_add(t_mini *mini, char *s)
     if (!is_valid_env_name(s))
     {
         printf("export: `%s`: not a valid identifier\n", s);
-        g_exit_status = 1;
+        mini->exit = 1;
         return;
     }
     if (ft_strnstr(s, "+=",ft_strlen(s)))
     {
-        handle_append(mini, s);
+        handle_append(mini, s, head);
         return;
     }
     if(!ft_strchr(s, '='))
     {
         if (check(&mini->export_env, s) || check(&mini->env, s))
             return;
-        ft_env_lstadd_back(&mini->export_env, ft_env_lstnew(s, NULL));
+        ft_env_lstadd_back(&mini->export_env, ft_env_lstnew(s, NULL, head));
         return;
     }
     equal_sign = ft_strchr(s, '=');
     if (equal_sign)
     {
 		key_len = equal_sign - s;
-        key = ft_malloc(key_len + 1);
+        key = ft_malloc(key_len + 1, head);
         ft_strlcpy(key, s, key_len + 1); 
-        value = ft_strdup(equal_sign + 1);
+        value = ft_strdup(equal_sign + 1, head);
         if (!is_valid_env_name(key))
         {
             printf("export: `%s`: not a valid identifier\n", s);
-            g_exit_status = 1;
+            mini->exit = 1;
             return;
         }
-        update_env(&mini->env, key, value);
-        update_env(&mini->export_env, key, value);
+        update_env(&mini->env, key, value, head);
+        update_env(&mini->export_env, key, value, head);
     }
 }
 
-void do_export(char **args, t_mini *mini)
+void do_export(char **args, t_mini *mini, t_garbege **head)
 {
 	int i = 0;
 	if (!args[1])
@@ -176,6 +176,6 @@ void do_export(char **args, t_mini *mini)
 	else
 	{
 		while(args[++i])
-			env_add(mini, args[i]);
+			env_add(mini, args[i], head);
 	}
 }

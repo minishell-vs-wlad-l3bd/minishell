@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 14:52:49 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/06 15:06:02 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:47:14 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	wordcount(char const *s, char c)
 	return (count);
 }
 
-static char	*wordcopy(char const *str, char c)
+static char	*wordcopy(char const *str, char c, t_garbege **head)
 {
 	char	*word;
 	int		i;
@@ -39,7 +39,7 @@ static char	*wordcopy(char const *str, char c)
 	i = 0;
 	while (str[i] && str[i] != c)
 		i++;
-	word = ft_malloc((i +1) * sizeof(char));
+	word = ft_malloc((i +1) * sizeof(char), head);
 	if (!word)
 		return (NULL);
 	i = 0;
@@ -52,25 +52,14 @@ static char	*wordcopy(char const *str, char c)
 	return (word);
 }
 
-static char	**freearr(char **arr, int i)
-{
-	while (i >= 0)
-	{
-		free(arr[i]);
-		i--;
-	}
-	free(arr);
-	return (NULL);
-}
-
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c, t_garbege **head)
 {
 	char	**arr;
 	int		i;
 
 	if (!s)
 		return (NULL);
-	arr = (char **)ft_malloc((wordcount(s, c) + 1) * sizeof(char *));
+	arr = (char **)ft_malloc((wordcount(s, c) + 1) * sizeof(char *), head);
 	if (!arr)
 		return (NULL);
 	i = 0;
@@ -80,9 +69,9 @@ char	**ft_split(char const *s, char c)
 			s++;
 		if (*s)
 		{
-			arr[i] = wordcopy(s, c);
+			arr[i] = wordcopy(s, c, head);
 			if (!arr[i])
-				return (freearr(arr, i));
+				return (NULL);
 			i++;
 		}
 		while (*s && *s != c)

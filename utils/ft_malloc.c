@@ -1,44 +1,41 @@
 #include "../main/minishell.h"
 
-void ft_free_all(void)
+// Function to free all allocated memory
+void ft_free_all(t_garbege **head)
 {
-    static t_node *head;
-    t_node *tmp;
-    t_node *to_free;
+    t_garbege *tmp;
 
-	
-    tmp = head;
-    while (tmp)
+    while (*head)
     {
-        free(tmp->ptr);
-        to_free = tmp;
-        free(to_free);
-        tmp = tmp->next;
+        tmp = *head;
+        free((*head)->ptr);
+        *head = (*head)->next;
+        free(tmp);
     }
-    head = NULL;
+    *head = NULL;
 }
 
-void *ft_malloc(size_t size)
+void *ft_malloc(size_t size, t_garbege **head)
 {
-    static t_node *head;
-    t_node *new_node;
+    t_garbege *new_node;
     void *ptr;
 
     ptr = malloc(size);
     if (!ptr)
     {
-        ft_free_all();
+        ft_free_all(head);
         exit(2);
     }
-    new_node = malloc(sizeof(t_node));
+    new_node = malloc(sizeof(t_garbege));
     if (!new_node)
     {
         free(ptr);
+        ft_free_all(head);
         exit(2);
     }
     new_node->ptr = ptr;
-    new_node->next = head;
-    head = new_node;
+    new_node->next = *head;
+    *head = new_node;
     return ptr;
 }
 

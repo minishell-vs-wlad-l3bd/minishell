@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_pipe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:20:59 by aayad             #+#    #+#             */
-/*   Updated: 2025/05/31 10:24:29 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/09 15:20:00 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ static int	count_words(const char *s, char sep)
 	return (count);
 }
 
-static char	*copy_word(const char *s, int len)
+static char	*copy_word(const char *s, int len, t_garbege **head)
 {
 	char	*word ;
 	int		i;
 
-	word = ft_malloc(len + 1);
+	word = ft_malloc(len + 1, head);
 	i = 0;
 	while (i < len)
 	{
@@ -79,7 +79,7 @@ static char	*copy_word(const char *s, int len)
 	return (word);
 }
 
-char	**split_by_pipe(const char *s, t_mini *mini)
+char	**split_by_pipe(const char *s, t_mini *mini, t_garbege **head)
 {
 	char	**result;
 	int		i;
@@ -89,14 +89,14 @@ char	**split_by_pipe(const char *s, t_mini *mini)
 	i = 0;
 	if (count_words(s, '|') > 1)
 		mini->pipe = 1;
-	result = ft_malloc((count_words(s, '|') + 1) * sizeof(char *));
+	result = ft_malloc((count_words(s, '|') + 1) * sizeof(char *), head);
 	while (*s)
 	{
 		while (*s == '|')
 			s++;
 		if (!*s)
 			break ;
-		result[i] = copy_word(s, word_len(s, '|'));
+		result[i] = copy_word(s, word_len(s, '|'), head);
 		if (result[i] == 0)
 			return (NULL);
 		s += word_len(s, '|');

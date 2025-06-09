@@ -6,13 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 09:53:59 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/06 15:06:02 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/09 14:47:35 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(const char *s1, t_garbege **head)
 {
 	char	*s2;
 	int		i;
@@ -22,7 +22,7 @@ char	*ft_strdup(const char *s1)
 	while (s1[s1len] != '\0')
 		s1len++;
 	i = 0;
-	s2 = ft_malloc((s1len + 1) * sizeof(char));
+	s2 = ft_malloc((s1len + 1) * sizeof(char), head);
 	if (s2 == NULL)
 		return (0);
 	while (i < s1len)

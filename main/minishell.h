@@ -16,11 +16,10 @@
 
 #define MAX_PATH 4096
 
-extern int g_exit_status;
+extern int g_check_signal;
 
 typedef struct tokens
 {
-	int		CMD;
 	int     append;
 	int     heredoc;
 	int		intput;
@@ -55,13 +54,13 @@ typedef struct s_env
 typedef struct s_mini
 {
 	t_heredoc *heredocs;
+	char *pwd;
 	char **paths;
 	char	**ev;
 	int		pipe;
 	int		pipe_in;
 	int		pipe_out;
 	int		prev_pipe;
-	int		flag_expand;
 	int		in;
 	int		out;
 	int		ret;
@@ -72,38 +71,31 @@ typedef struct s_mini
 	t_parsing *parss;
 } t_mini;
 
-typedef struct s_node
-{
-	void            *ptr;
-	struct s_node   *next;
-}   t_node;
-
-char	*find_cmd_path(char **paths, char *cmd);
+char	*find_cmd_path(char **paths, char *cmd, t_mini *mini, t_garbege **head);
 char	*get_env_value(t_mini *mini, char *key);
 int		double_arr_len(char **str);
-void	execute_cmd(char **cmd, t_mini *mini);
-void	execute_builtin(char **cmd, t_mini *mini);
-void	ft_execute(t_mini *mini);
+void	execute_builtin(char **cmd, t_mini *mini, t_garbege **head);
+void	ft_execute(t_mini *mini, t_garbege **head);
 int		is_builtin(char *str);
-void	do_cd(char **cmd, t_mini *mini);
-void	do_echo(t_mini *mini);
+void	do_cd(char **cmd, t_mini *mini, t_garbege **head);
+void	do_echo(t_mini *mini, t_garbege **head);
 void    do_unset(char **args, t_mini *mini);
-void	do_env(t_mini *mini);
+void	do_env(t_mini *mini, t_garbege **head);
 void	do_pwd(t_mini *mini);
-void	do_export(char **args, t_mini *mini);
-void	do_exit(char **args, t_mini *mini);
+void	do_export(char **args, t_mini *mini, t_garbege **head);
+void	do_exit(char **args, t_mini *mini, t_garbege **head);
 int		double_arr_len(char **str);
-int 	check_type(t_mini *mini, int falg);
-void	execute_pipeline(t_mini *mini);
-void    increment_shlvl(t_mini *mini);
-char	*heredoc(char *delimiter);
-t_env	*ft_env_lstnew(void *key, void *value);
+int 	check_type(t_mini *mini, int falg, t_garbege **head);
+void	execute_pipeline(t_mini *mini, t_garbege **head);
+void    increment_shlvl(t_mini *mini, t_garbege **head);
+char	*heredoc(char *delimiter, t_mini *mini, t_garbege **head);
+t_env	*ft_env_lstnew(void *key, void *value, t_garbege **head);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
-t_env	*env_init(char **env, int flag);
-void	update_env(t_env **env, char *key, char *value);
-char	*expand_string(char *str, t_mini *mini);
-void	*ft_malloc(size_t size);
-void	ft_free_all(void);
+t_env	*env_init(char **env, int flag, t_garbege **head);
+void	update_env(t_env **env, char *key, char *value, t_garbege **head);
+char	*expand_string(char *str, t_mini *mini, t_garbege **head);
+void	*ft_malloc(size_t size, t_garbege **head);
+void	ft_free_all(t_garbege **head);
 void    quotes(char **strs);
 void    remove_quotes(char *str);
 void	setup_child_signals(void);
@@ -113,21 +105,20 @@ void	disable_echoctl(void);
 void    reset_std_fds(t_mini *mini);
 void    backup_std_fds(t_mini *mini);
 int		ft_isspace(char c);
-int		valid_line(char *line);
+int		valid_line(char *line, t_mini *mini);
 int		check_quotes(char *line);
 int		check_syntax(char *str);
-int		analys_syntax(char *line);
-void    valid_syntax(char *line, t_mini *mini);
+int		analys_syntax(char *line, t_mini *mini);
+void    valid_syntax(char *line, t_mini *mini, t_garbege **head);
 void	ft_lstadd_back_2(t_parsing **lst, t_parsing *new);
-char	**split_by_pipe(const char *s, t_mini *mini);
-int		check_input(char *str, t_mini *mini);
-int 	handle_redirections(t_tokens *token);
-char	*add_spaces(char *line);
-char	**split(const char *s, int use_quote);
-char	**env_list_to_array(t_env *env);
+char	**split_by_pipe(const char *s, t_mini *mini, t_garbege **head);
+int		check_input(char *str, t_mini *mini, t_garbege **head);
+int 	handle_redirections(t_tokens *token, t_mini *mini);
+char	*add_spaces(char *line, t_garbege **head);
+char	**split(const char *s, int use_quote, t_garbege **head);
+char	**env_list_to_array(t_env *env, t_garbege **head);
 void	reset_std_fds(t_mini *mini);
 int	check_quotes_expand(char *str, t_mini *mini);
 
-void remove_quotes_from_value(char *str);
 
-#endif //MINISHELL_H
+#endif 

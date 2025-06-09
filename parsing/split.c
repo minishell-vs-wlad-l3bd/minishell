@@ -53,10 +53,10 @@ static int	word_count(const char *s, int use_quote)
 	return count;
 }
 
-static char *wordcopy(const char *s, int use_quote)
+static char *wordcopy(const char *s, int use_quote, t_garbege **head)
 {
     int len = word_len(s, use_quote);
-    char *word = malloc(len + 1);
+    char *word = ft_malloc(len + 1, head);
     int i = 0, j = 0;
     char quote = 0;
 
@@ -84,7 +84,7 @@ static char *wordcopy(const char *s, int use_quote)
 }
 
 
-char **split(const char *s, int use_quote)
+char **split(const char *s, int use_quote, t_garbege **head)
 {
 	char **arr;
 	int i = 0;
@@ -93,7 +93,7 @@ char **split(const char *s, int use_quote)
 	if (!s)
 		return NULL;
 	count = word_count(s, use_quote);
-	arr = malloc((count + 1) * sizeof(char *));
+	arr = ft_malloc((count + 1) * sizeof(char *), head);
 	if (!arr)
 		return NULL;
 	while (*s)
@@ -102,7 +102,7 @@ char **split(const char *s, int use_quote)
 			s++;
 		if (*s)
 		{
-			arr[i] = wordcopy(s, use_quote);
+			arr[i] = wordcopy(s, use_quote, head);
 			if (!arr[i])
 				return NULL;
 			s += word_len(s, use_quote);

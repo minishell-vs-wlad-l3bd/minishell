@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   add_spaces.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 09:58:50 by aayad             #+#    #+#             */
-/*   Updated: 2025/05/31 09:58:51 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/09 14:48:52 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	count_spaces(char *line)
 	return (extra);
 }
 
-char	*add_spaces(char *line)
+char	*add_spaces(char *line, t_garbege **head)
 {
 	int		i;
 	int		j;
@@ -70,7 +70,7 @@ char	*add_spaces(char *line)
 
 	i = -1;
 	j = 0;
-	result = ft_malloc(ft_strlen(line) + count_spaces(line) + 1);
+	result = ft_malloc(ft_strlen(line) + count_spaces(line) + 1, head);
 	while (line[++i])
 	{
 		if ((line[i] == '<' || line[i] == '>') && !is_in_quotes(line, i))

@@ -9,6 +9,9 @@
 		"__locale": "c",
 		"cdefs.h": "c",
 		"availability.h": "c",
-		"__node_handle": "c"
+		"__node_handle": "c",
+		"termios.h": "c",
+		"dirent.h": "c",
+		"stdbool.h": "c"
 	}
 }

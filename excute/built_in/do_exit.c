@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:53 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/08 15:42:17 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/09 15:16:20 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	is_numeric_str(char *s)
 	return (1);
 }
 
-void	do_exit(char **args, t_mini *mini)
+void	do_exit(char **args, t_mini *mini, t_garbege **head)
 {
 	long	status;
 
@@ -69,7 +69,7 @@ void	do_exit(char **args, t_mini *mini)
 		{
 			ft_putstr_fd("exit\n", 2);
 			ft_putstr_fd("minishell: exit: numeric argument required\n", 2);
-			ft_free_all();
+			ft_free_all(head);
 			exit(255);
 		}
 		status = ft_atoi(args[1]);
@@ -77,7 +77,7 @@ void	do_exit(char **args, t_mini *mini)
 		{
 			ft_putstr_fd("exit\n", 2);
 			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-			g_exit_status = 1;
+			mini->exit = 1;
 			return ;
 		}
 	}
@@ -87,13 +87,13 @@ void	do_exit(char **args, t_mini *mini)
 		close(mini->out);
 	if (mini->pipe)
 	{
-		ft_free_all();
+		ft_free_all(head);
 		exit(status % 256);
 	}
 	else
 	{
 		ft_putstr_fd("exit\n", 2);
-		ft_free_all();
+		ft_free_all(head);
 		exit(status % 256);
 	}
 }
