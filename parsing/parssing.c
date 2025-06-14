@@ -1,37 +1,44 @@
 # include "../main/minishell.h"
 
-#include <stdio.h>
-int count_char(const char *str, char c) {
-    int count = 0;
-    for (int i = 0; str[i]; i++)
+int count_char(const char *str, char c)
+{
+    int count;
+	int i;
+
+	i = 0;
+	count = 0;
+    while (str[i])
+	{
         if (str[i] == c)
             count++;
+		i++;
+	}
     return count;
 }
 
 void remove_quotes(char *str)
 {
-    int single_quotes = count_char(str, '\'');
-    int double_quotes = count_char(str, '"');
+    int remove_single = (count_char(str, '\'') % 2 == 0);
+    int remove_double = (count_char(str, '"') % 2 == 0);
+    int i = 0;
+	int j = 0;
+    int in_single = 0;
+	int in_double = 0;
 
-    int remove_single = (single_quotes % 2 == 0);
-    int remove_double = (double_quotes % 2 == 0);
-
-    int i = 0, j = 0;
-    int in_single = 0, in_double = 0;
-
-    while (str[i]) {
-        if (str[i] == '\'' && !in_double && remove_single) {
+    while (str[i])
+	{
+        if (str[i] == '\'' && !in_double && remove_single)
+		{
             in_single = !in_single;
             i++;
         }
-        else if (str[i] == '"' && !in_single && remove_double) {
+        else if (str[i] == '"' && !in_single && remove_double)
+		{
             in_double = !in_double;
             i++;
         }
-        else {
+        else
             str[j++] = str[i++];
-        }
     }
     str[j] = '\0';
 }
@@ -55,21 +62,6 @@ int	check_quotes(char *line)
 		return (i);
 	}
 	return (0);
-}
-
-
-void    quotes(char **str)
-{
-	int	i;
-
-	i = 0;
-	if (!str || !*str)
-		return ;
-	while (str[i])
-	{
-		remove_quotes(str[i]);
-		i++;
-	}
 }
 
 int	ft_isspace(char c)

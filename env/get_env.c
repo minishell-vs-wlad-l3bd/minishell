@@ -29,8 +29,6 @@ void	update_env(t_env **env, char *key, char *value, t_garbege **head)
 	{
 		if (c->key && !ft_strcmp(c->key, key))
 		{
-			// if (c->value)
-			// 	free(c->value);
 			c->value = new;
 			return ;
 		}
@@ -43,7 +41,7 @@ void	update_env(t_env **env, char *key, char *value, t_garbege **head)
 	*env = c;
 }
 
-void	env_pre_add(t_env **node, int flg, t_garbege **head)
+static void	env_pre_add(t_env **node, int flg, t_garbege **head)
 {
 	if (!flg)
 	{
@@ -66,7 +64,8 @@ void	env_pre_add(t_env **node, int flg, t_garbege **head)
 		ft_env_lstadd_back(node,
 			ft_env_lstnew("PATH",
 				"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", head));
-		ft_env_lstadd_back(node, ft_env_lstnew("SHLVL", ft_strdup("1", head), head));
+		ft_env_lstadd_back(node,
+			ft_env_lstnew("SHLVL", ft_strdup("1", head), head));
 	}
 }
 

@@ -20,7 +20,7 @@ void	init_redir(t_tokens *head, char *str)
 	else if (str[i] == '>' && str[i + 1] == '>')
 		head->append = 1;
 	else if (str[i] == '<')
-		head->intput = 1;
+		head->input = 1;
 	else if (str[i] == '>')
 		head->output = 1;
 }
@@ -93,9 +93,9 @@ int	handle_redir(char **str, int *i, t_parsing *node, t_tokens **last, t_mini *m
 			*i += 2;
 			return (1);
 		}
+		remove_quotes(new->file);
 		(*i)++;
 	}
-
 	if (!node->token)
 		node->token = new;
 	else
@@ -120,7 +120,7 @@ t_parsing	*init_all(char **str, t_mini *mini, t_garbege **head)
 	i = 0;
 	while (str[i])
 	{
-		if (get_type(str[i]) && !str[i + 1])
+		if (get_type(str[i]) && str[i + 1])
 		{
 			if (!handle_redir(str, &i, node, &last, mini, head))
 				return (NULL);

@@ -6,17 +6,18 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:13 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/09 16:13:40 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/12 13:48:22 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main/minishell.h"
 
-int g_check_signal = 0;
+int	g_check_signal = 0;
 
-void disable_echoctl(void)
+void	disable_echoctl(void)
 {
-	struct termios term;
+	struct termios	term;
+
 	if (tcgetattr(STDIN_FILENO, &term) == 0)
 	{
 		term.c_lflag &= ~ECHOCTL;
@@ -45,14 +46,14 @@ void	handler_heredoc(int sig)
 	}
 }
 
-void setup_parent_signals(void)
+void	setup_parent_signals(void)
 {
-    signal(SIGINT, handler);
-    signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handler);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-void setup_child_signals(void)
+void	setup_child_signals(void)
 {
-    signal(SIGINT, SIG_DFL);
-    signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }

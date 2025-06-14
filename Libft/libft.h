@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:01:35 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/09 15:15:14 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/12 15:05:44 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-
 typedef struct s_list
 {
 	void			*content;
@@ -25,9 +24,9 @@ typedef struct s_list
 
 typedef struct s_garbege
 {
-	void            *ptr;
-	struct s_garbege   *next;
-}   t_garbege;
+	void				*ptr;
+	struct s_garbege	*next;
+}	t_garbege;
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -53,11 +52,10 @@ int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size, t_garbege **head);
 char	*ft_strdup(const char *s1, t_garbege **head);
 char	*ft_strjoin(char const *s1, char const *s2, t_garbege **head);
-char	*ft_substr(char const *s, unsigned int start, size_t len, t_garbege **head);
+char	*ft_substr(char const *s, unsigned int n, size_t len, t_garbege **head);
 char	*ft_strtrim(char const *s1, char const *set, t_garbege **head);
 char	**ft_split(char const *s, char c, t_garbege **head);
 char	*ft_itoa(int n, t_garbege **head);
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char), t_garbege **head);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
@@ -72,6 +70,6 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 void	*ft_malloc(size_t size, t_garbege **head);
-int	ft_strcmp(const char *s1, const char *s2);
+int		ft_strcmp(const char *s1, const char *s2);
 
 #endif

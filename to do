@@ -55,6 +55,4 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 ==69242==ABORTING
 [1]    69242 abort      ./minishell
 
-
-
 ====> norm 

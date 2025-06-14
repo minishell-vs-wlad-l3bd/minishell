@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 10:13:12 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/06 15:07:32 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/12 15:03:17 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 
 	i = 0;
 	if (!src)
-		return 0;
+		return (0);
 	while (src[i])
 		i++;
 	if (dstsize == 0)

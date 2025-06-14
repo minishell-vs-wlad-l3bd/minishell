@@ -6,13 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/09 17:15:29 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/14 17:03:20 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void backup_std_fds(t_mini *mini)
+void	backup_std_fds(t_mini *mini)
 {
 	if (mini->in == -1)
 		mini->in = dup(STDIN_FILENO);
@@ -22,7 +22,7 @@ void backup_std_fds(t_mini *mini)
 		perror("minishell: dup error");
 }
 
-void reset_std_fds(t_mini *mini)
+void	reset_std_fds(t_mini *mini)
 {
 	if (mini->in != -1)
 	{
@@ -38,7 +38,7 @@ void reset_std_fds(t_mini *mini)
 	}
 }
 
-void mini_init(t_mini *mini, char **env, t_garbege **head)
+void	mini_init(t_mini *mini, char **env, t_garbege **head)
 {
 	ft_memset(mini, 0, sizeof(t_mini));
 	mini->ev = env;
@@ -50,9 +50,9 @@ void mini_init(t_mini *mini, char **env, t_garbege **head)
 	backup_std_fds(mini);
 }
 
-void norm_main(t_mini *mini, t_garbege **head)
+int	norm_main(t_mini *mini, t_garbege **head)
 {
-	char *str;
+	char	*str;
 
 	while (1)
 	{
@@ -68,33 +68,34 @@ void norm_main(t_mini *mini, t_garbege **head)
 		{
 			ft_putstr_fd("exit\n", STDERR_FILENO);
 			reset_std_fds(mini);
-			break ;
+			return (mini->exit);
 		}
 		if (*str && !check_input(str, mini, head))
 			ft_execute(mini, head);
 		free(str);
 	}
+	return (0);
 }
 
-// void f(){system("leaks minishell");}
-
-int main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **env)
 {
-	t_mini mini;
-	t_garbege *head;
-	
-	// atexit(f);
+	t_mini		mini;
+	t_garbege	*head;
+	int			n;
+
+	n = 0;
 	head = NULL;
 	(void)ac;
 	(void)av;
 	if (!isatty(STDIN_FILENO))
 		return (1);
 	disable_echoctl();
+	//rest_attr
 	mini_init(&mini, env, &head);
 	increment_shlvl(&mini, &head);
 	setup_parent_signals();
-	norm_main(&mini, &head);
+	n = norm_main(&mini, &head);
 	ft_free_all(&head);
 	rl_clear_history();
-	return 0;
+	return (n);
 }

@@ -2,9 +2,9 @@
 
 char *extract_name(char *str, t_garbege **head)
 {
-    int	i;
+    int i;
 
-i	 = 0;
+    i = 0;
     if (!str || !*str)
         return NULL;
     if (str[i] == '?')
@@ -14,11 +14,11 @@ i	 = 0;
     return ft_substr(str, 0, i, head);
 }
 
-char *expand_value(char *str, t_mini *mini, t_garbege **head)
+char    *expand_value(char *str, t_mini *mini, t_garbege **head)
 {
-    char *var_name;
-    char *value;
-	int		i;
+    char    *var_name;
+    char    *value;
+	int	    i;
 
     var_name = extract_name(str, head);
     value = NULL;
@@ -37,12 +37,12 @@ char *expand_value(char *str, t_mini *mini, t_garbege **head)
 
 char *prepare_and_expand(char *result, char *var_start, t_mini *mini, char **new_result, t_garbege **head)
 {
-    char *before;
-    char *var_name;
-    char *value;
-    int var_len;
-    char *after;
-    char *tmp;
+    char    *before;
+    char    *var_name;
+    char    *value;
+    int     var_len;
+    char    *after;
+    char    *tmp;
 	
 	value = NULL;
 	var_len = 1;
@@ -77,7 +77,6 @@ char *expand_string(char *str, t_mini *mini, t_garbege **head)
     {
         if (!prepare_and_expand(result, var_start, mini, &new_result, head))
             return NULL;
-        // free(result);
         result = new_result;
     }
     return result;
