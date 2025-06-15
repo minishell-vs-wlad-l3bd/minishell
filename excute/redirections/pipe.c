@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/14 13:32:32 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/15 09:53:59 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ static void	child_process(t_mini *mini, t_parsing *parss, int i, int total_cmds,
 	if (!parss->cmd || !parss->cmd[0])
 		exit(0);
 	setup_pipe_io(mini, i == 0, i == total_cmds - 1);
-	setup_child_signals();
 	if (parss->heredoc_file)
 	{
 		fd = open(parss->heredoc_file, O_RDONLY);
@@ -105,15 +104,13 @@ static void	child_process(t_mini *mini, t_parsing *parss, int i, int total_cmds,
 	if (is_builtin(parss->cmd[0]))
 	{
 		execute_builtin(parss->cmd, mini, head);
-		exit(mini->exit);
+		exit(0);
 	}
 	else
 	{
 		if (!cmd_path)
 			exit(127);
-		execve(cmd_path, parss->cmd, mini->ev);
-		perror("minishell: ");
-		exit(errno);
+		exec_in_child(cmd_path, parss->cmd, mini);
 	}
 }
 
@@ -161,8 +158,10 @@ void	execute_pipeline(t_mini *mini, t_garbege **head)
 	}
 	i = -1;
 	while (++i < count_cmds)
+	{
 		waitpid(pids[i], &status, 0);
-	handle_child_status(status, mini);
+		handle_child_status(status, mini);
+	}
 	setup_parent_signals();
 	parss = mini->parss;
 	while (parss)

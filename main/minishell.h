@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/12 14:33:46 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/15 09:49:00 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,6 @@ int		check_is_key(t_env **env, char *key);
 void	exec_in_child(char *cmd_path, char **cmd, t_mini *mini);
 void	handle_child_status(int status, t_mini *mini);
 int		is_directory(char *cmd);
+void	enable_echoctl(void);
 
 #endif 

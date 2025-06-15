@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:13:20 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/12 14:17:06 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/15 09:49:55 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	is_directory(char *cmd)
 void	exec_in_child(char *cmd_path, char **cmd, t_mini *mini)
 {
 	setup_child_signals();
+	enable_echoctl();
 	execve(cmd_path, cmd, mini->ev);
 	perror("minishell: ");
 	exit(errno);

@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/14 17:03:20 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/15 09:46:24 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	mini_init(t_mini *mini, char **env, t_garbege **head)
 	backup_std_fds(mini);
 }
 
-int	norm_main(t_mini *mini, t_garbege **head)
+int	norm_main(t_mini *mini, t_garbege **head, struct termios *term)
 {
 	char	*str;
 
@@ -72,6 +72,7 @@ int	norm_main(t_mini *mini, t_garbege **head)
 		}
 		if (*str && !check_input(str, mini, head))
 			ft_execute(mini, head);
+		tcsetattr(STDIN_FILENO, TCSANOW, term);
 		free(str);
 	}
 	return (0);
@@ -82,6 +83,7 @@ int	main(int ac, char **av, char **env)
 	t_mini		mini;
 	t_garbege	*head;
 	int			n;
+	struct termios	term;
 
 	n = 0;
 	head = NULL;
@@ -90,11 +92,11 @@ int	main(int ac, char **av, char **env)
 	if (!isatty(STDIN_FILENO))
 		return (1);
 	disable_echoctl();
-	//rest_attr
+	tcgetattr(STDIN_FILENO, &term);
 	mini_init(&mini, env, &head);
 	increment_shlvl(&mini, &head);
 	setup_parent_signals();
-	n = norm_main(&mini, &head);
+	n = norm_main(&mini, &head, &term);
 	ft_free_all(&head);
 	rl_clear_history();
 	return (n);
