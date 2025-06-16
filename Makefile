@@ -20,6 +20,8 @@ SRCS = 	main/minishell.c\
 		utils/ft_malloc.c\
 		excute/built_in/do_exit.c\
 		excute/redirections/redr.c\
+		excute/redirections/pipe_tools.c\
+		excute/redirections/pipe_tools2.c\
 		excute/excute.c\
 		excute/excute_tools.c\
 		excute/shlvl.c\
