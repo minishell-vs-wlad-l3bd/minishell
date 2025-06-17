@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 10:03:02 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/17 10:54:16 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:04:39 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	enable_echoctl(void)
 
 	if (tcgetattr(STDIN_FILENO, &term) == 0)
 	{
-		// term.c_lflag |= ECHOCTL;
+		term.c_lflag |= ECHOCTL;
 		tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	}
 }
