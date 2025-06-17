@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 13:04:34 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/12 15:04:49 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:03:35 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ char	*ft_substr(char const *s, unsigned int n, size_t len, t_garbege **head)
 	if (len > s_len - n)
 		len = s_len - n;
 	substr = ft_malloc((len + 1) * sizeof(char), head);
-	if (substr == NULL)
-		return (NULL);
 	i = 0;
 	while (i < len && s[n + i] != '\0')
 	{

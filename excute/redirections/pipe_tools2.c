@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 13:24:17 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/16 13:30:47 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/16 21:06:46 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,20 @@ int	fork_failed(t_mini *mini)
 	ft_putendl_fd("minishell: fork failed", 2);
 	mini->exit = 1;
 	return (0);
+}
+
+void	kill_all(pid_t *pids, int n)
+{
+	int	i;
+
+	i = 0;
+	while (i < n)
+	{
+		if (pids[i] > 0)
+			kill(pids[i], SIGKILL);
+		i++;
+	}
+	i = -1;
+	while (++i < n)
+		waitpid(pids[i], 0, 0);
 }

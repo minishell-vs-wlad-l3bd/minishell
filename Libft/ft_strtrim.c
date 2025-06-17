@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 15:15:31 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/09 15:28:20 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:03:28 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ char	*ft_strtrim(char const *s1, char const *set, t_garbege **head)
 		end--;
 	len = end - start;
 	t = ft_malloc((len + 1) * sizeof(char), head);
-	if (t == NULL)
-		return (NULL);
 	ft_strlcpy(t, start, len + 1);
 	return (t);
 }

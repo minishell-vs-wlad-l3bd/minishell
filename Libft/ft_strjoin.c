@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 12:04:16 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/09 15:01:41 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:03:23 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ char	*ft_strjoin(char const *s1, char const *s2, t_garbege **head)
 	i = 0;
 	maxlen = ft_strlen(s1) + ft_strlen(s2);
 	alls = ft_malloc((maxlen + 1) * (sizeof(char)), head);
-	if (alls == NULL)
-		return (NULL);
 	while (s1[i])
 		alls[j++] = s1[i++];
 	i = 0;

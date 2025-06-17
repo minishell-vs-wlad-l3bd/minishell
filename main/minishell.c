@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/15 09:46:24 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/17 10:33:45 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ int	norm_main(t_mini *mini, t_garbege **head, struct termios *term)
 
 int	main(int ac, char **av, char **env)
 {
-	t_mini		mini;
-	t_garbege	*head;
-	int			n;
+	t_mini			mini;
+	t_garbege		*head;
+	int				n;
 	struct termios	term;
 
 	n = 0;

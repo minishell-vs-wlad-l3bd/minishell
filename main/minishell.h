@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/16 13:29:23 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/17 10:33:25 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_env
 
 typedef struct s_mini
 {
+	pid_t		*pids;
 	int			pipe;
 	int			pipe_in;
 	int			pipe_out;
@@ -119,8 +120,8 @@ void	exec_in_child(char *cmd_path, char **cmd, t_mini *mini);
 void	handle_child_status(int status, t_mini *mini);
 int		is_directory(char *cmd);
 void	enable_echoctl(void);
-int 	handle_heredoc_token(t_tokens *tok, t_mini *mini,
-					t_garbege **head, char **last_file);
+int		handle_heredoc_token(t_tokens *tok, t_mini *mini,
+			t_garbege **head, char **last_file);
 int		handle_all_redirections(t_tokens *tokens, t_mini *mini);
 void	wait_for_children(pid_t *pids, int count_cmds, t_mini *mini);
 void	cleanup_heredocs(t_parsing *parss);
@@ -128,6 +129,7 @@ int		ft_lstsize_pipe(t_parsing *parss);
 int		create_pipe(t_mini *mini);
 void	parent_cleanup(t_mini *mini, int i, int total_cmds);
 void	prepare_heredocs(t_mini *mini, t_garbege **head);
-int 	fork_failed(t_mini *mini);
+int		fork_failed(t_mini *mini);
+void	kill_all(pid_t *pids, int n);
 
 #endif 

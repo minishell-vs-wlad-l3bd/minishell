@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/16 13:29:07 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/16 21:05:23 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static int	fork_and_setup_processes(t_mini *mini, t_garbege **head,
 			child_process_exec(mini, parss, head);
 		}
 		else if (pids[i] < 0)
-			return (fork_failed(mini));
+			return (kill_all(mini->pids, i), fork_failed(mini));
 		parent_cleanup(mini, i, count_cmds);
 		parss = parss->next;
 	}
@@ -101,17 +101,14 @@ void	execute_pipeline(t_mini *mini, t_garbege **head)
 {
 	t_parsing	*parss;
 	int			count_cmds;
-	pid_t		*pids;
 
 	parss = mini->parss;
 	count_cmds = ft_lstsize_pipe(parss);
 	prepare_heredocs(mini, head);
-	pids = ft_malloc(sizeof(pid_t) * count_cmds, head);
-	if (!pids)
+	mini->pids = ft_malloc(sizeof(pid_t) * count_cmds, head);
+	if (!fork_and_setup_processes(mini, head, parss, mini->pids))
 		return ;
-	if (!fork_and_setup_processes(mini, head, parss, pids))
-		return ;
-	wait_for_children(pids, count_cmds, mini);
+	wait_for_children(mini->pids, count_cmds, mini);
 	setup_parent_signals();
 	cleanup_heredocs(mini->parss);
 }
