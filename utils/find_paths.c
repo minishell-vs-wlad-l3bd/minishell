@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 15:08:26 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/17 10:31:59 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:01:43 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,10 @@ char	*find_cmd_path(char **paths, char *cmd, t_mini *mini, t_garbege **head)
 		return (mini->exit = check_error(1, cmd), NULL);
 	i = -1;
 	while (paths[++i])
-		if (build_cmd_path(paths[i], cmd, head))
+	{
+		cmd_p = build_cmd_path(paths[i], cmd, head);
+		if (cmd_p)
 			return (cmd_p);
+	}
 	return (mini->exit = check_error(1, cmd), NULL);
 }
