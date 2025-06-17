@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:18:33 by aayad             #+#    #+#             */
-/*   Updated: 2025/05/31 10:18:56 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/16 14:52:06 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,15 @@ void	ft_lstadd_back_2(t_parsing **lst, t_parsing *new)
 	new->next = NULL;
 }
 
-// t_parsing	*ft_lstnew_2(int file, char **cmd, int type)
-// {
-// 	t_parsing	*node1;
+int	get_type(char *str)
+{
+	if (!str)
+		return (0);
+	return (!ft_strcmp(str, ">") || !ft_strcmp(str, ">>")
+		|| !ft_strcmp(str, "<") || !ft_strcmp(str, "<<"));
+}
 
-// 	node1 = ft_malloc(sizeof(t_parsing));
-// 	if (node1 == NULL)
-// 		return (NULL);
-// 	node1->cmd = cmd;
-// 	node1->file = file;
-// 	node1->type = type;
-// 	node1->next = NULL;
-// 	return (node1);
-// }
+int	ft_isspace(char c)
+{
+	return (c == ' ' || (c >= 9 && c <= 13));
+}

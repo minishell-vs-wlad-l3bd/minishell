@@ -32,7 +32,10 @@ SRCS = 	main/minishell.c\
 		parsing/valid_syntax.c\
 		parsing/split.c\
 		parsing/expand.c\
-		parsing/add_spaces.c 
+		parsing/add_spaces.c\
+		parsing/check_syntax.c\
+		parsing/check_expand_quotes.c\
+		parsing/init.c
 
 OBGS = $(SRCS:.c=.o)
 

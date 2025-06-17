@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parss_input.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/15 16:42:53 by aayad             #+#    #+#             */
+/*   Updated: 2025/06/15 16:56:47 by aayad            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../main/minishell.h"
 
 int	is_only_spaces(const char *str)
@@ -57,83 +69,17 @@ int	incorect_quotes(char *line)
 int	valid_line(char *line, t_mini *mini)
 {
 	if (special_char(line))
-		return (ft_putendl_fd("Error : d'ont seport special char", 2),mini->exit = 1, 0);
+		return (ft_putendl_fd("Error : d'ont seport special char", 2),
+			mini->exit = 1, 0);
 	if (incorect_quotes(line))
-		return (ft_putendl_fd("Error : incorect quotes", 2),mini->exit = 1, 0);
+		return (ft_putendl_fd("Error : incorect quotes", 2),
+			mini->exit = 1, 0);
 	if (!analys_syntax(line, mini))
 		return (0);
 	return (1);
 }
-int	is_inside_single_quotes(char *str, int pos)
-{
-	int i;
-	int in_single;
-	int in_double;
 
-	i = 0;
-	in_single = 0;
-	in_double = 0;
-	while (i < pos)
-	{
-		if (str[i] == '\'' && !in_double)
-			in_single = !in_single;
-		else if (str[i] == '"' && !in_single)
-			in_double = !in_double;
-		i++;
-	}
-	return (in_single);
-}
-
-int	is_inside_double_quotes(char *str, int pos)
-{
-	int i;
-	int in_single;
-	int in_double;
-
-	i = 0;
-	in_single = 0;
-	in_double = 0;
-	while (i < pos)
-	{
-		if (str[i] == '\'' && !in_double)
-			in_single = !in_single;
-		else if (str[i] == '"' && !in_single)
-			in_double = !in_double;
-		i++;
-	}
-	return (in_double);
-}
-
-int	check_quotes_expand(char *str, t_mini *mini)
-{
-	int i;
-
-	i = 0;
-	if (mini->parss)
-		mini->parss->is_expand = 0;
-	while (str && str[i])
-	{
-		if (str[i] == '$')
-		{
-			if (!str[i + 1])
-				return (1);
-			if (str[i + 1] == '"')
-			{
-				mini->parss->is_expand = 1;
-				return (1);
-			}
-			if (is_inside_single_quotes(str, i))
-				return (1);
-			if (is_inside_double_quotes(str, i))
-				return (0);
-			return (0);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int		check_input(char *str, t_mini *mini, t_garbege **head)
+int	check_input(char *str, t_mini *mini, t_garbege **head)
 {
 	if (*str)
 		add_history(str);

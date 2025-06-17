@@ -1,44 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   split.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/16 12:25:34 by aayad             #+#    #+#             */
+/*   Updated: 2025/06/16 14:29:28 by aayad            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../main/minishell.h"
 
-static int	is_quote(char c)
+static int	word_len(const char *s, int use_quote)
 {
-	return (c == '\'' || c == '"');
-}
+	int		i;
+	char	quote;
 
-static int word_len(const char *s, int use_quote)
-{
-    int i = 0;
-    char quote = 0;
-
-    if (!use_quote)
-    {
-        while (s[i] && !ft_isspace(s[i]))
-            i++;
-        return i;
-    }
-    while (s[i])
-    {
-        if (!quote && is_quote(s[i]))
-            quote = s[i++];
-        else if (quote && s[i] == quote)
-        {
-            quote = 0;
-            i++;
-        }
-        else if (!quote && ft_isspace(s[i]))
-            break;
-        else
-            i++;
-    }
-    return i;
+	i = 0;
+	quote = 0;
+	if (!use_quote)
+	{
+		while (s[i] && !ft_isspace(s[i]))
+			i++;
+		return (i);
+	}
+	while (s[i])
+	{
+		if (!quote && is_quote(s[i]))
+			quote = s[i++];
+		else if (quote && s[i] == quote)
+			(1) && (quote = 0, i++);
+		else if (!quote && ft_isspace(s[i]))
+			break ;
+		else
+			i++;
+	}
+	return (i);
 }
 
 static int	word_count(const char *s, int use_quote)
 {
-	int i = 0;
-	int count = 0;
-	int len;
+	int	i;
+	int	count;
+	int	len;
 
+	i = 0;
+	count = 0;
 	while (s[i])
 	{
 		while (ft_isspace(s[i]))
@@ -50,52 +58,66 @@ static int	word_count(const char *s, int use_quote)
 			count++;
 		}
 	}
-	return count;
+	return (count);
 }
 
-static char *wordcopy(const char *s, int use_quote, t_garbege **head)
+static void	copy_with_quotes(const char *s, char *word, int len)
 {
-    int len = word_len(s, use_quote);
-    char *word = ft_malloc(len + 1, head);
-    int i = 0, j = 0;
-    char quote = 0;
+	int		i;
+	int		j;
+	char	quote;
 
-    if (!word)
-        return NULL;
-
-    if (!use_quote)
-    {
-        while (i < len)
-            word[j++] = s[i++];
-    }
-    else
-    {
-        while (i < len)
-        {
-            if (!quote && is_quote(s[i]))
-                quote = s[i];
-            else if (quote && s[i] == quote)
-                quote = 0;
-            word[j++] = s[i++];
-        }
-    }
-    word[j] = '\0';
-    return word;
+	i = 0;
+	j = 0;
+	quote = 0;
+	while (i < len)
+	{
+		if (!quote && is_quote(s[i]))
+			quote = s[i];
+		else if (quote && s[i] == quote)
+			quote = 0;
+		word[j++] = s[i++];
+	}
+	word[j] = '\0';
 }
 
-
-char **split(const char *s, int use_quote, t_garbege **head)
+static char	*wordcopy(const char *s, int use_quote, t_garbege **head)
 {
-	char **arr;
-	int i = 0;
-	int count;
+	int		len;
+	char	*word;
+	int		i;
+	int		j;
+
+	len = word_len(s, use_quote);
+	word = ft_malloc(len + 1, head);
+	if (!word)
+		return (NULL);
+	if (!use_quote)
+	{
+		i = 0;
+		j = 0;
+		while (i < len)
+			word[j++] = s[i++];
+		word[j] = '\0';
+	}
+	else
+		copy_with_quotes(s, word, len);
+	return (word);
+}
+
+char	**split(const char *s, int use_quote, t_garbege **head)
+{
+	char	**arr;
+	int		i;
+	int		count;
 
 	if (!s)
-		return NULL;
+		return (NULL);
+	i = 0;
 	count = word_count(s, use_quote);
 	arr = ft_malloc((count + 1) * sizeof(char *), head);
 	if (!arr)
-		return NULL;
+		return (NULL);
 	while (*s)
 	{
 		while (ft_isspace(*s))
@@ -104,11 +126,10 @@ char **split(const char *s, int use_quote, t_garbege **head)
 		{
 			arr[i] = wordcopy(s, use_quote, head);
 			if (!arr[i])
-				return NULL;
+				return (NULL);
 			s += word_len(s, use_quote);
 			i++;
 		}
 	}
-	arr[i] = NULL;
-	return arr;
+	return (arr[i] = NULL, arr);
 }

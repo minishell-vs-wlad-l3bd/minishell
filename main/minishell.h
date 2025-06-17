@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/12 14:33:46 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:50:16 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 
 # define MAX_PATH 4096
 
-extern int	g_check_signal;
+extern int g_check_signal;
 
 typedef struct tokens
 {
@@ -44,6 +44,8 @@ typedef struct s_parsing
 	int					is_expand;
 	char				**cmd;
 	t_tokens			*token;
+	t_garbege			**head;
+	struct s_mini		*mini;
 	struct s_parsing	*next;
 }	t_parsing;
 
@@ -118,5 +120,10 @@ int		check_is_key(t_env **env, char *key);
 void	exec_in_child(char *cmd_path, char **cmd, t_mini *mini);
 void	handle_child_status(int status, t_mini *mini);
 int		is_directory(char *cmd);
+int		check_syntax(char *str);
+int		is_quote(char c);
+int		get_type(char *str);
+int		handle_redir(char **str, int *i, t_parsing *node, t_tokens **last);
+t_parsing	*init_all(char **str, t_mini *mini, t_garbege **head);
 
 #endif 

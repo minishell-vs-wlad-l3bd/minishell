@@ -1,46 +1,59 @@
-# include "../main/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parssing.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/15 16:57:22 by aayad             #+#    #+#             */
+/*   Updated: 2025/06/16 15:58:05 by aayad            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int count_char(const char *str, char c)
+#include "../main/minishell.h"
+
+int	count_char(const char *str, char c)
 {
-    int count;
-	int i;
+	int	count;
+	int	i;
 
 	i = 0;
 	count = 0;
-    while (str[i])
+	while (str[i])
 	{
-        if (str[i] == c)
-            count++;
+		if (str[i] == c)
+			count++;
 		i++;
 	}
-    return count;
+	return (count);
 }
 
-void remove_quotes(char *str)
+void	remove_quotes(char *str)
 {
-    int remove_single = (count_char(str, '\'') % 2 == 0);
-    int remove_double = (count_char(str, '"') % 2 == 0);
-    int i = 0;
-	int j = 0;
-    int in_single = 0;
-	int in_double = 0;
+	int	i;
+	int	j;
+	int	state;
+	int	q;
+	int	r;
 
-    while (str[i])
+	i = 0;
+	j = 0;
+	state = 0;
+	r = (count_char(str, '\'') % 2 == 0);
+	q = (count_char(str, '"') % 2 == 0);
+	while (str[i])
 	{
-        if (str[i] == '\'' && !in_double && remove_single)
-		{
-            in_single = !in_single;
-            i++;
-        }
-        else if (str[i] == '"' && !in_single && remove_double)
-		{
-            in_double = !in_double;
-            i++;
-        }
-        else
-            str[j++] = str[i++];
-    }
-    str[j] = '\0';
+		if (str[i] == '\'' && !state && r)
+			state = '\'';
+		else if (str[i] == '"' && !state && q)
+			state = '"';
+		else if (str[i] == state)
+			state = 0;
+		else
+			str[j++] = str[i];
+		i++;
+	}
+	str[j] = '\0';
 }
 
 int	check_quotes(char *line)
@@ -64,7 +77,7 @@ int	check_quotes(char *line)
 	return (0);
 }
 
-int	ft_isspace(char c)
+int	is_quote(char c)
 {
-	return (c == ' ' || (c >= 9 && c <= 13));
+	return (c == '\'' || c == '"');
 }
