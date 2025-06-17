@@ -1,23 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
+/*   attr.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 14:40:44 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/16 17:03:01 by mohidbel         ###   ########.fr       */
+/*   Created: 2025/06/15 10:03:02 by mohidbel          #+#    #+#             */
+/*   Updated: 2025/06/17 11:04:39 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../main/minishell.h"
 
-t_list	*ft_lstnew(void *content, t_garbege **head)
+void	disable_echoctl(void)
 {
-	t_list	*node1;
+	struct termios	term;
 
-	node1 = ft_malloc(sizeof(t_list), head);
-	node1->content = content;
-	node1->next = NULL;
-	return (node1);
+	if (tcgetattr(STDIN_FILENO, &term) == 0)
+	{
+		term.c_lflag &= ~ECHOCTL;
+		tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	}
+}
+
+void	enable_echoctl(void)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == 0)
+	{
+		term.c_lflag |= ECHOCTL;
+		tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	}
 }

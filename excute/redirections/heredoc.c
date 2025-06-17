@@ -6,13 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/13 18:06:38 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/15 10:01:34 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main/minishell.h"
 
-char	*get_temp_file(t_garbege **head)
+static char	*get_temp_file(t_garbege **head)
 {
 	char	*file;
 	int		fd;
@@ -31,12 +31,31 @@ char	*get_temp_file(t_garbege **head)
 	return (file);
 }
 
+static void	heredoc_child_process(int fd, const char *delimiter)
+{
+	char	*line;
+
+	signal(SIGINT, handler_heredoc);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+			exit(0);
+		if (!ft_strcmp(line, delimiter))
+		{
+			free(line);
+			exit(0);
+		}
+		ft_putendl_fd(line, fd);
+		free(line);
+	}
+}
+
 char	*heredoc(char *delimiter, t_mini *mini, t_garbege **head)
 {
 	pid_t	pid;
 	char	*filename;
 	int		fd;
-	char	*line;
 	int		status;
 
 	filename = get_temp_file(head);
@@ -48,24 +67,8 @@ char	*heredoc(char *delimiter, t_mini *mini, t_garbege **head)
 	pid = fork();
 	if (pid == -1)
 		return (close(fd), NULL);
-	signal(SIGINT, SIG_IGN);
 	if (pid == 0)
-	{
-		signal(SIGINT, handler_heredoc);
-		while (1)
-		{
-			line = readline("> ");
-			if (!line)
-				exit(0);
-			if (!ft_strcmp(line, delimiter))
-			{
-				free(line);
-				exit(0);
-			}
-			ft_putendl_fd(line, fd);
-			free(line);
-		}
-	}
+		heredoc_child_process(fd, delimiter);
 	close(fd);
 	waitpid(pid, &status, 0);
 	setup_parent_signals();

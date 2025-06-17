@@ -6,24 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:13 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/12 13:48:22 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/15 10:04:03 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main/minishell.h"
 
 int	g_check_signal = 0;
-
-void	disable_echoctl(void)
-{
-	struct termios	term;
-
-	if (tcgetattr(STDIN_FILENO, &term) == 0)
-	{
-		term.c_lflag &= ~ECHOCTL;
-		tcsetattr(STDIN_FILENO, TCSANOW, &term);
-	}
-}
 
 void	handler(int sig)
 {

@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:26:01 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/09 14:46:36 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:02:57 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ char	*ft_itoa(int n, t_garbege **head)
 
 	len = get_int_len(n);
 	str = (char *)ft_malloc((len + 1) * sizeof(char), head);
-	if (!str)
-		return (NULL);
 	str[len] = '\0';
 	tap_number(n, str, len - 1);
 	return (str);

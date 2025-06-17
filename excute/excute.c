@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:44 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/14 11:40:43 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:02:03 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,44 +68,23 @@ void	execute_cmd(char **cmd, t_mini *mini, t_garbege **head)
 	}
 }
 
-int	check_type(t_mini *mini, int falg, t_garbege **head)
+int	check_type(t_mini *mini, int flag, t_garbege **head)
 {
-	int			fd;
+	char		*last_file;
 	t_tokens	*tokens;
-	char		*last_heredoc_file;
 
-	last_heredoc_file = NULL;
+	last_file = NULL;
 	tokens = mini->parss->token;
 	while (tokens)
 	{
-		if (tokens->heredoc && falg)
+		if (tokens->heredoc && flag)
 		{
-			if (last_heredoc_file)
-				unlink(last_heredoc_file);
-			last_heredoc_file = heredoc(tokens->file, mini, head);
-			if (last_heredoc_file)
-			{
-				fd = open(last_heredoc_file, O_RDONLY);
-				if (fd == -1 || dup2(fd, STDIN_FILENO) == -1)
-					exit(1);
-				close(fd);
-				unlink(last_heredoc_file);
-			}
-		}
-		tokens = tokens->next;
-	}
-	tokens = mini->parss->token;
-	while (tokens)
-	{
-		if ((tokens->append || tokens->input || tokens->output)
-			&& !tokens->heredoc)
-		{
-			if (!handle_redirections(tokens, mini))
+			if (!handle_heredoc_token(tokens, mini, head, &last_file))
 				return (0);
 		}
 		tokens = tokens->next;
 	}
-	return (1);
+	return (handle_all_redirections(mini->parss->token, mini));
 }
 
 void	ft_execute(t_mini *mini, t_garbege **head)

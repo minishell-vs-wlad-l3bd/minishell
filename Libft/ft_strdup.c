@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 09:53:59 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/09 14:47:35 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:03:18 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ char	*ft_strdup(const char *s1, t_garbege **head)
 		s1len++;
 	i = 0;
 	s2 = ft_malloc((s1len + 1) * sizeof(char), head);
-	if (s2 == NULL)
-		return (0);
 	while (i < s1len)
 	{
 		s2[i] = s1[i];

@@ -1,5 +1,5 @@
 NAME = minishell
-FLAGS =  -Wall -Wextra -Werror 
+FLAGS =  -Wall -Wextra -Werror -fsanitize=address
 SFLAGS = -lreadline
 COMP = cc
 HEADRES = main/minishell.h
@@ -9,6 +9,7 @@ SRCS = 	main/minishell.c\
 		env/get_env.c\
 		env/env_tools.c\
 		excute/built_in/do_cd.c\
+		excute/attr.c\
 		excute/built_in/do_echo.c\
 		parsing/parssing.c\
 		excute/built_in/do_unset.c\
@@ -19,6 +20,8 @@ SRCS = 	main/minishell.c\
 		utils/ft_malloc.c\
 		excute/built_in/do_exit.c\
 		excute/redirections/redr.c\
+		excute/redirections/pipe_tools.c\
+		excute/redirections/pipe_tools2.c\
 		excute/excute.c\
 		excute/excute_tools.c\
 		excute/shlvl.c\
