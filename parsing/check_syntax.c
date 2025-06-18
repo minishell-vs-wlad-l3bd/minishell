@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 16:36:23 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/15 16:39:48 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/17 16:15:59 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ int	check_syntax(char *str)
 	end = ft_strlen(str) - 1;
 	while (end > start && str[end] == ' ')
 		end--;
-	if (start > end)
-		return (2);
 	if (str[start] == '|' || invalid_operator(&str[start]))
 		return (0);
 	if (str[end] == '<' || str[end] == '>')
