@@ -1,8 +1,8 @@
 NAME = minishell
-FLAGS =  -Wall -Wextra -Werror -fsanitize=address
+FLAGS =  -Wall -Wextra -Werror
 SFLAGS = -lreadline
 COMP = cc
-HEADRES = main/minishell.h
+HEADRES = main/minishell.h Libft/libft.h
 
 SRCS = 	main/minishell.c\
 		utils/find_paths.c\
@@ -40,16 +40,59 @@ SRCS = 	main/minishell.c\
 		parsing/check_expand_quotes.c\
 		parsing/init.c
 
+SRC_LIBFT	= 	LIBFT/ft_isalpha.c\
+		LIBFT/ft_isdigit.c\
+		LIBFT/ft_isalnum.c\
+		LIBFT/ft_isascii.c\
+		LIBFT/ft_isprint.c\
+		LIBFT/ft_strlen.c\
+		LIBFT/ft_memset.c\
+		LIBFT/ft_bzero.c\
+		LIBFT/ft_memcpy.c\
+		LIBFT/ft_memmove.c\
+		LIBFT/ft_strlcpy.c\
+		LIBFT/ft_strlcat.c\
+		LIBFT/ft_toupper.c\
+		LIBFT/ft_tolower.c\
+		LIBFT/ft_strchr.c\
+		LIBFT/ft_strrchr.c\
+		LIBFT/ft_strncmp.c\
+		LIBFT/ft_strcmp.c\
+		LIBFT/ft_memchr.c\
+		LIBFT/ft_memcmp.c\
+		LIBFT/ft_strnstr.c\
+		LIBFT/ft_atoi.c\
+		LIBFT/ft_calloc.c\
+		LIBFT/ft_strdup.c\
+		LIBFT/ft_substr.c\
+		LIBFT/ft_strjoin.c\
+		LIBFT/ft_strtrim.c\
+		LIBFT/ft_split.c\
+		LIBFT/ft_itoa.c\
+		LIBFT/ft_striteri.c\
+		LIBFT/ft_putchar_fd.c\
+		LIBFT/ft_putstr_fd.c\
+		LIBFT/ft_putendl_fd.c\
+		LIBFT/ft_putnbr_fd.c\
+		LIBFT/ft_lstnew_bonus.c\
+		LIBFT/ft_lstadd_front_bonus.c\
+		LIBFT/ft_lstsize_bonus.c\
+		LIBFT/ft_lstlast_bonus.c\
+		LIBFT/ft_lstadd_back_bonus.c\
+		LIBFT/ft_lstdelone_bonus.c\
+		LIBFT/ft_lstclear_bonus.c\
+		LIBFT/ft_lstiter_bonus.c
+
 OBGS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBGS)
-	@make -C Libft
+$(NAME): $(OBGS) 
+	make -C Libft
 	$(COMP) $(FLAGS) $(OBGS) Libft/libft.a $(SFLAGS) -o $@
 
-%.o: %.c $(HEADRES)
-	$(COMP) $(FLAGS) -c $< -o $@ 
+%.o: %.c $(HEADRES) $(SRC_LIBFT)
+	$(COMP) $(FLAGS) -c $< -o $@
 
 clean:
 	make clean -C Libft

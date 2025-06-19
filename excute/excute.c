@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:44 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/17 11:02:03 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/19 17:38:12 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ void	execute_cmd(char **cmd, t_mini *mini, t_garbege **head)
 	}
 }
 
-int	check_type(t_mini *mini, int flag, t_garbege **head)
+int	check_type(t_mini *mini, int flag, t_garbege **head, t_parsing *parss)
 {
 	char		*last_file;
 	t_tokens	*tokens;
 
 	last_file = NULL;
-	tokens = mini->parss->token;
+	tokens = parss->token;
 	while (tokens)
 	{
 		if (tokens->heredoc && flag)
@@ -84,7 +84,7 @@ int	check_type(t_mini *mini, int flag, t_garbege **head)
 		}
 		tokens = tokens->next;
 	}
-	return (handle_all_redirections(mini->parss->token, mini));
+	return (handle_all_redirections(parss->token, mini));
 }
 
 void	ft_execute(t_mini *mini, t_garbege **head)
@@ -98,7 +98,7 @@ void	ft_execute(t_mini *mini, t_garbege **head)
 		execute_pipeline(mini, head);
 		return ;
 	}
-	if (!check_type(mini, 1, head))
+	if (!check_type(mini, 1, head, mini->parss))
 		return ;
 	if (is_builtin(mini->parss->cmd[0]))
 		execute_builtin(mini->parss->cmd, mini, head);

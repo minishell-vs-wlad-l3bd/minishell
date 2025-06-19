@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/16 21:05:23 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/19 17:35:48 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	child_process_exec(t_mini *mini, t_parsing *parss,
 {
 	char	*cmd_path;
 
-	if (!check_type(mini, 0, head))
+	if (!check_type(mini, 0, head, parss))
 		exit(1);
 	cmd_path = find_cmd_path(mini->paths, parss->cmd[0], mini, head);
 	mini->ev = env_list_to_array(mini->env, head);

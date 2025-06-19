@@ -66,6 +66,12 @@ void	do_cd(char **cmd, t_mini *mini, t_garbege **head)
 		mini->exit = 1;
 		return ;
 	}
+	if (!getcwd(NULL, 0))
+	{
+		ft_putstr_fd("cd: error retrieving current directory:", 2);
+		ft_putstr_fd(" getcwd: cannot access parent directories:", 2);
+		ft_putstr_fd(" No such file or directory\n", 2);
+	}
 	update_env(&mini->env, "OLDPWD", cwd, head);
 	update_env(&mini->export_env, "OLDPWD", cwd, head);
 	update_pwd(mini, cwd, target, head);

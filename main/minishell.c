@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/17 15:22:59 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/19 17:28:41 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	mini_init(t_mini *mini, char **env, t_garbege **head)
 	mini->in = -1;
 	mini->out = -1;
 	mini->prev_pipe = -1;
+	mini->pipe_in = -1;
+	mini->pipe_out = -1;
 	mini->env = env_init(env, 0, head);
 	mini->export_env = env_init(env, 1, head);
 	backup_std_fds(mini);

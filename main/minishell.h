@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/18 08:54:27 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/19 17:36:45 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ void		do_env(t_mini *mini, t_garbege **head);
 void		do_pwd(t_mini *mini);
 void		do_export(char **args, t_mini *mini, t_garbege **head);
 void		do_exit(char **args, t_mini *mini, t_garbege **head);
-int			check_type(t_mini *mini, int falg, t_garbege **head);
+int			check_type(t_mini *mini, int flag, t_garbege **head,
+				t_parsing *parss);
 void		execute_pipeline(t_mini *mini, t_garbege **head);
 void		increment_shlvl(t_mini *mini, t_garbege **head);
 char		*heredoc(char *delimiter, t_mini *mini, t_garbege **head);
