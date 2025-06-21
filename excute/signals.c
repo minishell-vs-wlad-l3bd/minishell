@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:13 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/15 10:04:03 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/21 11:14:32 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,11 @@ void	handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(1, "\n", 1);
+		write(STDERR_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		g_check_signal = 1;
+		g_check_signal = SIGINT;
 		rl_redisplay();
-	}
-}
-
-void	handler_heredoc(int sig)
-{
-	if (sig == SIGINT)
-	{
-		write(1, "\n", 1);
-		exit(1);
 	}
 }
 

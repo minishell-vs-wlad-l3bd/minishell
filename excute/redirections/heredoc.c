@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/15 10:01:34 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/21 11:17:56 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	heredoc_child_process(int fd, const char *delimiter)
 {
 	char	*line;
 
-	signal(SIGINT, handler_heredoc);
+	signal(SIGINT, SIG_DFL);
 	while (1)
 	{
 		line = readline("> ");
@@ -64,6 +64,7 @@ char	*heredoc(char *delimiter, t_mini *mini, t_garbege **head)
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (NULL);
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		return (close(fd), NULL);
@@ -71,7 +72,10 @@ char	*heredoc(char *delimiter, t_mini *mini, t_garbege **head)
 		heredoc_child_process(fd, delimiter);
 	close(fd);
 	waitpid(pid, &status, 0);
-	setup_parent_signals();
-	mini->exit = WEXITSTATUS(status);
-	return (filename);
+	if (WIFEXITED(status))
+		mini->exit = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		if (WTERMSIG(status) == SIGINT)
+			(ft_putstr_fd("\n", STDERR_FILENO), mini->exit = 1);
+	return (setup_parent_signals(), filename);
 }

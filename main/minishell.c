@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/19 17:28:41 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/21 10:21:19 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ int	norm_main(t_mini *mini, t_garbege **head, struct termios *term)
 		reset_std_fds(mini);
 		backup_std_fds(mini);
 		str = readline("minishell$ ");
-		if (g_check_signal == 1)
+		if (g_check_signal == SIGINT)
 		{
 			mini->exit = 1;
-			g_check_signal = 0;
+			g_check_signal = (int)SIG_DFL;
 		}
 		if (!str)
 		{

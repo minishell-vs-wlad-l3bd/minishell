@@ -12,6 +12,7 @@
 		"__node_handle": "c",
 		"termios.h": "c",
 		"dirent.h": "c",
-		"stdbool.h": "c"
+		"stdbool.h": "c",
+		"algorithm": "c"
 	}
 }

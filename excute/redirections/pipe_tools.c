@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 13:14:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/16 13:19:07 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/21 11:04:50 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,25 @@ void	wait_for_children(pid_t *pids, int count_cmds, t_mini *mini)
 {
 	int	i;
 	int	status;
+	int sigquit;
+	int sigint;
 
 	i = -1;
+	sigquit = 0;
+	sigint = 0;
 	while (++i < count_cmds)
 	{
 		waitpid(pids[i], &status, 0);
-		handle_child_status(status, mini);
+		if (WIFEXITED(status))
+			mini->exit = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) == SIGQUIT && !sigquit)
+				(ft_putstr_fd("Quit: 3\n", STDERR_FILENO), sigquit = 1);
+			else if (WTERMSIG(status) == SIGINT && !sigint)
+				(ft_putstr_fd("\n", STDERR_FILENO), sigint = 1);
+			mini->exit = 128 + WTERMSIG(status);
+		}
 	}
 }
 

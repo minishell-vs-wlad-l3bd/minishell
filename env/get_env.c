@@ -46,7 +46,7 @@ static void	env_pre_add(t_env **node, int flg, t_garbege **head)
 	if (!flg)
 	{
 		ft_env_lstadd_back(node,
-			ft_env_lstnew("PWD", getcwd(NULL, MAX_PATH), head));
+			ft_env_lstnew("PWD", getcwd(NULL, PATH_MAX), head));
 		ft_env_lstadd_back(node,
 			ft_env_lstnew("SHLVL", ft_strdup("1", head), head));
 		ft_env_lstadd_back(node,
