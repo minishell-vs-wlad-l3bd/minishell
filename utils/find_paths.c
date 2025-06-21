@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 15:08:26 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/17 11:01:43 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:01:50 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,26 @@ static int	check_error(int flag, char *cmd)
 {
 	if (flag)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": command not found\n", 2);
+		if (flag == 1)
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd, 2);
+			ft_putstr_fd(": command not found\n", 2);
+		}
+		else
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd, 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+		}
 		return (127);
 	}
 	else
 	{
 		if (errno == EACCES || errno == ENOTDIR)
-		{
-			perror("minishell: ");
-			return (126);
-		}
+			return (perror("minishell: "), 126);
 		else if (errno == ENOENT)
-		{
-			perror("minishell: ");
-			return (127);
-		}
+			return (perror("minishell: "), 127);
 	}
 	return (1);
 }
@@ -84,8 +87,8 @@ char	*find_cmd_path(char **paths, char *cmd, t_mini *mini, t_garbege **head)
 			return (ft_strdup(cmd, head));
 		return (mini->exit = check_error(0, cmd), NULL);
 	}
-	if (!paths)
-		return (mini->exit = check_error(1, cmd), NULL);
+	if (!paths || !paths[0])
+		return (mini->exit = check_error(2, cmd), NULL);
 	i = -1;
 	while (paths[++i])
 	{

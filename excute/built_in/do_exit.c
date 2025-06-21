@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:53 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/12 10:58:42 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/21 12:51:43 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,20 @@ void	do_exit(char **args, t_mini *mini, t_garbege **head)
 			exit_with_error(head);
 		if (args[2])
 		{
-			ft_putstr_fd("exit\n", 2);
+			(mini->exit = 1, ft_putstr_fd("exit\n", 2));
 			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-			mini->exit = 1;
 			return ;
 		}
 		status = ft_atoi(args[1]);
 	}
+	else
+		exit(mini->exit);
 	if (mini->in != STDIN_FILENO)
 		close(mini->in);
 	if (mini->out != STDOUT_FILENO)
 		close(mini->out);
 	if (mini->pipe)
 		(ft_free_all(head), exit(status % 256));
-	ft_putstr_fd("exit\n", 2);
-	ft_free_all(head);
+	(ft_putstr_fd("exit\n", 2), ft_free_all(head));
 	exit(status % 256);
 }
