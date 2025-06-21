@@ -80,7 +80,7 @@ static void	handle_pipe(char **pipes, t_mini *mini,
 	while (pipes[i])
 	{
 		spaces = add_spaces(pipes[i], head);
-		redir = split(spaces, 1, head);
+		redir = split(spaces, head);
 		new = init_all(redir, mini, head);
 		ft_lstadd_back_2(node, new);
 		i++;

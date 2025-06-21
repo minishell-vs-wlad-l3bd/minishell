@@ -42,7 +42,7 @@ static void	handle_split_case(t_list **cmd_list,
 	expanded = expand_string(str, mini, head);
 	if (!expanded)
 		return ;
-	tmp = split(expanded, 1, head);
+	tmp = split(expanded, head);
 	if (!tmp)
 		return ;
 	j = 0;

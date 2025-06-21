@@ -12,19 +12,13 @@
 
 #include "../main/minishell.h"
 
-static int	word_len(const char *s, int use_quote)
+static int	word_len(const char *s)
 {
 	int		i;
 	char	quote;
 
 	i = 0;
 	quote = 0;
-	if (!use_quote)
-	{
-		while (s[i] && !ft_isspace(s[i]))
-			i++;
-		return (i);
-	}
 	while (s[i])
 	{
 		if (!quote && is_quote(s[i]))
@@ -39,7 +33,7 @@ static int	word_len(const char *s, int use_quote)
 	return (i);
 }
 
-static int	word_count(const char *s, int use_quote)
+static int	word_count(const char *s)
 {
 	int	i;
 	int	count;
@@ -53,7 +47,7 @@ static int	word_count(const char *s, int use_quote)
 			i++;
 		if (s[i])
 		{
-			len = word_len(&s[i], use_quote);
+			len = word_len(&s[i]);
 			i += len;
 			count++;
 		}
@@ -61,12 +55,18 @@ static int	word_count(const char *s, int use_quote)
 	return (count);
 }
 
-static void	copy_with_quotes(const char *s, char *word, int len)
+static char	*wordcopy(const char *s, t_garbege **head)
 {
+	int		len;
+	char	*word;
 	int		i;
 	int		j;
-	char	quote;
+	int		quote;
 
+	len = word_len(s);
+	word = ft_malloc(len + 1, head);
+	if (!word)
+		return (NULL);
 	i = 0;
 	j = 0;
 	quote = 0;
@@ -79,33 +79,10 @@ static void	copy_with_quotes(const char *s, char *word, int len)
 		word[j++] = s[i++];
 	}
 	word[j] = '\0';
-}
-
-static char	*wordcopy(const char *s, int use_quote, t_garbege **head)
-{
-	int		len;
-	char	*word;
-	int		i;
-	int		j;
-
-	len = word_len(s, use_quote);
-	word = ft_malloc(len + 1, head);
-	if (!word)
-		return (NULL);
-	if (!use_quote)
-	{
-		i = 0;
-		j = 0;
-		while (i < len)
-			word[j++] = s[i++];
-		word[j] = '\0';
-	}
-	else
-		copy_with_quotes(s, word, len);
 	return (word);
 }
 
-char	**split(const char *s, int use_quote, t_garbege **head)
+char	**split(const char *s, t_garbege **head)
 {
 	char	**arr;
 	int		i;
@@ -114,7 +91,7 @@ char	**split(const char *s, int use_quote, t_garbege **head)
 	if (!s)
 		return (NULL);
 	i = 0;
-	count = word_count(s, use_quote);
+	count = word_count(s);
 	arr = ft_malloc((count + 1) * sizeof(char *), head);
 	if (!arr)
 		return (NULL);
@@ -124,10 +101,10 @@ char	**split(const char *s, int use_quote, t_garbege **head)
 			s++;
 		if (*s)
 		{
-			arr[i] = wordcopy(s, use_quote, head);
+			arr[i] = wordcopy(s, head);
 			if (!arr[i])
 				return (NULL);
-			s += word_len(s, use_quote);
+			s += word_len(s);
 			i++;
 		}
 	}
