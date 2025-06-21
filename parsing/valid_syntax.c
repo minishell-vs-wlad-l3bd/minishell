@@ -28,6 +28,17 @@ void	init_redir(t_tokens *head, char *str)
 		head->output = 1;
 }
 
+int	has_quotes(char *str)
+{
+	while (*str)
+	{
+		if (*str == '\'' || *str == '\"')
+			return (1);
+		str++;
+	}
+	return (0);
+}
+
 int	handle_redir(char **str, int *i, t_parsing *node, t_tokens **last)
 {
 	t_tokens	*new;
@@ -37,7 +48,11 @@ int	handle_redir(char **str, int *i, t_parsing *node, t_tokens **last)
 	if (str[*i + 1])
 	{
 		if (new->heredoc)
+		{
+			if (!has_quotes(str[*i + 1]))
+				new->is_expand = 1;
 			new->file = ft_strdup(str[*i + 1], node->head);
+		}
 		else if (ft_strchr(str[*i + 1], '$'))
 			new->file = expand_string(str[*i + 1], node->mini, node->head);
 		else
@@ -50,8 +65,7 @@ int	handle_redir(char **str, int *i, t_parsing *node, t_tokens **last)
 		node->token = new;
 	else
 		(*last)->next = new;
-	*last = new;
-	return (1);
+	return (*last = new, 1);
 }
 
 static void	handle_pipe(char **pipes, t_mini *mini,

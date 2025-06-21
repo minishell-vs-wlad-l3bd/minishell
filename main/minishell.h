@@ -14,7 +14,7 @@
 # define MINISHELL_H
 
 # include <stdio.h>
-#include <limits.h>
+# include <limits.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -34,6 +34,7 @@ typedef struct tokens
 	int				append;
 	int				heredoc;
 	int				input;
+	int				is_expand;
 	int				output;
 	char			*file;
 	struct tokens	*next;

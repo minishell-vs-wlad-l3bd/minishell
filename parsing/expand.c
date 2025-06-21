@@ -60,8 +60,6 @@ static char	*prepare_and_expand(char *result, char *var_start,
 	if (!var_name)
 		return (NULL);
 	value = expand_value(var_start + 1, mini, head);
-	if (!value)
-		return (NULL);
 	before = ft_substr(result, 0, var_start - result, head);
 	if (!before)
 		return (NULL);
