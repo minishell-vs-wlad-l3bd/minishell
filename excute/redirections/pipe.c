@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/21 09:52:55 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 15:43:13 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static void	child_process_exec(t_mini *mini, t_parsing *parss,
 
 	if (!check_type(mini, 0, head, parss))
 		exit(1);
-	cmd_path = find_cmd_path(mini->paths, parss->cmd[0], mini, head);
 	mini->ev = env_list_to_array(mini->env, head);
 	if (is_builtin(parss->cmd[0]))
 	{
@@ -61,6 +60,7 @@ static void	child_process_exec(t_mini *mini, t_parsing *parss,
 	}
 	else
 	{
+		cmd_path = find_cmd_path(mini->paths, parss->cmd[0], mini, head);
 		if (!cmd_path)
 			exit(127);
 		exec_in_child(cmd_path, parss->cmd, mini);

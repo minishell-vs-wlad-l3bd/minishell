@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:35:04 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/14 13:58:07 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 16:15:00 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	do_unset(char **args, t_mini *mini)
 	{
 		if (!is_invalid_identifier(args[i], mini))
 		{
+			mini->exit = 0;
 			remove_env_var(args[i], mini->env);
 			remove_env_var(args[i], mini->export_env);
 		}

@@ -6,13 +6,11 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:13 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/21 11:14:32 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 16:45:56 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main/minishell.h"
-
-int	g_check_signal = 0;
 
 void	handler(int sig)
 {

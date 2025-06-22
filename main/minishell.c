@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/21 10:21:19 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 16:46:00 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,12 @@ int	main(int ac, char **av, char **env)
 	int				n;
 	struct termios	term;
 
+	g_check_signal = 0;
 	n = 0;
 	head = NULL;
 	(void)ac;
 	(void)av;
-	if (!isatty(STDIN_FILENO))
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
 		return (1);
 	disable_echoctl();
 	tcgetattr(STDIN_FILENO, &term);

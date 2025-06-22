@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/22 10:04:25 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:32:54 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 # define MAX_PATH 4096
 
-extern int	g_check_signal;
+int	g_check_signal;
 
 typedef struct tokens
 {
@@ -126,8 +126,7 @@ int			get_type(char *str);
 int			handle_redir(char **str, int *i, t_parsing *node, t_tokens **last);
 t_parsing	*init_all(char **str, t_mini *mini, t_garbege **head);
 void		enable_echoctl(void);
-int			handle_heredoc_token(t_tokens *tok, t_mini *mini,
-				t_garbege **head, char **last_file);
+char		*handle_heredocs(t_tokens *tokens, t_mini *mini, t_garbege **head);
 int			handle_all_redirections(t_tokens *tokens, t_mini *mini);
 void		wait_for_children(pid_t *pids, int count_cmds, t_mini *mini);
 void		cleanup_heredocs(t_parsing *parss);

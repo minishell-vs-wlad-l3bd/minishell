@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:13:20 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/22 10:01:00 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:34:06 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,23 +50,27 @@ void	handle_child_status(int status, t_mini *mini)
 	}
 }
 
-int	handle_heredoc_token(t_tokens *tok, t_mini *mini,
-					t_garbege **head, char **last_file)
+char	*handle_heredocs(t_tokens *tokens, t_mini *mini, t_garbege **head)
 {
-	int	fd;
+	char	*last_file;
 
-	if (*last_file)
-		unlink(*last_file);
-	*last_file = heredoc(mini, head, tok);
-	if (*last_file)
+	last_file = NULL;
+	while (tokens)
 	{
-		fd = open(*last_file, O_RDONLY);
-		if (fd == -1 || dup2(fd, STDIN_FILENO) == -1)
-			exit(1);
-		close(fd);
-		unlink(*last_file);
+		if (tokens->heredoc)
+		{
+			if (last_file)
+			{
+				unlink(last_file);
+				free(last_file);
+			}
+			last_file = heredoc(mini, head, tokens);
+			if (!last_file)
+				return (NULL);
+		}
+		tokens = tokens->next;
 	}
-	return (1);
+	return (last_file);
 }
 
 int	handle_all_redirections(t_tokens *tokens, t_mini *mini)

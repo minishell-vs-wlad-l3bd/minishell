@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/22 10:06:40 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:36:35 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ static char	*get_temp_file(t_garbege **head)
 	return (file);
 }
 
-static void	heredoc_child_process(int fd, t_mini *mini, t_tokens *tok, t_garbege **head)
+static void	heredoc_child_process(int fd, t_mini *mini, t_tokens *tok,
+			t_garbege **head)
 {
 	char	*line;
 	char	*expand;
@@ -40,8 +41,6 @@ static void	heredoc_child_process(int fd, t_mini *mini, t_tokens *tok, t_garbege
 	while (1)
 	{
 		line = readline("> ");
-		if (tok->here_expand)
-			expand = expand_string(line, mini, head);
 		if (!line)
 			exit(0);
 		if (!ft_strcmp(line, tok->file))
@@ -49,6 +48,8 @@ static void	heredoc_child_process(int fd, t_mini *mini, t_tokens *tok, t_garbege
 			free(line);
 			exit(0);
 		}
+		if (tok->here_expand)
+			expand = expand_string(line, mini, head);
 		if (expand)
 			ft_putendl_fd(expand, fd);
 		else
@@ -57,12 +58,31 @@ static void	heredoc_child_process(int fd, t_mini *mini, t_tokens *tok, t_garbege
 	}
 }
 
+static char	*wait_for_heredoc(pid_t pid, int fd, char *filename, t_mini *mini)
+{
+	int	status;
+
+	close(fd);
+	waitpid(pid, &status, 0);
+	setup_parent_signals();
+	if (WIFEXITED(status))
+		mini->exit = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		ft_putstr_fd("\n", STDERR_FILENO);
+		mini->exit = 1;
+		unlink(filename);
+		free(filename);
+		return (NULL);
+	}
+	return (filename);
+}
+
 char	*heredoc(t_mini *mini, t_garbege **head, t_tokens *tok)
 {
 	pid_t	pid;
 	char	*filename;
 	int		fd;
-	int		status;
 
 	filename = get_temp_file(head);
 	if (!filename || !tok->file)
@@ -73,15 +93,11 @@ char	*heredoc(t_mini *mini, t_garbege **head, t_tokens *tok)
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
-		return (close(fd), NULL);
+	{
+		close(fd);
+		return (NULL);
+	}
 	if (pid == 0)
 		heredoc_child_process(fd, mini, tok, head);
-	close(fd);
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		mini->exit = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		if (WTERMSIG(status) == SIGINT)
-			(ft_putstr_fd("\n", STDERR_FILENO), mini->exit = 1);
-	return (setup_parent_signals(), filename);
+	return (wait_for_heredoc(pid, fd, filename, mini));
 }
