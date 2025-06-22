@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 13:24:17 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/16 21:06:46 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 10:04:59 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	prepare_heredocs(t_mini *mini, t_garbege **head)
 			{
 				if (parss->heredoc_file)
 					unlink(parss->heredoc_file);
-				parss->heredoc_file = heredoc(tokens->file, mini, head);
+				parss->heredoc_file = heredoc(mini, head, tokens);
 				if (!parss->heredoc_file)
 					return ;
 			}

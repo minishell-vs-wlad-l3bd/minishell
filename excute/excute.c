@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:44 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/21 14:00:43 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:34:33 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,18 @@ void	execute_cmd(char **cmd, t_mini *mini, t_garbege **head)
 int	check_type(t_mini *mini, int flag, t_garbege **head, t_parsing *parss)
 {
 	char		*last_file;
-	t_tokens	*tokens;
+	int			fd;
 
 	last_file = NULL;
-	tokens = parss->token;
-	while (tokens)
+	if (flag)
+		last_file = handle_heredocs(parss->token, mini, head);
+	if (last_file && flag)
 	{
-		if (tokens->heredoc && flag)
-		{
-			if (!handle_heredoc_token(tokens, mini, head, &last_file))
-				return (0);
-		}
-		tokens = tokens->next;
+		fd = open(last_file, O_RDONLY);
+		if (fd == -1 || dup2(fd, STDIN_FILENO) == -1)
+			return (0);
+		close(fd);
+		unlink(last_file);
 	}
 	return (handle_all_redirections(parss->token, mini));
 }

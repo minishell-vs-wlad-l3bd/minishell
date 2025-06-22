@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/21 09:43:55 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:30:41 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ static int	handle_input_redir(t_tokens *token, t_mini *mini)
 
 int	handle_redirections(t_tokens *token, t_mini *mini)
 {
-	if ((token->output || token->append || token->input) && !token->file)
+	if ((token->output || token->append || token->input)
+		&& (!token->file || token->file[0] == '\0'))
 	{
 		ft_putendl_fd("minishell: ambiguous redirect", 2);
 		mini->exit = 1;

@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 13:14:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/21 11:04:50 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:29:39 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	wait_for_children(pid_t *pids, int count_cmds, t_mini *mini)
 {
 	int	i;
 	int	status;
-	int sigquit;
-	int sigint;
+	int	sigquit;
+	int	sigint;
 
 	i = -1;
 	sigquit = 0;
