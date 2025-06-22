@@ -69,11 +69,9 @@ int	incorect_quotes(char *line)
 int	valid_line(char *line, t_mini *mini)
 {
 	if (special_char(line))
-		return (ft_putendl_fd("Error : d'ont seport special char", 2),
-			mini->exit = 1, 0);
+		return (ft_putendl_fd("Error : d'ont seport special char", 2), 0);
 	if (incorect_quotes(line))
-		return (ft_putendl_fd("Error : incorect quotes", 2),
-			mini->exit = 1, 0);
+		return (ft_putendl_fd("Error : incorect quotes", 2), 0);
 	if (!analys_syntax(line, mini))
 		return (0);
 	return (1);
