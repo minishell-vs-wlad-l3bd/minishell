@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/21 11:07:00 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 10:04:25 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct tokens
 	int				append;
 	int				heredoc;
 	int				input;
-	int				is_expand;
+	int				here_expand;
 	int				output;
 	char			*file;
 	struct tokens	*next;
@@ -92,7 +92,7 @@ int			check_type(t_mini *mini, int flag, t_garbege **head,
 				t_parsing *parss);
 void		execute_pipeline(t_mini *mini, t_garbege **head);
 void		increment_shlvl(t_mini *mini, t_garbege **head);
-char		*heredoc(char *delimiter, t_mini *mini, t_garbege **head);
+char		*heredoc(t_mini *mini, t_garbege **head, t_tokens *tok);
 t_env		*ft_env_lstnew(void *key, void *value, t_garbege **head);
 void		ft_env_lstadd_back(t_env **lst, t_env *new);
 t_env		*env_init(char **env, int flag, t_garbege **head);

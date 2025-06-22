@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/21 11:17:56 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/22 10:06:40 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,33 @@ static char	*get_temp_file(t_garbege **head)
 	return (file);
 }
 
-static void	heredoc_child_process(int fd, const char *delimiter)
+static void	heredoc_child_process(int fd, t_mini *mini, t_tokens *tok, t_garbege **head)
 {
 	char	*line;
+	char	*expand;
 
 	signal(SIGINT, SIG_DFL);
 	while (1)
 	{
 		line = readline("> ");
+		if (tok->here_expand)
+			expand = expand_string(line, mini, head);
 		if (!line)
 			exit(0);
-		if (!ft_strcmp(line, delimiter))
+		if (!ft_strcmp(line, tok->file))
 		{
 			free(line);
 			exit(0);
 		}
-		ft_putendl_fd(line, fd);
+		if (expand)
+			ft_putendl_fd(expand, fd);
+		else
+			ft_putendl_fd(line, fd);
 		free(line);
 	}
 }
 
-char	*heredoc(char *delimiter, t_mini *mini, t_garbege **head)
+char	*heredoc(t_mini *mini, t_garbege **head, t_tokens *tok)
 {
 	pid_t	pid;
 	char	*filename;
@@ -59,7 +65,7 @@ char	*heredoc(char *delimiter, t_mini *mini, t_garbege **head)
 	int		status;
 
 	filename = get_temp_file(head);
-	if (!filename || !delimiter)
+	if (!filename || !tok->file)
 		return (NULL);
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
@@ -69,7 +75,7 @@ char	*heredoc(char *delimiter, t_mini *mini, t_garbege **head)
 	if (pid == -1)
 		return (close(fd), NULL);
 	if (pid == 0)
-		heredoc_child_process(fd, delimiter);
+		heredoc_child_process(fd, mini, tok, head);
 	close(fd);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))

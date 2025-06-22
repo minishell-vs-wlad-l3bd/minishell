@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   valid_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:39:14 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/16 18:52:05 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/22 10:05:25 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	handle_redir(char **str, int *i, t_parsing *node, t_tokens **last)
 		if (new->heredoc)
 		{
 			if (!has_quotes(str[*i + 1]))
-				new->is_expand = 1;
+				new->here_expand = 1;
 			new->file = ft_strdup(str[*i + 1], node->head);
 		}
 		else if (ft_strchr(str[*i + 1], '$'))
