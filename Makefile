@@ -87,11 +87,11 @@ OBGS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBGS) 
+$(NAME): $(OBGS) $(SRC_LIBFT)
 	make -C Libft
 	$(COMP) $(FLAGS) $(OBGS) Libft/libft.a $(SFLAGS) -o $@
 
-%.o: %.c $(HEADRES) $(SRC_LIBFT)
+%.o: %.c $(HEADRES)
 	$(COMP) $(FLAGS) -c $< -o $@
 
 clean:
