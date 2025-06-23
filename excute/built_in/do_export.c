@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:27 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/12 11:30:46 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:36:19 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,4 +116,5 @@ void	do_export(char **args, t_mini *mini, t_garbege **head)
 		while (args[++i])
 			env_add(mini, args[i], head);
 	}
+	mini->exit = 0;
 }

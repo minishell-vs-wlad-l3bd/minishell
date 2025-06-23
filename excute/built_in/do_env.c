@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:46 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/12 11:02:39 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:36:02 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,5 @@ void	do_env(t_mini *mini, t_garbege **head)
 		node = node->next;
 	}
 	printf("%s", buff);
+	mini->exit = 0;
 }

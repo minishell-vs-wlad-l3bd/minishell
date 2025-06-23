@@ -75,4 +75,5 @@ void	do_cd(char **cmd, t_mini *mini, t_garbege **head)
 	update_env(&mini->env, "OLDPWD", cwd, head);
 	update_env(&mini->export_env, "OLDPWD", cwd, head);
 	update_pwd(mini, cwd, target, head);
+	mini->exit = 0;
 }

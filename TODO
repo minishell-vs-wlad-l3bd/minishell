@@ -1,0 +1,15 @@
+------------------------------
+minishell$ echo "       "$USER"'"'"'
+"       "aayad"'"'"'
+------------------------------
+minishell$ echo "       "$USER"'"'"'>""
+"       "aayad"'"'"'> 
+-------------------------------
+minishell$ echo "  $USER "$USER"   "$"USER  $"USER" "$""USER"  '$USER' '$''USER' '$'USER $'USER'    "
+  aayad aayad   USER  USER USER  'aayad' '''USER' ''USER 'USER'
+minishell$ 
+---------------------------------
+minishell$ export a="ls -la"
+minishell$ export b=$a
+not a valid identifier
+-----------------------

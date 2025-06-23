@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:59 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/12 11:01:27 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:36:24 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,5 @@ void	do_pwd(t_mini *mini)
 		printf("%s\n", cwd);
 	else
 		printf("%s\n", get_env_value(mini, "PWD"));
+	mini->exit = 0;
 }

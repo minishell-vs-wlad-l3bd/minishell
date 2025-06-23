@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/14 13:26:06 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:39:11 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,5 @@ void	do_echo(t_mini *mini, t_garbege **head)
 		ft_putstr_fd(buff, 1);
 	else
 		printf("%s\n", buff);
+	mini->exit = 0;
 }
