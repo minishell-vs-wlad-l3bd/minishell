@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 23:22:42 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/24 14:23:49 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ typedef struct tokens
 typedef struct s_parsing
 {
 	char				*heredoc_file;
-	int					is_expand;
 	char				**cmd;
 	t_tokens			*token;
 	t_garbege			**head;
@@ -60,6 +59,7 @@ typedef struct s_env
 
 typedef struct s_mini
 {
+	int			is_expand;
 	pid_t		*pids;
 	int			pipe;
 	int			pipe_in;
@@ -136,5 +136,6 @@ void		parent_cleanup(t_mini *mini, int i, int total_cmds);
 void		prepare_heredocs(t_mini *mini, t_garbege **head);
 int			fork_failed(t_mini *mini);
 void		kill_all(pid_t *pids, int n);
+int			check_valide_name(char *str);
 
 #endif 
