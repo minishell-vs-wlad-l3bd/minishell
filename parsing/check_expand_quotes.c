@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 16:54:28 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/15 16:56:21 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/24 11:32:16 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,31 @@ int	is_inside_double_quotes(char *str, int pos)
 	return (in_double);
 }
 
+int	check_valide_name(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$' && str[i + 1])
+		{
+			i++;
+			if (!ft_isalpha(str[i]) && str[i] != '?'
+				&& str[i] != '_')
+				return (0);
+		}
+		else
+			i++;
+	}
+	return (1);
+}
+
 int	check_quotes_expand(char *str, t_mini *mini)
 {
 	int	i;
 
 	i = 0;
-	if (mini->parss)
-		mini->parss->is_expand = 0;
 	while (str && str[i])
 	{
 		if (str[i] == '$')
@@ -67,7 +85,8 @@ int	check_quotes_expand(char *str, t_mini *mini)
 				return (1);
 			if (str[i + 1] == '"')
 			{
-				mini->parss->is_expand = 1;
+				if (str[i + 2] && str[i + 2] != '"')
+					mini->is_expand = 1;
 				return (1);
 			}
 			if (is_inside_single_quotes(str, i))

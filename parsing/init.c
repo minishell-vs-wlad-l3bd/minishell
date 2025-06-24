@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:48:09 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/17 19:13:57 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/24 10:55:58 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,13 @@ static void	handle_split_case(t_list **cmd_list,
 void	handle_argument(t_list **cmd_list,
 	char *str, t_mini *mini, t_garbege **head)
 {
-	if (ft_strchr(str, '$') && !check_quotes_expand(str, mini))
+	mini->is_expand = 0;
+	if (ft_strchr(str, '$') && !check_quotes_expand(str, mini)
+		&& check_valide_name(str))
 		handle_split_case(cmd_list, str, mini, head);
 	else
 	{
-		if (mini->parss && mini->parss->is_expand)
+		if (mini && mini->is_expand)
 			str++;
 		remove_quotes(str);
 		ft_lstadd_back(cmd_list, ft_lstnew(ft_strdup(str, head), head));

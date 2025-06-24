@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:40:59 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/17 20:21:20 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/24 11:45:28 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,48 +47,41 @@ char	*expand_value(char *str, t_mini *mini, t_garbege **head)
 		return (NULL);
 }
 
-static char	*prepare_and_expand(char *result, char *var_start,
-		t_mini *mini, t_garbege **head)
+static char	*get_expanded_token(char *str,
+	int *i, t_mini *mini, t_garbege **head)
 {
 	char	*var_name;
 	char	*value;
-	char	*before;
-	char	*after;
-	char	*joined;
 
-	var_name = extract_name(var_start + 1, head);
+	if (str[*i + 1] == '\0')
+		return (ft_substr(str, (*i)++, 1, head));
+	var_name = extract_name(&str[*i + 1], head);
 	if (!var_name)
 		return (NULL);
-	value = expand_value(var_start + 1, mini, head);
-	before = ft_substr(result, 0, var_start - result, head);
-	if (!before)
-		return (NULL);
-	after = ft_strdup(var_start + 1 + ft_strlen(var_name), head);
-	if (!after)
-		return (NULL);
-	joined = ft_strjoin(before, value, head);
-	if (!joined)
-		return (NULL);
-	return (ft_strjoin(joined, after, head));
+	value = expand_value(&str[*i + 1], mini, head);
+	*i += ft_strlen(var_name) + 1;
+	if (value)
+		return (ft_strdup(value, head));
+	return (ft_calloc(1, 1, head));
 }
 
 char	*expand_string(char *str, t_mini *mini, t_garbege **head)
 {
-	char	*result;
-	char	*var_start;
-	char	*new_result;
+	char	*res;
+	char	*tmp;
+	int		i;
 
 	if (!str)
 		return (NULL);
-	result = ft_strdup(str, head);
-	var_start = ft_strchr(result, '$');
-	while (var_start)
+	res = ft_calloc(1, 1, head);
+	i = 0;
+	while (str[i])
 	{
-		new_result = prepare_and_expand(result, var_start, mini, head);
-		if (!new_result)
-			return (NULL);
-		result = new_result;
-		var_start = ft_strchr(result, '$');
+		if (str[i] == '$' && str[i + 1])
+			tmp = get_expanded_token(str, &i, mini, head);
+		else
+			tmp = ft_substr(str, i++, 1, head);
+		res = ft_strjoin(res, tmp, head);
 	}
-	return (result);
+	return (res);
 }
