@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:13:20 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 21:42:18 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/24 14:39:59 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,10 @@ void	exec_in_child(char *cmd_path, char **cmd, t_mini *mini)
 	setup_child_signals();
 	enable_echoctl();
 	execve(cmd_path, cmd, mini->ev);
-	perror("execve ");
-	exit(errno);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
+	exit(127);
 }
 
 void	handle_child_status(int status, t_mini *mini)
