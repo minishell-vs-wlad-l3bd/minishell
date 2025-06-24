@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/22 16:46:00 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:38:13 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ int	norm_main(t_mini *mini, t_garbege **head, struct termios *term)
 		if (!str)
 		{
 			ft_putstr_fd("exit\n", STDERR_FILENO);
-			reset_std_fds(mini);
-			return (mini->exit);
+			return (reset_std_fds(mini), mini->exit);
 		}
 		if (*str && !check_input(str, mini, head))
 			ft_execute(mini, head);

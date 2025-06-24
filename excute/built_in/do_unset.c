@@ -6,19 +6,19 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:35:04 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/22 16:15:00 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/23 21:21:25 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main/minishell.h"
 
-static void	remove_env_var(char *var, t_env *env)
+static void	remove_env_var(char *var, t_env **env)
 {
 	t_env	*temp;
 	t_env	*prev;
 	size_t	len;
 
-	temp = env;
+	temp = *env;
 	prev = NULL;
 	len = ft_strlen(var);
 	while (temp)
@@ -28,7 +28,7 @@ static void	remove_env_var(char *var, t_env *env)
 			if (prev)
 				prev->next = temp->next;
 			else
-				env = temp->next;
+				*env = temp->next;
 			return ;
 		}
 		prev = temp;
@@ -68,10 +68,10 @@ void	do_unset(char **args, t_mini *mini)
 	{
 		if (!is_invalid_identifier(args[i], mini))
 		{
-			mini->exit = 0;
-			remove_env_var(args[i], mini->env);
-			remove_env_var(args[i], mini->export_env);
+			remove_env_var(args[i], &(mini->env));
+			remove_env_var(args[i], &(mini->export_env));
 		}
 		i++;
 	}
+	mini->exit = 0;
 }
