@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 22:48:40 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/24 14:02:49 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	handle_input_redir(t_tokens *token, t_mini *mini)
 int	handle_redirections(t_tokens *token, t_mini *mini)
 {
 	if ((token->output || token->append || token->input)
-		&& (!token->file || token->file[0] == '\0'))
+		&& (!token->file))
 	{
 		ft_putendl_fd("minishell: No such file or directory", 2);
 		mini->exit = 1;
