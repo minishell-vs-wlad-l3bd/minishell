@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 21:28:23 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/23 22:48:40 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	handle_redirections(t_tokens *token, t_mini *mini)
 	if ((token->output || token->append || token->input)
 		&& (!token->file || token->file[0] == '\0'))
 	{
-		ft_putendl_fd("minishell: ambiguous redirect", 2);
+		ft_putendl_fd("minishell: No such file or directory", 2);
 		mini->exit = 1;
 		return (0);
 	}

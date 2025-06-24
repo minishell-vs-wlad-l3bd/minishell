@@ -13,3 +13,7 @@ minishell$ export a="ls -la"
 minishell$ export b=$a
 not a valid identifier
 -----------------------
+bash-3.2$ export a="     "
+bash-3.2$ ls>l$a
+bash-3.2$ cat l
+---------------------------

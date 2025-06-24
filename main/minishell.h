@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/22 20:32:54 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/23 23:22:42 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void		execute_builtin(char **cmd, t_mini *mini, t_garbege **head);
 void		ft_execute(t_mini *mini, t_garbege **head);
 int			is_builtin(char *str);
 void		do_cd(char **cmd, t_mini *mini, t_garbege **head);
-void		do_echo(t_mini *mini, t_garbege **head);
+void		do_echo(char **cmd, t_mini *mini, t_garbege **head);
 void		do_unset(char **args, t_mini *mini);
 void		do_env(t_mini *mini, t_garbege **head);
 void		do_pwd(t_mini *mini);

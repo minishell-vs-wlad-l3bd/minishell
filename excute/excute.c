@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:44 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 21:34:48 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/23 23:20:25 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	execute_builtin(char **cmd, t_mini *mini, t_garbege **head)
 	if (!ft_strcmp(cmd[0], "cd"))
 		do_cd(cmd, mini, head);
 	else if (!ft_strcmp(cmd[0], "echo"))
-		do_echo(mini, head);
+		do_echo(cmd, mini, head);
 	else if (!ft_strcmp(cmd[0], "exit"))
 		do_exit(cmd, mini, head);
 	else if (!ft_strcmp(cmd[0], "pwd"))

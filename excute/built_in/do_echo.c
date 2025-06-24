@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 12:39:11 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/23 23:22:08 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,21 @@ static char	*join_args(char **cmd, int i, t_garbege **head)
 	return (buff);
 }
 
-void	do_echo(t_mini *mini, t_garbege **head)
+void	do_echo(char **cmd, t_mini *mini, t_garbege **head)
 {
-	t_parsing	*parss;
 	int			i;
 	int			nl;
 	char		*buff;
 
-	parss = mini->parss;
 	i = 1;
 	i = 1;
 	nl = 0;
-	while (parss->cmd[i] && is_valid_n_flag(parss->cmd[i]))
+	while (cmd[i] && is_valid_n_flag(cmd[i]))
 	{
 		nl = 1;
 		i++;
 	}
-	buff = join_args(parss->cmd, i, head);
+	buff = join_args(cmd, i, head);
 	if (nl)
 		ft_putstr_fd(buff, 1);
 	else
