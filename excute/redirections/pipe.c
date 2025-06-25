@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 23:23:08 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/25 11:17:48 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	child_process_exec(t_mini *mini, t_parsing *parss,
 	{
 		cmd_path = find_cmd_path(mini->paths, parss->cmd[0], mini, head);
 		if (!cmd_path)
-			exit(127);
+			exit(mini->exit);
 		exec_in_child(cmd_path, parss->cmd, mini);
 	}
 }

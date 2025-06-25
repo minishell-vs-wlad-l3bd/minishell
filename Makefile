@@ -1,5 +1,5 @@
 NAME = minishell
-FLAGS =  -Wall -Wextra -Werror
+FLAGS =  -Wall -Wextra -Werror -fsanitize=address
 SFLAGS = -lreadline
 COMP = cc
 HEADRES = main/minishell.h Libft/libft.h

@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/22 20:36:35 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/25 11:02:16 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ static char	*wait_for_heredoc(pid_t pid, int fd, char *filename, t_mini *mini)
 		ft_putstr_fd("\n", STDERR_FILENO);
 		mini->exit = 1;
 		unlink(filename);
-		free(filename);
 		return (NULL);
 	}
 	return (filename);

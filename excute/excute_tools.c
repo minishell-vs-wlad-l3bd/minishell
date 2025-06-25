@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:13:20 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/24 14:39:59 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/25 11:02:05 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,7 @@ char	*handle_heredocs(t_tokens *tokens, t_mini *mini, t_garbege **head)
 		if (tokens->heredoc)
 		{
 			if (last_file)
-			{
 				unlink(last_file);
-				free(last_file);
-			}
 			last_file = heredoc(mini, head, tokens);
 			if (!last_file)
 				return (NULL);

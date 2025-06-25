@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 15:08:26 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 21:32:29 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/25 11:08:05 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,29 @@ static char	*build_cmd_path(char *path, char *cmd, t_garbege **head)
 	cmd_p = ft_strjoin(tmp, cmd, head);
 	if (!cmd_p)
 		return (NULL);
-	if (access(cmd_p, F_OK | X_OK) == 0)
+	if (access(cmd_p, F_OK) == 0)
 		return (cmd_p);
 	return (NULL);
 }
 
-char	*find_cmd_path(char **paths, char *cmd, t_mini *mini, t_garbege **head)
+static char	*handle_cmd_path(char **paths, char *cmd, t_mini *mini,
+		t_garbege **head)
 {
 	int		i;
 	char	*cmd_p;
 
+	i = -1;
+	while (paths && paths[++i])
+	{
+		cmd_p = build_cmd_path(paths[i], cmd, head);
+		if (cmd_p && access(cmd_p, X_OK) == 0)
+			return (cmd_p);
+	}
+	return (mini->exit = check_error(1, cmd), NULL);
+}
+
+char	*find_cmd_path(char **paths, char *cmd, t_mini *mini, t_garbege **head)
+{
 	if (!cmd)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
@@ -89,12 +102,5 @@ char	*find_cmd_path(char **paths, char *cmd, t_mini *mini, t_garbege **head)
 	}
 	if (!paths || !paths[0])
 		return (mini->exit = check_error(2, cmd), NULL);
-	i = -1;
-	while (paths[++i])
-	{
-		cmd_p = build_cmd_path(paths[i], cmd, head);
-		if (cmd_p)
-			return (cmd_p);
-	}
-	return (mini->exit = check_error(1, cmd), NULL);
+	return (handle_cmd_path(paths, cmd, mini, head));
 }

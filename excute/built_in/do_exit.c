@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:53 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/24 14:16:40 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/25 10:52:17 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	do_exit(char **args, t_mini *mini, t_garbege **head)
 	status = 0;
 	if (args[1])
 	{
-		
 		if (!is_numeric_str(args[1]) || is_too_big(args[1]) || !args[1][0])
 			exit_with_error(head);
 		if (args[2])
