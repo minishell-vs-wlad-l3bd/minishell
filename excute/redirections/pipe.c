@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/25 11:17:48 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:32:48 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static void	child_process_setup_io(t_mini *mini, t_parsing *parss,
 	int	fd;
 
 	setup_pipe_io(mini, i == 0, i == total_cmds - 1);
+	printf("%d\n", total_cmds);
 	if (parss->heredoc_file)
 	{
 		fd = open(parss->heredoc_file, O_RDONLY);

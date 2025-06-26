@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:27 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 13:36:19 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:10:59 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,18 +64,6 @@ static int	is_valid_env_name(char *name)
 	return (1);
 }
 
-static void	update(t_mini *mini, char *key, char *value, t_garbege **head)
-{
-	if (!is_valid_env_name(key))
-	{
-		ft_putstr_fd("not a valid identifier\n", STDERR_FILENO);
-		mini->exit = 1;
-		return ;
-	}
-	update_env(&mini->env, key, value, head);
-	update_env(&mini->export_env, key, value, head);
-}
-
 static void	env_add(t_mini *mini, char *s, t_garbege **head)
 {
 	char	*key;
@@ -100,7 +88,8 @@ static void	env_add(t_mini *mini, char *s, t_garbege **head)
 		key = ft_malloc(key_len + 1, head);
 		ft_strlcpy(key, s, key_len + 1);
 		value = ft_strdup(ft_strchr(s, '=') + 1, head);
-		update(mini, key, value, head);
+		update_env(&mini->env, key, value, head);
+		update_env(&mini->export_env, key, value, head);
 	}
 }
 
