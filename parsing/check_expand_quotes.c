@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_expand_quotes.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 16:54:28 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/24 11:32:16 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/25 18:50:17 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	check_valide_name(char *str)
 		{
 			i++;
 			if (!ft_isalpha(str[i]) && str[i] != '?'
-				&& str[i] != '_')
+				&& str[i] != '_' && str[i] != '$')
 				return (0);
 		}
 		else

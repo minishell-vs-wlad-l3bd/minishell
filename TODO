@@ -8,6 +8,7 @@ minishell$ echo "       "$USER"'"'"'>""
 minishell$ echo "  $USER "$USER"   "$"USER  $"USER" "$""USER"  '$USER' '$''USER' '$'USER $'USER'    "
   aayad aayad   USER  USER USER  'aayad' '''USER' ''USER 'USER'
 minishell$ 
+
 ---------------------------------
 minishell$ export a="ls -la"
 minishell$ export b=$a
@@ -22,3 +23,7 @@ bash-3.2$ cat l
 ---------------------------
 ---------------------------
 ---------------------------
+
+echo "$""$USER"
+
+export a="this 'sdf' s"
