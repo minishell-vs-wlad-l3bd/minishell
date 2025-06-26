@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:40:59 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/24 11:45:28 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/26 11:39:41 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ char	*expand_string(char *str, t_mini *mini, t_garbege **head)
 
 	if (!str)
 		return (NULL);
-	res = ft_calloc(1, 1, head);
 	i = 0;
+	res = ft_strdup("", head);
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1])
