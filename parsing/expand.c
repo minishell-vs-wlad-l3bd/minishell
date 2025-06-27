@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:40:59 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/26 11:39:41 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:32:06 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char	*get_expanded_token(char *str,
 	*i += ft_strlen(var_name) + 1;
 	if (value)
 		return (ft_strdup(value, head));
-	return (ft_calloc(1, 1, head));
+	return (ft_strdup("", head));
 }
 
 char	*expand_string(char *str, t_mini *mini, t_garbege **head)
@@ -83,5 +83,6 @@ char	*expand_string(char *str, t_mini *mini, t_garbege **head)
 			tmp = ft_substr(str, i++, 1, head);
 		res = ft_strjoin(res, tmp, head);
 	}
+	mini->exit = 0;
 	return (res);
 }

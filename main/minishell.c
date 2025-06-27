@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 12:38:13 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/27 21:33:12 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,14 @@ void	reset_std_fds(t_mini *mini)
 	}
 }
 
-void	mini_init(t_mini *mini, char **env, t_garbege **head)
+int	mini_init(t_mini *mini, char **env, t_garbege **head)
 {
+	char	*pwd;
+
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (ft_putendl_fd("run minishell in correct PATH", 2), 1);
+	free(pwd);
 	ft_memset(mini, 0, sizeof(t_mini));
 	mini->ev = env;
 	mini->in = -1;
@@ -50,6 +56,7 @@ void	mini_init(t_mini *mini, char **env, t_garbege **head)
 	mini->env = env_init(env, 0, head);
 	mini->export_env = env_init(env, 1, head);
 	backup_std_fds(mini);
+	return (0);
 }
 
 int	norm_main(t_mini *mini, t_garbege **head, struct termios *term)
@@ -95,7 +102,8 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	disable_echoctl();
 	tcgetattr(STDIN_FILENO, &term);
-	mini_init(&mini, env, &head);
+	if (mini_init(&mini, env, &head))
+		return (1);
 	increment_shlvl(&mini, &head);
 	setup_parent_signals();
 	n = norm_main(&mini, &head, &term);

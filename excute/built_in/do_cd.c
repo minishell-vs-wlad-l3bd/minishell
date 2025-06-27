@@ -14,11 +14,12 @@
 
 static void	update_pwd(t_mini *mini, char *cwd, char *target, t_garbege **head)
 {
-	char	new_pwd[MAX_PATH];
+	char	*new_pwd;
 	char	*tmp;
 	char	*pwd;
 
-	if (!getcwd(new_pwd, sizeof(new_pwd)))
+	new_pwd = getcwd(NULL, 0);
+	if (!new_pwd)
 	{
 		tmp = ft_strjoin(cwd, "/", head);
 		pwd = ft_strjoin(tmp, target, head);
@@ -30,6 +31,7 @@ static void	update_pwd(t_mini *mini, char *cwd, char *target, t_garbege **head)
 		update_env(&mini->env, "PWD", new_pwd, head);
 		update_env(&mini->export_env, "PWD", new_pwd, head);
 	}
+	free(new_pwd);
 }
 
 static char	*get_cd_target(char **cmd, t_mini *mini)
@@ -50,30 +52,55 @@ static char	*get_cd_target(char **cmd, t_mini *mini)
 	return (target);
 }
 
-void	do_cd(char **cmd, t_mini *mini, t_garbege **head)
+static int	prepare_cd(t_mini *mini, char **cwd, char **target, char **cmd)
 {
-	char	cwd[MAX_PATH];
-	char	*target;
-
-	if (!getcwd(cwd, sizeof(cwd)))
-		ft_strlcpy(cwd, get_env_value(mini, "PWD"), MAX_PATH);
-	target = get_cd_target(cmd, mini);
-	if (!target)
-		return ;
-	if (chdir(target) != 0)
+	*cwd = getcwd(NULL, 0);
+	if (!*cwd)
+	{
+		*cwd = get_env_value(mini, "PWD");
+		if (!*cwd)
+			return (-1);
+	}
+	*target = get_cd_target(cmd, mini);
+	if (!*target)
+		return (-1);
+	if (chdir(*target) != 0)
 	{
 		perror("minishell: cd");
 		mini->exit = 1;
-		return ;
+		return (-1);
 	}
-	if (!getcwd(NULL, 0))
+	if (*cwd == get_env_value(mini, "PWD"))
+		return (0);
+	else
+		return (1);
+}
+
+void	do_cd(char **cmd, t_mini *mini, t_garbege **head)
+{
+	char	*cwd;
+	char	*cwd2;
+	char	*target;
+	int		free_cwd;
+	int		free_cwd2;
+
+	free_cwd = prepare_cd(mini, &cwd, &target, cmd);
+	if (free_cwd == -1)
+		return (free(cwd));
+	cwd2 = getcwd(NULL, 0);
+	if (!cwd2)
 	{
-		ft_putstr_fd("cd: error retrieving current directory:", 2);
-		ft_putstr_fd(" getcwd: cannot access parent directories:", 2);
-		ft_putstr_fd(" No such file or directory\n", 2);
+		free_cwd2 = 0;
+		ft_putendl_fd("cd: error retrieving current directory: getcwd: ", 2);
 	}
+	else
+		free_cwd2 = 1;
 	update_env(&mini->env, "OLDPWD", cwd, head);
 	update_env(&mini->export_env, "OLDPWD", cwd, head);
 	update_pwd(mini, cwd, target, head);
 	mini->exit = 0;
+	if (free_cwd)
+		free(cwd);
+	if (free_cwd2)
+		free(cwd2);
 }

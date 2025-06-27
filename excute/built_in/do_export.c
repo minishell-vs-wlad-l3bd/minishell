@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:27 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/26 11:10:59 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:41:05 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ static void	handle_append(t_mini *mini, char *str, t_garbege **head)
 	else
 	{
 		update_env(&mini->env, key, ++value_part, head);
-		update_env(&mini->export_env, key, ++value_part, head);
+		update_env(&mini->export_env, key, value_part, head);
 	}
 }
 
-static int	is_valid_env_name(char *name)
+int	is_valid_env_name(char *name)
 {
 	char	*p;
 

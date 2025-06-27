@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:48:09 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/26 11:20:47 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/27 20:55:43 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,23 @@ static void	handle_split_case(t_list **cmd_list,
 	expanded = expand_string(str, mini, head);
 	if (!expanded)
 		return ;
-	tmp = split(expanded, head);
-	if (!tmp)
-		return ;
-	j = 0;
-	while (tmp[j])
+	if (mini->split)
 	{
-		remove_quotes(tmp[j]);
-		ft_lstadd_back(cmd_list,
-			ft_lstnew(ft_strdup(tmp[j++], head), head));
+		remove_quotes(expanded);
+		ft_lstadd_back(cmd_list, ft_lstnew(ft_strdup(expanded, head), head));
+	}
+	else
+	{
+		tmp = split(expanded, head);
+		if (!tmp)
+			return ;
+		j = 0;
+		while (tmp[j])
+		{
+			remove_quotes(tmp[j]);
+			ft_lstadd_back(cmd_list,
+				ft_lstnew(ft_strdup(tmp[j++], head), head));
+		}
 	}
 }
 
@@ -83,8 +91,12 @@ t_parsing	*init_all(char **str, t_mini *mini, t_garbege **head)
 	cmd_list = NULL;
 	last = NULL;
 	i = 0;
+	mini->split = 0;
 	while (str[i])
 	{
+		if (!ft_strcmp(str[0], "export") && str[i + 1]
+			&& is_valid_env_name(str[i + 1]))
+			mini->split = 1;
 		if (get_type(str[i]) && str[i + 1])
 		{
 			if (!handle_redir(str, &i, node, &last))

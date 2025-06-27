@@ -52,7 +52,7 @@ all : $(NAME)
 $(NAME): $(OBJ)
 	ar rc $(NAME) $(OBJ)
 
-%.o: %.c libft.h
+%.o: %.c libft.h ../main/minishell.h
 	$(COMP) $(FLAG) -c -o $@ $<
 
 clean:

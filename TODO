@@ -1,0 +1,40 @@
+------------------------------------
+➜  mini git:(master) ✗ mkdir test
+➜  mini git:(master) ✗ cd test
+➜  test git:(master) ✗ rm -rf ../t
+➜  test git:(master) ✗ rm -rf ../test
+➜  test ../minishell
+minishell$ pwd
+/mnt/homes/mohidbel/Desktop/mini/test
+minishell$ cd .
+cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+minishell$ pwd
+/mnt/homes/mohidbel/Desktop/mini/test/.
+------------------------------------
+minishell$ export a="hi 'l's"
+minishell$ echo $a
+hi ls
+minishell$
+------------------------------------
+minishell$ echo "'"'$PWD'"'"'"'""
+""$PWD"""""
+------------------------------------
+minishell$ echo $$$$$$$$$$$$$$$$$$
+$
+------------------------------------
+------------------------------------
+remove PATH_MAX
+and free getcwd(null, 0);
+------------------------------------
+------------------------------------
+------------------------------------
+------------------------------------
+------------------------------------
+------------------------------------
+------------------------------------
+------------------------------------
+------------------------------------
+------------------------------------
+------------------------------------
+------------------------------------
+------------------------------------

@@ -43,10 +43,12 @@ void	update_env(t_env **env, char *key, char *value, t_garbege **head)
 
 static void	env_pre_add(t_env **node, int flg, t_garbege **head)
 {
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
 	if (!flg)
 	{
-		ft_env_lstadd_back(node,
-			ft_env_lstnew("PWD", getcwd(NULL, PATH_MAX), head));
+		ft_env_lstadd_back(node, ft_env_lstnew("PWD", cwd, head));
 		ft_env_lstadd_back(node,
 			ft_env_lstnew("SHLVL", ft_strdup("1", head), head));
 		ft_env_lstadd_back(node,
@@ -57,16 +59,15 @@ static void	env_pre_add(t_env **node, int flg, t_garbege **head)
 	}
 	else
 	{
-		ft_env_lstadd_back(node,
-			ft_env_lstnew("OLDPWD", NULL, head));
-		ft_env_lstadd_back(node,
-			ft_env_lstnew("PWD", getcwd(NULL, MAX_PATH), head));
+		ft_env_lstadd_back(node, ft_env_lstnew("OLDPWD", NULL, head));
+		ft_env_lstadd_back(node, ft_env_lstnew("PWD", cwd, head));
 		ft_env_lstadd_back(node,
 			ft_env_lstnew("PATH",
 				"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", head));
 		ft_env_lstadd_back(node,
 			ft_env_lstnew("SHLVL", ft_strdup("1", head), head));
 	}
+	free (cwd);
 }
 
 int	double_arr_len(char **str)
