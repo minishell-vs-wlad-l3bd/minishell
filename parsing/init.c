@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:48:09 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/28 15:50:14 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 16:45:08 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,9 @@ void	handle_argument(t_list **cmd_list,
 	}
 }
 
-static void	check_export_split(char **str, t_mini *mini)
+static void	check_export_split(char **str, int i, t_mini *mini)
 {
-	if (!ft_strcmp(str[0], "export")
+	if (!ft_strcmp(str[0], "export") && i == 0
 		&& str[1] && is_valid_env_name(str[1]))
 		mini->split = 1;
 }
@@ -125,7 +125,7 @@ t_parsing	*init_all(char **str, t_mini *mini, t_garbege **head)
 	mini->split = 0;
 	while (str[i])
 	{
-		check_export_split(str, mini);
+		check_export_split(str, i, mini);
 		if (get_type(str[i]) && str[i + 1])
 		{
 			if (!handle_redir(str, &i, node, &last))
