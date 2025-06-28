@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/26 17:43:06 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 10:00:36 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ static void	child_process_exec(t_mini *mini, t_parsing *parss,
 {
 	char	*cmd_path;
 
-	if (!check_type(mini, 0, head, parss))
-		exit(1);
+	if (parss->cmd[0])
+		if (!check_type(mini, 0, head, parss))
+			exit(1);
 	mini->ev = env_list_to_array(mini->env, head);
 	if (is_builtin(parss->cmd[0]))
 	{
@@ -103,6 +104,7 @@ void	execute_pipeline(t_mini *mini, t_garbege **head)
 	int			count_cmds;
 
 	parss = mini->parss;
+	handle_empty_redirections(parss);
 	count_cmds = ft_lstsize_pipe(parss);
 	prepare_heredocs(mini, head);
 	mini->pids = ft_malloc(sizeof(pid_t) * count_cmds, head);

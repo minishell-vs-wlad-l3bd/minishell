@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/27 20:41:31 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 15:14:47 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ char		**split_by_pipe(const char *s, t_mini *mini, t_garbege **head);
 int			check_input(char *str, t_mini *mini, t_garbege **head);
 int			handle_redirections(t_tokens *token, t_mini *mini);
 char		*add_spaces(char *line, t_garbege **head);
-char		**split(const char *s, t_garbege **head);
 char		**env_list_to_array(t_env *env, t_garbege **head);
 int			check_quotes_expand(char *str, t_mini *mini);
 void		print_sort_env(t_mini *mini);
@@ -139,5 +138,6 @@ int			fork_failed(t_mini *mini);
 void		kill_all(pid_t *pids, int n);
 int			check_valide_name(char *str);
 int			is_valid_env_name(char *name);
+char		**split(const char *s, int use_quote, t_garbege **head);
 
 #endif 
