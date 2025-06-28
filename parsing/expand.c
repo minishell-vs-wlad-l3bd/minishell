@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:40:59 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/27 17:32:06 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 12:29:01 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,10 @@ char	*expand_string(char *str, t_mini *mini, t_garbege **head)
 	res = ft_strdup("", head);
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1])
+		if (str[i] == '$' && str[i + 1] && str[i + 1] == '$')
+			tmp = ft_substr(str, i++, 1, head);
+		else if (str[i] == '$' && str[i + 1]
+			&& str[i + 1] != '\'' && str[i + 1] != '"')
 			tmp = get_expanded_token(str, &i, mini, head);
 		else
 			tmp = ft_substr(str, i++, 1, head);

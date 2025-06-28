@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:18:33 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/16 14:52:06 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/28 12:28:09 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,20 @@ int	get_type(char *str)
 int	ft_isspace(char c)
 {
 	return (c == ' ' || (c >= 9 && c <= 13));
+}
+
+char	*add_quotes(const char *str, t_garbege **head)
+{
+	size_t	len;
+	char	*quoted;
+
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str);
+	quoted = ft_malloc(len + 3, head);
+	quoted[0] = '"';
+	ft_memcpy(quoted + 1, str, len);
+	quoted[len + 1] = '"';
+	quoted[len + 2] = '\0';
+	return (quoted);
 }

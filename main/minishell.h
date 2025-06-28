@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/28 15:14:47 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 15:26:17 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,8 @@ int			fork_failed(t_mini *mini);
 void		kill_all(pid_t *pids, int n);
 int			check_valide_name(char *str);
 int			is_valid_env_name(char *name);
-char		**split(const char *s, int use_quote, t_garbege **head);
+char		**split(const char *s, t_garbege **head);
+char		*add_quotes(const char *str, t_garbege **head);
+void		handle_empty_redirections(t_parsing *parss);
 
 #endif 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 11:12:00 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/12 11:13:41 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 11:27:20 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ void	print_sort_env(t_mini *mini)
 	node = mini->export_env;
 	while (node)
 	{
-		printf("declare -x ");
-		printf("%s", node->key);
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(node->key, 1);
 		if (node->value)
 			printf("=\"%s\"\n", node->value);
 		else

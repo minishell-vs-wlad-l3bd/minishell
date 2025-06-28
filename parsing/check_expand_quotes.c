@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_expand_quotes.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 16:54:28 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/25 18:50:17 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 12:27:22 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ int	check_valide_name(char *str)
 		{
 			i++;
 			if (!ft_isalpha(str[i]) && str[i] != '?'
-				&& str[i] != '_' && str[i] != '$')
+				&& str[i] != '_' && str[i] != '$'
+				&& str[i] != '"' && str[i] != '\'')
 				return (0);
 		}
 		else
@@ -76,8 +77,8 @@ int	check_quotes_expand(char *str, t_mini *mini)
 {
 	int	i;
 
-	i = 0;
-	while (str && str[i])
+	i = -1;
+	while (str && str[++i])
 	{
 		if (str[i] == '$')
 		{
@@ -87,6 +88,8 @@ int	check_quotes_expand(char *str, t_mini *mini)
 			{
 				if (str[i + 2] && str[i + 2] != '"')
 					mini->is_expand = 1;
+				else
+					mini->is_expand = 0;
 				return (1);
 			}
 			if (is_inside_single_quotes(str, i))
@@ -95,7 +98,6 @@ int	check_quotes_expand(char *str, t_mini *mini)
 				return (0);
 			return (0);
 		}
-		i++;
 	}
 	return (0);
 }
