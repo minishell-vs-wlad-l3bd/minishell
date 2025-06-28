@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/27 20:41:31 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 14:36:23 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,5 +139,6 @@ int			fork_failed(t_mini *mini);
 void		kill_all(pid_t *pids, int n);
 int			check_valide_name(char *str);
 int			is_valid_env_name(char *name);
+char		*add_quotes(const char *str, t_garbege **head);
 
 #endif 

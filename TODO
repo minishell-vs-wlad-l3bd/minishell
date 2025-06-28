@@ -4,8 +4,6 @@ minishell$ echo $a
 hi ls
 minishell$
 ------------------------------------
-minishell$ echo "'"'$PWD'"'"'"'""
-""$PWD"""""
 ------------------------------------
 minishell$ echo $$$$$$$$$$$$$$$$$$
 $

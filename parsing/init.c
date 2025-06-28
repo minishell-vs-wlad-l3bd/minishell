@@ -3,14 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:48:09 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/27 20:55:43 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 15:14:53 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main/minishell.h"
+
+void	remove_quotesa(char *str)
+{
+	int		i;
+	int		j;
+	char	quote;
+
+	i = 0;
+	j = 0;
+	quote = 0;
+	while (str[i])
+	{
+		if ((str[i] == '\'' || str[i] == '"'))
+		{
+			if (!quote)
+				quote = str[i];
+			else if (quote == str[i])
+				quote = 0;
+			else
+				str[j++] = str[i];
+		}
+		else
+			str[j++] = str[i];
+		i++;
+	}
+	str[j] = '\0';
+}
 
 char	**list_to_array(t_list *lst, t_garbege **head)
 {
@@ -32,7 +59,7 @@ char	**list_to_array(t_list *lst, t_garbege **head)
 	return (arr);
 }
 
-static void	handle_split_case(t_list **cmd_list,
+static void	handle_split_case(t_list **cmd_lst,
 	char *str, t_mini *mini, t_garbege **head)
 {
 	char	*expanded;
@@ -44,11 +71,13 @@ static void	handle_split_case(t_list **cmd_list,
 		return ;
 	if (mini->split)
 	{
+		expanded = add_quotes(expanded, head);
 		remove_quotes(expanded);
-		ft_lstadd_back(cmd_list, ft_lstnew(ft_strdup(expanded, head), head));
+		ft_lstadd_back(cmd_lst, ft_lstnew(ft_strdup(expanded, head), head));
 	}
 	else
 	{
+		expanded = add_quotes(expanded, head);
 		tmp = split(expanded, head);
 		if (!tmp)
 			return ;
@@ -56,8 +85,7 @@ static void	handle_split_case(t_list **cmd_list,
 		while (tmp[j])
 		{
 			remove_quotes(tmp[j]);
-			ft_lstadd_back(cmd_list,
-				ft_lstnew(ft_strdup(tmp[j++], head), head));
+			ft_lstadd_back(cmd_lst, ft_lstnew(ft_strdup(tmp[j++], head), head));
 		}
 	}
 }
@@ -73,9 +101,16 @@ void	handle_argument(t_list **cmd_list,
 	{
 		if (mini && mini->is_expand)
 			str++;
-		remove_quotes(str);
+		remove_quotesa(str);
 		ft_lstadd_back(cmd_list, ft_lstnew(ft_strdup(str, head), head));
 	}
+}
+
+static void	check_export_split(char **str, t_mini *mini)
+{
+	if (!ft_strcmp(str[0], "export")
+		&& str[1] && is_valid_env_name(str[1]))
+		mini->split = 1;
 }
 
 t_parsing	*init_all(char **str, t_mini *mini, t_garbege **head)
@@ -86,17 +121,14 @@ t_parsing	*init_all(char **str, t_mini *mini, t_garbege **head)
 	int			i;
 
 	node = ft_calloc(1, sizeof(t_parsing), head);
-	node->mini = mini;
-	node->head = head;
+	(1) && (node->mini = mini, node->head = head);
 	cmd_list = NULL;
 	last = NULL;
 	i = 0;
 	mini->split = 0;
 	while (str[i])
 	{
-		if (!ft_strcmp(str[0], "export") && str[i + 1]
-			&& is_valid_env_name(str[i + 1]))
-			mini->split = 1;
+		check_export_split(str, mini);
 		if (get_type(str[i]) && str[i + 1])
 		{
 			if (!handle_redir(str, &i, node, &last))
