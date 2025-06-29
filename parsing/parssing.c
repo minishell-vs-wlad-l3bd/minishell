@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 16:57:22 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/28 15:39:47 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 10:33:03 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,25 +30,24 @@ int	count_char(const char *str, char c)
 
 void	remove_quotes(char *str)
 {
-	int	i;
-	int	j;
-	int	state;
-	int	q;
-	int	r;
+	int		i;
+	int		j;
+	char	quote;
 
 	i = 0;
 	j = 0;
-	state = 0;
-	r = (count_char(str, '\'') % 2 == 0);
-	q = (count_char(str, '"') % 2 == 0);
+	quote = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'' && !state && r)
-			state = '\'';
-		else if (str[i] == '"' && !state && q)
-			state = '"';
-		else if (str[i] == state)
-			state = 0;
+		if ((str[i] == '\'' || str[i] == '"'))
+		{
+			if (!quote)
+				quote = str[i];
+			else if (quote == str[i])
+				quote = 0;
+			else
+				str[j++] = str[i];
+		}
 		else
 			str[j++] = str[i];
 		i++;

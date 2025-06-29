@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:53 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/25 10:52:17 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:33:19 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ static int	is_numeric_str(char *s)
 	if (!s)
 		return (0);
 	i = 0;
+	while (s[i] == ' ' || (s[i] >= 9 && s[i] <= 13))
+		i++;
 	if (s[i] == '+' || s[i] == '-')
 		i++;
 	while (s[i])

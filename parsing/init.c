@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:48:09 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/28 16:45:08 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 10:44:24 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ static void	handle_split_case(t_list **cmd_lst,
 	char	**tmp;
 	int		j;
 
+	j = 0;
 	expanded = expand_string(str, mini, head);
 	if (!expanded)
 		return ;
@@ -79,9 +80,14 @@ static void	handle_split_case(t_list **cmd_lst,
 		tmp = split(expanded, head);
 		if (!tmp)
 			return ;
-		j = 0;
 		while (tmp[j])
 		{
+			remove_quotes(tmp[j]);
+			if (tmp[j][0] == '\0' && j != 0)
+			{
+				j++;
+				continue ;
+			}
 			ft_lstadd_back(cmd_lst, ft_lstnew(ft_strdup(tmp[j++], head), head));
 		}
 	}
@@ -105,9 +111,12 @@ void	handle_argument(t_list **cmd_list,
 
 static void	check_export_split(char **str, int i, t_mini *mini)
 {
-	if (!ft_strcmp(str[0], "export") && i == 0
-		&& str[1] && is_valid_env_name(str[1]))
-		mini->split = 1;
+	mini->split = 0;
+	if (!ft_strcmp(str[0], "export"))
+	{
+		if (str[i] && is_valid_env_name(str[i]))
+			mini->split = 1;
+	}
 }
 
 t_parsing	*init_all(char **str, t_mini *mini, t_garbege **head)
@@ -122,7 +131,6 @@ t_parsing	*init_all(char **str, t_mini *mini, t_garbege **head)
 	cmd_list = NULL;
 	last = NULL;
 	i = 0;
-	mini->split = 0;
 	while (str[i])
 	{
 		check_export_split(str, i, mini);

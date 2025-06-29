@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/28 15:26:17 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 21:07:36 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@
 # include "../Libft/libft.h"
 # include <stdbool.h>
 # include <dirent.h>
-
-# define MAX_PATH 4096
 
 int	g_check_signal;
 

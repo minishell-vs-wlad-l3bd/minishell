@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:13:20 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/25 11:02:05 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:56:22 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	is_directory(char *cmd)
 	DIR	*dir;
 
 	dir = opendir(cmd);
-	if (dir)
+	if (dir && ft_strchr(cmd, '/'))
 	{
 		closedir(dir);
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:59 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 13:36:24 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 09:46:20 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,15 @@
 
 void	do_pwd(t_mini *mini)
 {
-	char	cwd[MAX_PATH];
+	char	*cwd;
 
-	if (getcwd(cwd, sizeof(cwd)))
-		printf("%s\n", cwd);
+	cwd = getcwd(NULL, 0);
+	if (cwd)
+	{
+		ft_putendl_fd(cwd, 1);
+		free(cwd);
+	}
 	else
-		printf("%s\n", get_env_value(mini, "PWD"));
+		ft_putendl_fd(get_env_value(mini, "PWD"), 1);
 	mini->exit = 0;
 }
