@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/28 19:14:53 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 11:16:27 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,16 @@
 
 static char	*get_temp_file(t_garbege **head)
 {
-	char	*file;
-	int		fd;
-	char	*pid_str;
+	char		*file;
+	int			fd;
+	char		*pid_str;
+	static int	n;
 
-	pid_str = ft_itoa(0000, head);
+	pid_str = ft_itoa(n, head);
+	if (pid_str)
+		n++;
+	else
+		return (NULL);
 	if (!pid_str)
 		return (NULL);
 	file = ft_strjoin("/tmp/heredoc_", pid_str, head);
