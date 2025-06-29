@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:48:09 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/29 14:38:41 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/29 15:46:36 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ static void	handle_split_case(t_list **cmd_lst,
 
 	j = 0;
 	expanded = expand_string(str, mini, head);
-	if (!expanded)
-		return ;
 	if (mini->split)
 	{
 		remove_quotes(expanded);
