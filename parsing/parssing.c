@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 16:57:22 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/29 10:33:03 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 14:26:07 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,26 @@ int	check_quotes(char *line)
 		return (i);
 	}
 	return (0);
+}
+
+char	**list_to_array(t_list *lst, t_garbege **head)
+{
+	int		size;
+	char	**arr;
+	int		i;
+
+	i = 0;
+	size = ft_lstsize(lst);
+	arr = ft_calloc(size + 1, sizeof(char *), head);
+	if (!arr)
+		return (NULL);
+	while (lst)
+	{
+		arr[i++] = lst->content;
+		lst = lst->next;
+	}
+	arr[i] = NULL;
+	return (arr);
 }
 
 int	is_quote(char c)

@@ -6,30 +6,30 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:48:09 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/29 11:29:23 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/29 14:38:41 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main/minishell.h"
 
-char	**list_to_array(t_list *lst, t_garbege **head)
+static void	handle_split_else_case(t_list **cmd_lst,
+	char **tmp, t_garbege **head)
 {
-	int		size;
-	char	**arr;
-	int		i;
+	int	j;
 
-	i = 0;
-	size = ft_lstsize(lst);
-	arr = ft_calloc(size + 1, sizeof(char *), head);
-	if (!arr)
-		return (NULL);
-	while (lst)
+	j = 0;
+	while (tmp[j])
 	{
-		arr[i++] = lst->content;
-		lst = lst->next;
+		remove_quotes(tmp[j]);
+		if (tmp[j][0] == '\0' && j != 0)
+		{
+			j++;
+			continue ;
+		}
+		else
+			ft_lstadd_back(cmd_lst, ft_lstnew(ft_strdup(tmp[j], head), head));
+		j++;
 	}
-	arr[i] = NULL;
-	return (arr);
 }
 
 static void	handle_split_case(t_list **cmd_lst,
@@ -53,20 +53,11 @@ static void	handle_split_case(t_list **cmd_lst,
 		tmp = split(expanded, head);
 		if (!tmp)
 			return ;
-		while (tmp[j])
-		{
-			remove_quotes(tmp[j]);
-			if (tmp[j][0] == '\0' && j != 0)
-			{
-				j++;
-				continue ;
-			}
-			ft_lstadd_back(cmd_lst, ft_lstnew(ft_strdup(tmp[j++], head), head));
-		}
+		handle_split_else_case(cmd_lst, tmp, head);
 	}
 }
 
-void	handle_argument(t_list **cmd_list,
+static void	handle_argument(t_list **cmd_list,
 	char *str, t_mini *mini, t_garbege **head)
 {
 	mini->is_expand = 0;
@@ -77,7 +68,7 @@ void	handle_argument(t_list **cmd_list,
 	{
 		if (mini && mini->is_expand)
 			str++;
-		remove_quotesa(str);
+		remove_quotes(str);
 		ft_lstadd_back(cmd_list, ft_lstnew(ft_strdup(str, head), head));
 	}
 }
