@@ -3,41 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:48:09 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/29 10:44:24 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 11:29:23 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main/minishell.h"
-
-void	remove_quotesa(char *str)
-{
-	int		i;
-	int		j;
-	char	quote;
-
-	i = 0;
-	j = 0;
-	quote = 0;
-	while (str[i])
-	{
-		if ((str[i] == '\'' || str[i] == '"'))
-		{
-			if (!quote)
-				quote = str[i];
-			else if (quote == str[i])
-				quote = 0;
-			else
-				str[j++] = str[i];
-		}
-		else
-			str[j++] = str[i];
-		i++;
-	}
-	str[j] = '\0';
-}
 
 char	**list_to_array(t_list *lst, t_garbege **head)
 {

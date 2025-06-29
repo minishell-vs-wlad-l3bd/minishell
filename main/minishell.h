@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/28 21:07:36 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 11:30:11 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,5 +139,6 @@ int			is_valid_env_name(char *name);
 char		**split(const char *s, t_garbege **head);
 char		*add_quotes(const char *str, t_garbege **head);
 void		handle_empty_redirections(t_parsing *parss);
+void		remove_quotesa(char *str);
 
 #endif 

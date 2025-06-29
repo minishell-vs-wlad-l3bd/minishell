@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:18:33 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/28 12:28:09 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/29 11:29:33 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,31 @@ char	*add_quotes(const char *str, t_garbege **head)
 	quoted[len + 1] = '"';
 	quoted[len + 2] = '\0';
 	return (quoted);
+}
+
+void	remove_quotesa(char *str)
+{
+	int		i;
+	int		j;
+	char	quote;
+
+	i = 0;
+	j = 0;
+	quote = 0;
+	while (str[i])
+	{
+		if ((str[i] == '\'' || str[i] == '"'))
+		{
+			if (!quote)
+				quote = str[i];
+			else if (quote == str[i])
+				quote = 0;
+			else
+				str[j++] = str[i];
+		}
+		else
+			str[j++] = str[i];
+		i++;
+	}
+	str[j] = '\0';
 }
