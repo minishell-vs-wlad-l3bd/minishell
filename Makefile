@@ -9,7 +9,6 @@ SRCS = 	main/minishell.c\
 		env/get_env.c\
 		env/env_tools.c\
 		excute/built_in/do_cd.c\
-		excute/attr.c\
 		excute/built_in/do_echo.c\
 		parsing/parssing.c\
 		excute/built_in/do_unset.c\

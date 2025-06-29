@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:44 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/28 20:59:33 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 14:25:38 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	execute_builtin(char **cmd, t_mini *mini, t_garbege **head)
 		do_env(mini, head);
 }
 
-void	execute_cmd(char **cmd, t_mini *mini, t_garbege **head)
+static void	execute_cmd(char **cmd, t_mini *mini, t_garbege **head)
 {
 	int		status;
 	pid_t	pid;

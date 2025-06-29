@@ -6,13 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/27 21:33:12 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 14:49:47 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	backup_std_fds(t_mini *mini)
+static void	backup_std_fds(t_mini *mini)
 {
 	if (mini->in == -1)
 		mini->in = dup(STDIN_FILENO);
@@ -22,7 +22,7 @@ void	backup_std_fds(t_mini *mini)
 		perror("minishell: dup error");
 }
 
-void	reset_std_fds(t_mini *mini)
+static void	reset_std_fds(t_mini *mini)
 {
 	if (mini->in != -1)
 	{
@@ -38,10 +38,12 @@ void	reset_std_fds(t_mini *mini)
 	}
 }
 
-int	mini_init(t_mini *mini, char **env, t_garbege **head)
+static int	mini_init(t_mini *mini, char **env, t_garbege **head)
 {
 	char	*pwd;
 
+	g_check_signal = 0;
+	rl_catch_signals = 0;
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (ft_putendl_fd("run minishell in correct PATH", 2), 1);
@@ -59,7 +61,7 @@ int	mini_init(t_mini *mini, char **env, t_garbege **head)
 	return (0);
 }
 
-int	norm_main(t_mini *mini, t_garbege **head, struct termios *term)
+static int	norm_main(t_mini *mini, t_garbege **head, struct termios *term)
 {
 	char	*str;
 
@@ -93,14 +95,12 @@ int	main(int ac, char **av, char **env)
 	int				n;
 	struct termios	term;
 
-	g_check_signal = 0;
+	(void)av;
+	(void)ac;
 	n = 0;
 	head = NULL;
-	(void)ac;
-	(void)av;
 	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
 		return (1);
-	disable_echoctl();
 	tcgetattr(STDIN_FILENO, &term);
 	if (mini_init(&mini, env, &head))
 		return (1);
