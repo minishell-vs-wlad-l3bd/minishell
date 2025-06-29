@@ -6,13 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:13 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/22 16:45:56 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 14:26:13 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main/minishell.h"
 
-void	handler(int sig)
+static void	handler(int sig)
 {
 	if (sig == SIGINT)
 	{

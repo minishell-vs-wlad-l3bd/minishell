@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 16:54:28 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/29 12:08:22 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 12:25:36 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ int	check_quotes_expand(char *str, t_mini *mini)
 		{
 			if (!str[i + 1])
 				return (1);
-			if (str[i + 1] == '"')
+			if (str[i + 1] == '"' || str[i + 1] == '\'')
 			{
-				if (str[i + 2] && str[i + 2] != '"' && str[i + 2] != '\'')
+				if (str[i + 2] && (str[i + 2] != '"' || str[i + 2] != '\''))
 					mini->is_expand = 1;
 				else
 					mini->is_expand = 0;

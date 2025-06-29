@@ -70,7 +70,7 @@ static void	env_pre_add(t_env **node, int flg, t_garbege **head)
 	free (cwd);
 }
 
-int	double_arr_len(char **str)
+static int	double_arr_len(char **str)
 {
 	int	i;
 

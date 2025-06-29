@@ -6,13 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/29 12:13:32 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 14:25:05 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main/minishell.h"
 
-void	setup_pipe_io(t_mini *mini, int is_first, int is_last)
+static void	setup_pipe_io(t_mini *mini, int is_first, int is_last)
 {
 	if (!is_first)
 	{

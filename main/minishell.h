@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/29 14:29:43 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/29 14:56:20 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ void		ft_free_all(t_garbege **head);
 void		remove_quotes(char *str);
 void		setup_child_signals(void);
 void		setup_parent_signals(void);
-void		disable_echoctl(void);
 int			ft_isspace(char c);
 int			check_quotes(char *line);
 int			analys_syntax(char *line, t_mini *mini);
@@ -123,7 +122,6 @@ int			is_quote(char c);
 int			get_type(char *str);
 int			handle_redir(char **str, int *i, t_parsing *node, t_tokens **last);
 t_parsing	*init_all(char **str, t_mini *mini, t_garbege **head);
-void		enable_echoctl(void);
 char		*handle_heredocs(t_tokens *tokens, t_mini *mini, t_garbege **head);
 int			handle_all_redirections(t_tokens *tokens, t_mini *mini);
 void		wait_for_children(pid_t *pids, int count_cmds, t_mini *mini);
