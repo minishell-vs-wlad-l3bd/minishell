@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:48:09 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/29 15:46:36 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/29 17:11:23 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ static void	handle_split_case(t_list **cmd_lst,
 {
 	char	*expanded;
 	char	**tmp;
-	int		j;
 
-	j = 0;
 	expanded = expand_string(str, mini, head);
 	if (mini->split)
 	{

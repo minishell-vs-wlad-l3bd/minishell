@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:35:04 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/23 21:21:25 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 17:17:15 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,19 @@ static int	is_invalid_identifier(char *str, t_mini *mini)
 void	do_unset(char **args, t_mini *mini)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	while (args[i])
 	{
-		if (!is_invalid_identifier(args[i], mini))
+		j = is_invalid_identifier(args[i], mini);
+		if (!j)
 		{
 			remove_env_var(args[i], &(mini->env));
 			remove_env_var(args[i], &(mini->export_env));
 		}
 		i++;
 	}
-	mini->exit = 0;
+	if (!j)
+		mini->exit = 0;
 }

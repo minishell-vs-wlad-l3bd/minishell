@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/29 14:25:05 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 22:26:05 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,8 @@ void	execute_pipeline(t_mini *mini, t_garbege **head)
 	parss = mini->parss;
 	handle_empty_redirections(parss);
 	count_cmds = ft_lstsize_pipe(parss);
-	prepare_heredocs(mini, head);
+	if (!prepare_heredocs(mini, head))
+		return ;
 	mini->pids = ft_malloc(sizeof(pid_t) * count_cmds, head);
 	if (!fork_and_setup_processes(mini, head, parss, mini->pids))
 		return ;

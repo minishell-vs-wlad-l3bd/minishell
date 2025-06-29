@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 15:08:26 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/28 20:26:22 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 22:43:37 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ static char	*handle_cmd_path(char **paths, char *cmd, t_mini *mini,
 
 char	*find_cmd_path(char **paths, char *cmd, t_mini *mini, t_garbege **head)
 {
+	char	*cmd_p;
+
 	if (!cmd)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
@@ -103,6 +105,16 @@ char	*find_cmd_path(char **paths, char *cmd, t_mini *mini, t_garbege **head)
 		return (mini->exit = check_error(0, cmd), NULL);
 	}
 	if (!paths || !paths[0])
-		return (mini->exit = check_error(2, cmd), NULL);
+	{
+		cmd_p = build_cmd_path(".", cmd, head);
+		if (is_directory(cmd_p))
+			return (ft_putstr_fd("is a directory\n", 2), mini->exit = 126, NULL);
+		else if (cmd_p && access(cmd_p, X_OK) == 0)
+			return (cmd_p);
+		else if (cmd_p && access(cmd_p, X_OK) == -1)
+			return (mini->exit = check_error(0, cmd), NULL);
+		else
+			return (mini->exit = check_error(2, cmd), NULL);
+	}
 	return (handle_cmd_path(paths, cmd, mini, head));
 }
