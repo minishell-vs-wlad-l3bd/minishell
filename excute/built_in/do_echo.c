@@ -6,18 +6,20 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/26 10:58:30 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:48:52 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main/minishell.h"
 
-static int	is_valid_n_flag(const char *str)
+static int	is_valid_n_flag(char *str)
 {
 	int	i;
 
 	i = 1;
 	if (str[0] != '-')
+		return (0);
+	if (str[1] != 'n')
 		return (0);
 	while (str[i])
 	{
