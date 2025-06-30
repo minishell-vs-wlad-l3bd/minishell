@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:53 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/28 18:33:19 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 17:15:42 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	do_exit(char **args, t_mini *mini, t_garbege **head)
 		status = ft_atoi(args[1]);
 	}
 	else if (!mini->pipe)
-		exit(mini->exit);
+		(ft_putstr_fd("exit\n", 2), ft_free_all(head), exit(mini->exit));
 	if (mini->in != STDIN_FILENO)
 		close(mini->in);
 	if (mini->out != STDOUT_FILENO)

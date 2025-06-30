@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:27 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/27 20:41:05 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 22:50:09 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,20 @@ static void	env_add(t_mini *mini, char *s, t_garbege **head)
 void	do_export(char **args, t_mini *mini, t_garbege **head)
 {
 	int	i;
+	int	status;
 
 	i = 0;
+	status = 0;
 	if (!args[1])
 		print_sort_env(mini);
 	else
 	{
 		while (args[++i])
+		{
 			env_add(mini, args[i], head);
+			if (mini->exit == 1)
+				status = 1;
+		}
 	}
-	mini->exit = 0;
+	mini->exit = status;
 }

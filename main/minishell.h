@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/30 12:54:20 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/30 15:53:07 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void		cleanup_heredocs(t_parsing *parss);
 int			ft_lstsize_pipe(t_parsing *parss);
 int			create_pipe(t_mini *mini);
 void		parent_cleanup(t_mini *mini, int i, int total_cmds);
-void		prepare_heredocs(t_mini *mini, t_garbege **head);
+int			prepare_heredocs(t_mini *mini, t_garbege **head);
 int			fork_failed(t_mini *mini);
 void		kill_all(pid_t *pids, int n);
 int			is_valid_env_name(char *name);

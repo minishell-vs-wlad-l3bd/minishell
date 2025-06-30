@@ -6,13 +6,13 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 13:24:17 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/28 15:57:03 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/29 22:23:25 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main/minishell.h"
 
-void	prepare_heredocs(t_mini *mini, t_garbege **head)
+int	prepare_heredocs(t_mini *mini, t_garbege **head)
 {
 	t_parsing	*parss;
 	t_tokens	*tokens;
@@ -29,12 +29,13 @@ void	prepare_heredocs(t_mini *mini, t_garbege **head)
 					unlink(parss->heredoc_file);
 				parss->heredoc_file = heredoc(mini, head, tokens);
 				if (!parss->heredoc_file)
-					return ;
+					return (0);
 			}
 			tokens = tokens->next;
 		}
 		parss = parss->next;
 	}
+	return (1);
 }
 
 int	fork_failed(t_mini *mini)
