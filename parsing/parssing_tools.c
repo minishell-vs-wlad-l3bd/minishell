@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssing_tools.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:18:33 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/29 15:57:15 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:53:44 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,22 @@ int	get_type(char *str)
 int	ft_isspace(char c)
 {
 	return (c == ' ' || (c >= 9 && c <= 13));
+}
+
+char	*return_quote(char **str)
+{
+	int	i;
+
+	i = 0;
+	if (!str || !(*str))
+		return (NULL);
+	while ((*str)[i])
+	{
+		if ((*str)[i] == 6)
+			(*str)[i] = '\'';
+		else if ((*str)[i] == 7)
+			(*str)[i] = '"';
+		i++;
+	}
+	return (*str);
 }

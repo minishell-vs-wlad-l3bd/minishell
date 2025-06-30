@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/30 15:48:52 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:55:53 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	do_echo(char **cmd, t_mini *mini, t_garbege **head)
 	int			nl;
 	char		*buff;
 
-	i = 1;
 	i = 1;
 	nl = 0;
 	while (cmd[i] && is_valid_n_flag(cmd[i]))

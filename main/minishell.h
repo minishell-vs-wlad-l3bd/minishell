@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/29 22:24:26 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:53:07 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ typedef struct s_env
 
 typedef struct s_mini
 {
-	int			is_expand;
 	int			split;
 	pid_t		*pids;
 	int			pipe;
@@ -132,9 +131,9 @@ void		parent_cleanup(t_mini *mini, int i, int total_cmds);
 int			prepare_heredocs(t_mini *mini, t_garbege **head);
 int			fork_failed(t_mini *mini);
 void		kill_all(pid_t *pids, int n);
-int			check_valide_name(char *str);
 int			is_valid_env_name(char *name);
 char		**split(const char *s, t_garbege **head);
+char		*return_quote(char **str);
 void		handle_empty_redirections(t_parsing *parss);
 char		**list_to_array(t_list *lst, t_garbege **head);
 

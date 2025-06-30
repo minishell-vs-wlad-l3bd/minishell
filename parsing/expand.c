@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:40:59 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/29 15:56:27 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:53:24 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*extract_name(char *str, t_garbege **head)
 	i = 0;
 	if (!str || !*str)
 		return (NULL);
+	if (ft_isdigit(str[0]))
+		return (ft_strdup("1", head));
 	if (str[i] == '?')
 		return (ft_strdup("?", head));
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
@@ -65,6 +67,22 @@ static char	*get_expanded_token(char *str,
 	return (ft_strdup("", head));
 }
 
+static char	*replace_quotes(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			str[i] = 6;
+		else if (str[i] == '"')
+			str[i] = 7;
+		i++;
+	}
+	return (str);
+}
+
 char	*expand_string(char *str, t_mini *mini, t_garbege **head)
 {
 	char	*res;
@@ -79,9 +97,13 @@ char	*expand_string(char *str, t_mini *mini, t_garbege **head)
 	{
 		if (str[i] == '$' && str[i + 1] && str[i + 1] == '$')
 			tmp = ft_substr(str, i++, 1, head);
-		else if (str[i] == '$' && str[i + 1]
-			&& str[i + 1] != '\'' && str[i + 1] != '"')
+		else if (str[i] == '$' && str[i + 1])
+		{
 			tmp = get_expanded_token(str, &i, mini, head);
+			if (tmp[0] && tmp[0] == '1')
+				i++;
+			tmp = replace_quotes(tmp);
+		}
 		else
 			tmp = ft_substr(str, i++, 1, head);
 		res = ft_strjoin(res, tmp, head);

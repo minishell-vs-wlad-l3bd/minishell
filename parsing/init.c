@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:48:09 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/29 17:11:23 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:53:34 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void	handle_split_else_case(t_list **cmd_lst,
 	while (tmp[j])
 	{
 		remove_quotes(tmp[j]);
+		return_quote(&tmp[j]);
 		if (tmp[j][0] == '\0' && j != 0)
 		{
 			j++;
@@ -42,6 +43,7 @@ static void	handle_split_case(t_list **cmd_lst,
 	if (mini->split)
 	{
 		remove_quotes(expanded);
+		return_quote(&expanded);
 		ft_lstadd_back(cmd_lst, ft_lstnew(ft_strdup(expanded, head), head));
 	}
 	else
@@ -56,14 +58,10 @@ static void	handle_split_case(t_list **cmd_lst,
 static void	handle_argument(t_list **cmd_list,
 	char *str, t_mini *mini, t_garbege **head)
 {
-	mini->is_expand = 0;
-	if (ft_strchr(str, '$') && !check_quotes_expand(str, mini)
-		&& check_valide_name(str))
+	if (ft_strchr(str, '$') && !check_quotes_expand(str, mini))
 		handle_split_case(cmd_list, str, mini, head);
 	else
 	{
-		if (mini && mini->is_expand)
-			str++;
 		remove_quotes(str);
 		ft_lstadd_back(cmd_list, ft_lstnew(ft_strdup(str, head), head));
 	}
