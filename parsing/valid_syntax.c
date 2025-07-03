@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   valid_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:39:14 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/28 15:27:34 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:53:12 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	handle_redir(char **str, int *i, t_parsing *node, t_tokens **last)
 			new->file = ft_strdup(str[*i + 1], node->head);
 		if (new->file)
 			remove_quotes(new->file);
-		(*i)++;
+		(return_quote(&new->file), (*i)++);
 	}
 	if (!node->token)
 		node->token = new;

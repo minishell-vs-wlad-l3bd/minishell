@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:18:33 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/30 15:53:44 by aayad            ###   ########.fr       */
+/*   Updated: 2025/07/03 17:56:26 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,26 @@ char	*return_quote(char **str)
 		i++;
 	}
 	return (*str);
+}
+
+int	count_heredoc(const char *str)
+{
+	int	count;
+	int	i;
+
+	i = 0;
+	count = 0;
+	while (str[i] && str[i + 1])
+	{
+		if (str[i] == '<' && str[i + 1] == '<')
+		{
+			count++;
+			if (count >= 17)
+				return (-1);
+			i += 2;
+		}
+		else
+			i++;
+	}
+	return (count);
 }

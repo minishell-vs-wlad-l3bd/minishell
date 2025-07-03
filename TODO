@@ -1,0 +1,14 @@
+minishell$ echo '"'"'"'"'"$0"'"'"'"'"'
+"'""'"
+minishell$ echo '"'"'"'"'"$?"'"'"'"'"'
+"'"0"'"
+minishell$ echo '"'"'"'"'"$1"'"'"'"'"'
+"'""'"
+minishell$ echo ~
+~
+
+
+should splite ""export is not export
+ export""  m=$a n=$a$a l=$a
+
+ 

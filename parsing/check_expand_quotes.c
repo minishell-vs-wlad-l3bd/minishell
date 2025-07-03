@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 16:54:28 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/30 12:54:07 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/30 16:06:00 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	is_inside_double_quotes(char *str, int pos)
 	return (in_double);
 }
 
-int	check_quotes_expand(char *str, t_mini *mini)
+int	check_quotes_expand(char *str)
 {
 	int	i;
 

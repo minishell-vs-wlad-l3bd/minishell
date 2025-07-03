@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:40:59 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/30 15:53:24 by aayad            ###   ########.fr       */
+/*   Updated: 2025/07/03 17:55:38 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,11 @@ char	*expand_string(char *str, t_mini *mini, t_garbege **head)
 	{
 		if (str[i] == '$' && str[i + 1] && str[i + 1] == '$')
 			tmp = ft_substr(str, i++, 1, head);
-		else if (str[i] == '$' && str[i + 1])
+		else if (str[i] == '$' && str[i + 1]
+			&& (ft_isalnum(str[i + 1])
+				|| str[i + 1] == '_' || str[i + 1] == '?'))
 		{
 			tmp = get_expanded_token(str, &i, mini, head);
-			if (tmp[0] && tmp[0] == '1')
-				i++;
 			tmp = replace_quotes(tmp);
 		}
 		else

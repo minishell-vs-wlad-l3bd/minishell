@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/30 15:53:07 by aayad            ###   ########.fr       */
+/*   Updated: 2025/07/03 17:56:50 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int			check_input(char *str, t_mini *mini, t_garbege **head);
 int			handle_redirections(t_tokens *token, t_mini *mini);
 char		*add_spaces(char *line, t_garbege **head);
 char		**env_list_to_array(t_env *env, t_garbege **head);
-int			check_quotes_expand(char *str, t_mini *mini);
+int			check_quotes_expand(char *str);
 void		print_sort_env(t_mini *mini);
 int			check_is_key(t_env **env, char *key);
 void		exec_in_child(char *cmd_path, char **cmd, t_mini *mini);
@@ -136,5 +136,6 @@ char		**split(const char *s, t_garbege **head);
 char		*return_quote(char **str);
 void		handle_empty_redirections(t_parsing *parss);
 char		**list_to_array(t_list *lst, t_garbege **head);
+int			count_heredoc(const char *str);
 
 #endif 

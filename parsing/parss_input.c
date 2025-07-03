@@ -6,7 +6,7 @@
 /*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 16:42:53 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/24 15:55:03 by aayad            ###   ########.fr       */
+/*   Updated: 2025/07/03 17:57:30 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,12 @@ int	check_input(char *str, t_mini *mini, t_garbege **head)
 		return (1);
 	if (!valid_line(str, mini))
 		return (mini->exit = 258, 1);
+	if (count_heredoc(str) == -1)
+	{
+		ft_putendl_fd("Error to many herdoc", 2);
+		ft_free_all(head);
+		exit(2);
+	}
 	valid_syntax(str, mini, head);
 	return (0);
 }
