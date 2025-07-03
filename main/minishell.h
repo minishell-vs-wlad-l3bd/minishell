@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/07/03 16:39:44 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:02:48 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,5 +138,6 @@ char		*return_quote(char **str);
 void		handle_empty_redirections(t_parsing *parss, t_mini *mini);
 char		**list_to_array(t_list *lst, t_garbege **head);
 void		reset_std_fds(t_mini *mini);
+int			count_heredoc(const char *str);
 
 #endif 

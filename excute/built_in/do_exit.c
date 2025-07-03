@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:53 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/07/03 14:30:08 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:25:26 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static void	exit_with_error(t_mini *mini, t_garbege **head)
 	ft_putstr_fd("exit\n", 2);
 	ft_putstr_fd("minishell: exit: numeric argument required\n", 2);
 	ft_free_all(head);
+	rl_clear_history();
 	exit(255);
 }
 
@@ -91,11 +92,12 @@ void	do_exit(char **args, t_mini *mini, t_garbege **head)
 		status = ft_atoi(args[1]);
 	}
 	else if (!mini->pipe)
-		(close(mini->in), close(mini->out),
+		(close(mini->in), close(mini->out), rl_clear_history(),
 			ft_putstr_fd("exit\n", 2), ft_free_all(head), exit(mini->exit));
 	close(mini->in);
 	close(mini->out);
 	if (mini->pipe)
-		(ft_free_all(head), exit(status % 256));
-	(ft_putstr_fd("exit\n", 2), ft_free_all(head), exit(status % 256));
+		(ft_free_all(head), rl_clear_history(), exit(status % 256));
+	(ft_putstr_fd("exit\n", 2), rl_clear_history(),
+		ft_free_all(head), exit(status % 256));
 }

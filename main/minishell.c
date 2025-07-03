@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/07/03 16:14:09 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:47:42 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,28 +57,31 @@ static int	mini_init(t_mini *mini, char **env, t_garbege **head)
 
 static int	norm_main(t_mini *mini, t_garbege **head, struct termios *term)
 {
+	char	*tmp;
 	char	*str;
 
 	while (1)
 	{
-		str = readline("minishell$ ");
+		tmp = readline("minishell$ ");
 		if (g_check_signal == SIGINT)
 		{
 			mini->exit = 1;
 			g_check_signal = (int)SIG_DFL;
 		}
-		if (!str)
+		if (!tmp)
 		{
 			ft_putstr_fd("exit\n", STDERR_FILENO);
 			return (mini->exit);
 		}
+		str = ft_strdup(tmp, head);
+		free(tmp);
 		if (*str && !check_input(str, mini, head))
 			ft_execute(mini, head);
 		tcsetattr(STDIN_FILENO, TCSANOW, term);
-		free(str);
 	}
 	return (0);
 }
+// void f(){system("leaks minishell");}
 
 int	main(int ac, char **av, char **env)
 {
@@ -87,6 +90,7 @@ int	main(int ac, char **av, char **env)
 	int				n;
 	struct termios	term;
 
+	// atexit(f);
 	(void)av;
 	(void)ac;
 	n = 0;
