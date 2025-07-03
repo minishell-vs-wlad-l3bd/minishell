@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   do_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:39 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/29 23:52:06 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/30 15:55:53 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main/minishell.h"
 
-static int	is_valid_n_flag(const char *str)
+static int	is_valid_n_flag(char *str)
 {
 	int	i;
 
 	i = 1;
 	if (str[0] != '-')
+		return (0);
+	if (str[1] != 'n')
 		return (0);
 	while (str[i])
 	{

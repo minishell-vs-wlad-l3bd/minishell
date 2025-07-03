@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 15:08:26 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/29 22:43:37 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/06/30 15:56:30 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ char	*find_cmd_path(char **paths, char *cmd, t_mini *mini, t_garbege **head)
 	{
 		cmd_p = build_cmd_path(".", cmd, head);
 		if (is_directory(cmd_p))
-			return (ft_putstr_fd("is a directory\n", 2), mini->exit = 126, NULL);
+			return (ft_putstr_fd("is directory\n", 2), mini->exit = 126, NULL);
 		else if (cmd_p && access(cmd_p, X_OK) == 0)
 			return (cmd_p);
 		else if (cmd_p && access(cmd_p, X_OK) == -1)
