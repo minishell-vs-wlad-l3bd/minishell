@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:36:44 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/29 22:42:16 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:49:50 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,17 @@ static void	execute_cmd(char **cmd, t_mini *mini, t_garbege **head)
 
 int	check_type(t_mini *mini, int flag, t_garbege **head, t_parsing *parss)
 {
-	char		*last_file;
-	int			fd;
+	char	*last_file;
+	int		fd;
+	int		status;
 
 	last_file = NULL;
 	if (flag)
-		last_file = handle_heredocs(parss->token, mini, head);
+	{
+		status = handle_heredocs(parss->token, mini, head, &last_file);
+		if (status == -1)
+			return (0);
+	}
 	if (last_file && flag)
 	{
 		fd = open(last_file, O_RDONLY);
@@ -91,17 +96,24 @@ void	ft_execute(t_mini *mini, t_garbege **head)
 {
 	char	**paths;
 
+	mini->in = dup(STDIN_FILENO);
+	mini->out = dup(STDOUT_FILENO);
 	paths = ft_split(get_env_value(mini, "PATH"), ':', head);
 	mini->paths = paths;
 	if (mini->pipe)
 	{
 		execute_pipeline(mini, head);
+		reset_std_fds(mini);
 		return ;
 	}
 	if (!check_type(mini, 1, head, mini->parss))
+	{
+		reset_std_fds(mini);
 		return ;
+	}
 	if (is_builtin(mini->parss->cmd[0]))
 		execute_builtin(mini->parss->cmd, mini, head);
 	else
 		execute_cmd(mini->parss->cmd, mini, head);
+	reset_std_fds(mini);
 }

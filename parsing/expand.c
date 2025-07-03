@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:40:59 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/30 15:53:24 by aayad            ###   ########.fr       */
+/*   Updated: 2025/07/02 18:17:14 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,8 @@ char	*expand_string(char *str, t_mini *mini, t_garbege **head)
 		else if (str[i] == '$' && str[i + 1])
 		{
 			tmp = get_expanded_token(str, &i, mini, head);
-			if (tmp[0] && tmp[0] == '1')
-				i++;
+			// if (tmp[0] && tmp[0] == '1')
+			// 	i++;
 			tmp = replace_quotes(tmp);
 		}
 		else

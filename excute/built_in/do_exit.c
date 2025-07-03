@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:34:53 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/29 17:15:42 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:30:08 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,10 @@ static int	is_numeric_str(char *s)
 	return (1);
 }
 
-static void	exit_with_error(t_garbege **head)
+static void	exit_with_error(t_mini *mini, t_garbege **head)
 {
+	close(mini->in);
+	close(mini->out);
 	ft_putstr_fd("exit\n", 2);
 	ft_putstr_fd("minishell: exit: numeric argument required\n", 2);
 	ft_free_all(head);
@@ -78,7 +80,7 @@ void	do_exit(char **args, t_mini *mini, t_garbege **head)
 	if (args[1])
 	{
 		if (!is_numeric_str(args[1]) || is_too_big(args[1]) || !args[1][0])
-			exit_with_error(head);
+			exit_with_error(mini, head);
 		if (args[2])
 		{
 			mini->exit = 1;
@@ -89,11 +91,10 @@ void	do_exit(char **args, t_mini *mini, t_garbege **head)
 		status = ft_atoi(args[1]);
 	}
 	else if (!mini->pipe)
-		(ft_putstr_fd("exit\n", 2), ft_free_all(head), exit(mini->exit));
-	if (mini->in != STDIN_FILENO)
-		close(mini->in);
-	if (mini->out != STDOUT_FILENO)
-		close(mini->out);
+		(close(mini->in), close(mini->out),
+			ft_putstr_fd("exit\n", 2), ft_free_all(head), exit(mini->exit));
+	close(mini->in);
+	close(mini->out);
 	if (mini->pipe)
 		(ft_free_all(head), exit(status % 256));
 	(ft_putstr_fd("exit\n", 2), ft_free_all(head), exit(status % 256));

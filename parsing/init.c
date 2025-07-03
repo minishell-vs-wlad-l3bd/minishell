@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:48:09 by aayad             #+#    #+#             */
-/*   Updated: 2025/06/30 15:53:34 by aayad            ###   ########.fr       */
+/*   Updated: 2025/06/30 16:05:46 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	handle_split_case(t_list **cmd_lst,
 static void	handle_argument(t_list **cmd_list,
 	char *str, t_mini *mini, t_garbege **head)
 {
-	if (ft_strchr(str, '$') && !check_quotes_expand(str, mini))
+	if (ft_strchr(str, '$') && !check_quotes_expand(str))
 		handle_split_case(cmd_list, str, mini, head);
 	else
 	{

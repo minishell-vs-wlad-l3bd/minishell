@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:19:56 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/29 22:26:05 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:39:53 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	execute_pipeline(t_mini *mini, t_garbege **head)
 	int			count_cmds;
 
 	parss = mini->parss;
-	handle_empty_redirections(parss);
+	handle_empty_redirections(parss, mini);
 	count_cmds = ft_lstsize_pipe(parss);
 	if (!prepare_heredocs(mini, head))
 		return ;

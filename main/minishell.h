@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:30:11 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/30 15:53:07 by aayad            ###   ########.fr       */
+/*   Updated: 2025/07/03 16:39:44 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int			check_input(char *str, t_mini *mini, t_garbege **head);
 int			handle_redirections(t_tokens *token, t_mini *mini);
 char		*add_spaces(char *line, t_garbege **head);
 char		**env_list_to_array(t_env *env, t_garbege **head);
-int			check_quotes_expand(char *str, t_mini *mini);
+int			check_quotes_expand(char *str);
 void		print_sort_env(t_mini *mini);
 int			check_is_key(t_env **env, char *key);
 void		exec_in_child(char *cmd_path, char **cmd, t_mini *mini);
@@ -121,7 +121,8 @@ int			is_quote(char c);
 int			get_type(char *str);
 int			handle_redir(char **str, int *i, t_parsing *node, t_tokens **last);
 t_parsing	*init_all(char **str, t_mini *mini, t_garbege **head);
-char		*handle_heredocs(t_tokens *tokens, t_mini *mini, t_garbege **head);
+int			handle_heredocs(t_tokens *tokens, t_mini *mini,
+				t_garbege **head, char **last_file);
 int			handle_all_redirections(t_tokens *tokens, t_mini *mini);
 void		wait_for_children(pid_t *pids, int count_cmds, t_mini *mini);
 void		cleanup_heredocs(t_parsing *parss);
@@ -134,7 +135,8 @@ void		kill_all(pid_t *pids, int n);
 int			is_valid_env_name(char *name);
 char		**split(const char *s, t_garbege **head);
 char		*return_quote(char **str);
-void		handle_empty_redirections(t_parsing *parss);
+void		handle_empty_redirections(t_parsing *parss, t_mini *mini);
 char		**list_to_array(t_list *lst, t_garbege **head);
+void		reset_std_fds(t_mini *mini);
 
 #endif 

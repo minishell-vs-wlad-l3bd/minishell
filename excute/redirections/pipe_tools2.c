@@ -6,7 +6,7 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 13:24:17 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/29 22:23:25 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:41:39 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,25 +63,7 @@ void	kill_all(pid_t *pids, int n)
 		waitpid(pids[i], 0, 0);
 }
 
-static void	check_open(t_tokens *tokens)
-{
-	int	fd;
-
-	if (tokens->output)
-	{
-		fd = open(tokens->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd >= 0)
-			close(fd);
-	}
-	else if (tokens->append)
-	{
-		fd = open(tokens->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd >= 0)
-			close(fd);
-	}
-}
-
-void	handle_empty_redirections(t_parsing *parss)
+void	handle_empty_redirections(t_parsing *parss, t_mini *mini)
 {
 	t_tokens	*tokens;
 
@@ -90,11 +72,8 @@ void	handle_empty_redirections(t_parsing *parss)
 		if (!parss->cmd[0])
 		{
 			tokens = parss->token;
-			while (tokens)
-			{
-				check_open(tokens);
-				tokens = tokens->next;
-			}
+			if (handle_all_redirections(tokens, mini))
+				return ;
 		}
 		parss = parss->next;
 	}

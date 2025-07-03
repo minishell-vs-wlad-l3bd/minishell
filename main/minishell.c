@@ -6,33 +6,28 @@
 /*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/06/29 14:49:47 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:14:09 by mohidbel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	backup_std_fds(t_mini *mini)
+void	reset_std_fds(t_mini *mini)
 {
-	if (mini->in == -1)
-		mini->in = dup(STDIN_FILENO);
-	if (mini->out == -1)
-		mini->out = dup(STDOUT_FILENO);
-	if (mini->in < 0 || mini->out < 0)
-		perror("minishell: dup error");
-}
-
-static void	reset_std_fds(t_mini *mini)
-{
+	close(mini->prev_pipe);
+	close(mini->pipe_in);
+	close(mini->pipe_out);
 	if (mini->in != -1)
 	{
-		dup2(mini->in, STDIN_FILENO);
+		if (dup2(mini->in, STDIN_FILENO) == -1)
+			perror("minishell: dup2 stdin error");
 		close(mini->in);
 		mini->in = -1;
 	}
 	if (mini->out != -1)
 	{
-		dup2(mini->out, STDOUT_FILENO);
+		if (dup2(mini->out, STDOUT_FILENO) == -1)
+			perror("minishell: dup2 stdout error");
 		close(mini->out);
 		mini->out = -1;
 	}
@@ -57,7 +52,6 @@ static int	mini_init(t_mini *mini, char **env, t_garbege **head)
 	mini->pipe_out = -1;
 	mini->env = env_init(env, 0, head);
 	mini->export_env = env_init(env, 1, head);
-	backup_std_fds(mini);
 	return (0);
 }
 
@@ -67,8 +61,6 @@ static int	norm_main(t_mini *mini, t_garbege **head, struct termios *term)
 
 	while (1)
 	{
-		reset_std_fds(mini);
-		backup_std_fds(mini);
 		str = readline("minishell$ ");
 		if (g_check_signal == SIGINT)
 		{
@@ -78,7 +70,7 @@ static int	norm_main(t_mini *mini, t_garbege **head, struct termios *term)
 		if (!str)
 		{
 			ft_putstr_fd("exit\n", STDERR_FILENO);
-			return (reset_std_fds(mini), mini->exit);
+			return (mini->exit);
 		}
 		if (*str && !check_input(str, mini, head))
 			ft_execute(mini, head);
