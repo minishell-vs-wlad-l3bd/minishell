@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohidbel <mohidbel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aayad <aayad@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:37:25 by mohidbel          #+#    #+#             */
-/*   Updated: 2025/07/03 18:47:42 by mohidbel         ###   ########.fr       */
+/*   Updated: 2025/07/03 20:13:41 by aayad            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ static int	norm_main(t_mini *mini, t_garbege **head, struct termios *term)
 	}
 	return (0);
 }
-// void f(){system("leaks minishell");}
 
 int	main(int ac, char **av, char **env)
 {
@@ -90,7 +89,6 @@ int	main(int ac, char **av, char **env)
 	int				n;
 	struct termios	term;
 
-	// atexit(f);
 	(void)av;
 	(void)ac;
 	n = 0;
